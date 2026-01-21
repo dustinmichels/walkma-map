@@ -71,6 +71,7 @@ export interface AuditProperties {
   THEMES: string
   VIEW: string
   'FACILITATOR/AUTHOR': string
+  VIEW_link: string
   CITY: string
   NEIGHBORHOOD?: null
   TOWN_ID: number

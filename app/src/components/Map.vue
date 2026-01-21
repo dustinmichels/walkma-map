@@ -1,14 +1,129 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, shallowRef } from 'vue'
+import { onMounted, onUnmounted, ref, shallowRef, watch } from 'vue'
 import maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
+import type { Audits, Towns } from '../types'
+
+const props = defineProps<{
+  audits: Audits | null
+  selectedCity: string
+}>()
+
+const emit = defineEmits<{
+  (e: 'update:selectedCity', value: string): void
+}>()
 
 const mapContainer = ref<HTMLElement | null>(null)
 const map = shallowRef<maplibregl.Map | null>(null)
 let resizeObserver: ResizeObserver | null = null
+const townIdMap = ref<Record<string, number>>({})
+const townIdToNameMap = ref<Record<number, string>>({})
+const mapReady = ref(false)
 
-onMounted(() => {
+const updateMapData = (audits: Audits | null) => {
+  if (!map.value || !audits) {
+    console.log('updateMapData skipped:', { hasMap: !!map.value, hasAudits: !!audits })
+    return
+  }
+
+  // Check if source exists
+  if (!map.value.getSource('towns')) {
+    console.log('Towns source not yet added to map')
+    return
+  }
+
+  // Reset all towns to 0 first
+  for (const id of Object.values(townIdMap.value)) {
+    map.value.setFeatureState({ source: 'towns', id: Number(id) }, { auditCount: 0 })
+  }
+
+  const counts: Record<number, number> = {}
+
+  if (audits.features) {
+    audits.features.forEach((feature) => {
+      // Convert TOWN_ID to integer (it comes as float in the data)
+      let townId: number | undefined = feature.properties.TOWN_ID
+        ? Math.floor(feature.properties.TOWN_ID)
+        : undefined
+
+      // Fallback: Lookup by City Name if TOWN_ID is missing or 0
+      if (!townId) {
+        const cityName = feature.properties['CITY/TOWN'] || feature.properties.CITY
+        if (cityName) {
+          const standardizedName = cityName.toUpperCase().trim()
+          townId = townIdMap.value[standardizedName]
+        }
+      }
+
+      if (townId) {
+        counts[townId] = (counts[townId] || 0) + 1
+      }
+    })
+  }
+
+  console.log('Audit counts by town:', counts)
+
+  let matched = 0
+  for (const [id, count] of Object.entries(counts)) {
+    if (map.value.getSource('towns')) {
+      map.value.setFeatureState({ source: 'towns', id: Number(id) }, { auditCount: count })
+      matched++
+    }
+  }
+  console.log(`Updated feature state for ${matched} towns`)
+}
+
+// Watch for selectedCity changes to update the map selection state
+watch(
+  () => props.selectedCity,
+  (newCity) => {
+    if (!map.value || !map.value.isStyleLoaded()) return
+
+    if (newCity) {
+      const townId = townIdMap.value[newCity.toUpperCase().trim()]
+      if (townId) {
+        // Update the filter for the selected line layer
+        map.value.setFilter('towns-selected', ['==', ['get', 'TOWN_ID'], townId])
+
+        // Optional: Fly to the town if needed, but simple highlighting is requested
+      } else {
+        map.value.setFilter('towns-selected', ['==', ['get', 'TOWN_ID'], -1])
+      }
+    } else {
+      map.value.setFilter('towns-selected', ['==', ['get', 'TOWN_ID'], -1])
+    }
+  },
+)
+
+onMounted(async () => {
   if (!mapContainer.value) return
+
+  // Fetch Towns Data first to build lookup map & ensure source data is available
+  let townsData: Towns | null = null
+  try {
+    const res = await fetch('/data/towns.geojson')
+    townsData = await res.json()
+
+    if (townsData && townsData.features) {
+      townsData.features.forEach((f: any) => {
+        const p = f.properties
+        if (p.TOWN_ID) {
+          // Manually assign ID for setFeatureState to work reliably
+          f.id = p.TOWN_ID
+
+          const name = p.CITY || p.TOWN
+          if (name) {
+            const standardName = name.toUpperCase().trim()
+            townIdMap.value[standardName] = p.TOWN_ID
+            townIdToNameMap.value[p.TOWN_ID] = name
+          }
+        }
+      })
+      console.log('Loaded town ID map with', Object.keys(townIdMap.value).length, 'towns')
+    }
+  } catch (err) {
+    console.error('Failed to load towns data', err)
+  }
 
   const initialState = { lng: -71.5, lat: 42.15, zoom: 8 }
 
@@ -35,23 +150,41 @@ onMounted(() => {
 
   map.value.on('load', () => {
     console.log('Map loaded')
-    if (!map.value) return
+    if (!map.value || !townsData) return
 
     map.value.addSource('towns', {
       type: 'geojson',
-      data: '/data/towns.geojson',
+      data: townsData as any,
+      // promoteId: 'TOWN_ID', // Removing promoteId, we manually set id on features
     })
 
+    // Fill Layer
     map.value.addLayer({
       id: 'towns-fill',
       type: 'fill',
       source: 'towns',
       paint: {
-        'fill-color': '#088',
+        'fill-color': [
+          'case',
+          ['>', ['feature-state', 'auditCount'], 0],
+          [
+            'interpolate',
+            ['linear'],
+            ['feature-state', 'auditCount'],
+            1,
+            '#ff9800', // Orange for 1
+            5,
+            '#e65100', // Darker Orange for 5+
+            10,
+            '#b71c1c', // Deep red/orange for many
+          ],
+          '#cccccc', // Grey for no audits
+        ],
         'fill-opacity': 0.8,
       },
     })
 
+    // Standard Border Layer
     map.value.addLayer({
       id: 'towns-line',
       type: 'line',
@@ -62,19 +195,78 @@ onMounted(() => {
         'line-opacity': 0.5,
       },
     })
+
+    // Selected Town Border Layer
+    map.value.addLayer({
+      id: 'towns-selected',
+      type: 'line',
+      source: 'towns',
+      filter: ['==', ['get', 'TOWN_ID'], -1], // Initially hide
+      paint: {
+        'line-color': '#ff0000', // Bright Red
+        'line-width': 3,
+        'line-opacity': 1,
+      },
+    })
+
+    // Click to Select
+    map.value.on('click', 'towns-fill', (e) => {
+      if (e.features && e.features.length > 0) {
+        const feature = e.features[0]
+        if (feature && feature.properties) {
+          const townId = feature.properties.TOWN_ID
+          if (townId) {
+            const city = townIdToNameMap.value[townId]
+            // If we found a name, emit it
+            if (city) {
+              emit('update:selectedCity', city)
+            }
+          }
+        }
+      }
+    })
+
+    // Change cursor on hover
+    map.value.on('mouseenter', 'towns-fill', () => {
+      map.value!.getCanvas().style.cursor = 'pointer'
+    })
+    map.value.on('mouseleave', 'towns-fill', () => {
+      map.value!.getCanvas().style.cursor = ''
+    })
+
+    // Mark map as ready
+    mapReady.value = true
+    console.log('Map fully initialized and ready')
+
+    // Initial load if audits are already available
+    if (props.audits) {
+      updateMapData(props.audits)
+    }
   })
 
-  map.value.on('error', (e) => {
-    console.error('Map error:', e)
-  })
-
-  // ResizeObserver to handle container size changes
   // ResizeObserver to handle container size changes
   resizeObserver = new ResizeObserver(() => {
     map.value?.resize()
   })
   resizeObserver.observe(mapContainer.value)
 })
+
+watch(
+  () => props.audits,
+  (newAudits) => {
+    console.log(
+      'Audits changed, updating map. Audits:',
+      newAudits ? `${newAudits.features?.length} features` : 'null',
+      'mapReady:',
+      mapReady.value,
+    )
+    if (mapReady.value) {
+      updateMapData(newAudits)
+    } else {
+      console.log('Map not ready yet, will update when loaded')
+    }
+  },
+)
 
 onUnmounted(() => {
   map.value?.remove()
