@@ -16,7 +16,7 @@ const cities = computed(() => {
   if (!props.audits?.features) return []
   const uniqueCities = new Set<string>()
   props.audits.features.forEach((feature) => {
-    const city = feature.properties['CITY/TOWN'] || feature.properties.CITY
+    const city = feature.properties.CITY
     if (city) uniqueCities.add(city)
   })
   return Array.from(uniqueCities).sort()
@@ -24,10 +24,12 @@ const cities = computed(() => {
 
 const filteredAudits = computed(() => {
   if (!props.selectedCity || !props.audits?.features) return []
-  return props.audits.features.filter((feature) => {
-    const city = feature.properties['CITY/TOWN'] || feature.properties.CITY
+  const filtered = props.audits.features.filter((feature) => {
+    const city = feature.properties.CITY
     return city === props.selectedCity
   })
+  // Sort by date (most recent first)
+  return filtered.sort((a, b) => b.properties.YEAR - a.properties.YEAR)
 })
 
 const currentStats = computed(() => {
@@ -63,14 +65,6 @@ const currentStats = computed(() => {
   <aside
     class="w-full md:w-[400px] flex flex-col bg-white rounded-xl shadow-xl border border-zinc-200 overflow-hidden h-full"
   >
-    <!-- Panel Header -->
-    <div class="p-5 border-b border-zinc-100 bg-zinc-50/50">
-      <h2 class="text-lg font-bold flex items-center gap-2 text-zinc-800">
-        <i class="fas fa-sliders-h text-brand-orange"></i>
-        Analysis Parameters
-      </h2>
-    </div>
-
     <!-- Interactive Elements -->
     <div class="flex-grow overflow-y-auto p-5 custom-scrollbar space-y-6">
       <!-- City Selection -->

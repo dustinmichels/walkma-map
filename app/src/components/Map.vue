@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, shallowRef, watch } from 'vue'
-import maplibregl from 'maplibre-gl'
-import 'maplibre-gl/dist/maplibre-gl.css'
-import type { Audits, Towns } from '../types'
+import maplibregl from 'maplibre-gl';
+import 'maplibre-gl/dist/maplibre-gl.css';
+import { onMounted, onUnmounted, ref, shallowRef, watch } from 'vue';
+import type { Audits, Towns } from '../types';
 
 const props = defineProps<{
   audits: Audits | null
@@ -125,7 +125,7 @@ onMounted(async () => {
     console.error('Failed to load towns data', err)
   }
 
-  const initialState = { lng: -71.5, lat: 42.15, zoom: 8 }
+  const initialState = { lng: -71.7, lat: 42.15, zoom: 7.5 }
 
   map.value = new maplibregl.Map({
     container: mapContainer.value,
@@ -277,6 +277,27 @@ onUnmounted(() => {
 <template>
   <div class="map-wrap">
     <div class="map" ref="mapContainer"></div>
+    <div class="legend">
+      <div class="legend-title">Audit Count</div>
+      <div class="legend-scale">
+        <div class="legend-item">
+          <span class="legend-color" style="background: #cccccc"></span>
+          <span class="legend-label">0</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-color" style="background: #ff9800"></span>
+          <span class="legend-label">1</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-color" style="background: #e65100"></span>
+          <span class="legend-label">5</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-color" style="background: #b71c1c"></span>
+          <span class="legend-label">10+</span>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -291,5 +312,51 @@ onUnmounted(() => {
   position: absolute;
   width: 100%;
   height: 100%;
+}
+
+.legend {
+  position: absolute;
+  bottom: 30px;
+  left: 10px;
+  background: white;
+  padding: 10px 14px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.legend-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+  white-space: nowrap;
+}
+
+.legend-scale {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legend-color {
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.legend-label {
+  font-size: 12px;
+  color: #555;
 }
 </style>
