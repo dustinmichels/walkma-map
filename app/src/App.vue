@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import Map from './components/Map.vue'
 
 const selectedCity = ref('')
 const cities = ['Belchertown', 'Blandford', 'Boston']
@@ -53,40 +54,7 @@ const getMockStats = () => {
       <div
         class="flex-grow relative rounded-xl overflow-hidden border-2 border-zinc-200 bg-zinc-100 shadow-inner group"
       >
-        <div
-          class="map-placeholder w-full h-full flex flex-col items-center justify-center opacity-60"
-        >
-          <i
-            class="fas fa-map-marked-alt text-6xl text-zinc-400 mb-4 group-hover:scale-110 transition-transform duration-500"
-          ></i>
-          <p class="text-zinc-500 font-medium text-lg uppercase tracking-widest">
-            Interactive Map Canvas
-          </p>
-          <p class="text-zinc-400 text-sm mt-2">Geospatial Data Engine Loading...</p>
-        </div>
-
-        <!-- Floating Controls -->
-        <div class="absolute top-4 left-4 flex flex-col gap-2">
-          <button class="bg-white p-2 rounded shadow hover:bg-zinc-50 border border-zinc-200">
-            <i class="fas fa-plus"></i>
-          </button>
-          <button class="bg-white p-2 rounded shadow hover:bg-zinc-50 border border-zinc-200">
-            <i class="fas fa-minus"></i>
-          </button>
-        </div>
-
-        <div class="absolute bottom-6 right-6">
-          <div class="bg-white/90 backdrop-blur-sm p-3 rounded-lg shadow-lg border border-zinc-200">
-            <div class="flex items-center gap-2 mb-1">
-              <span class="w-3 h-3 rounded-full bg-brand-orange"></span>
-              <span class="text-xs font-bold">Audit Completed</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <span class="w-3 h-3 rounded-full bg-black"></span>
-              <span class="text-xs font-bold">Pending Audit</span>
-            </div>
-          </div>
-        </div>
+        <Map />
       </div>
 
       <!-- Right Side: Data Panel -->
@@ -236,19 +204,5 @@ body {
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #ffa100;
-}
-
-.map-placeholder {
-  background-image:
-    linear-gradient(45deg, #e5e7eb 25%, transparent 25%),
-    linear-gradient(-45deg, #e5e7eb 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, #e5e7eb 75%),
-    linear-gradient(-45deg, transparent 75%, #e5e7eb 75%);
-  background-size: 20px 20px;
-  background-position:
-    0 0,
-    0 10px,
-    10px -10px,
-    -10px 0px;
 }
 </style>
