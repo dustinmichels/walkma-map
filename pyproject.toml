@@ -1,0 +1,13 @@
+[project]
+name = "walk-map"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "fiona>=1.10.1",
+    "geopandas>=1.1.2",
+    "jupyterlab>=4.5.2",
+    "pandas>=2.3.3",
+    "pyogrio>=0.12.1",
+]
