@@ -18,19 +18,26 @@
         <span class="label">Facilitator:</span> {{ audit.properties['FACILITATOR/AUTHOR'] }}
       </div>
 
-      <button class="view-btn" @click="handleView" :disabled="!hasPdf">
-        <span class="icon">📄</span> View Report
-      </button>
+      <button class="view-btn" @click="openModal"><i class="fas fa-eye icon"></i> View</button>
     </div>
+
+    <Teleport to="body">
+      <Transition name="fade">
+        <AuditModal v-if="isModalOpen" :audit="audit" @close="closeModal" />
+      </Transition>
+    </Teleport>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { ref } from 'vue'
+import AuditModal from './AuditModal.vue'
 
 const props = defineProps<{
   audit: any
 }>()
+
+const isModalOpen = ref(false)
 
 const getThemes = (themesStr: string) => {
   if (!themesStr) return []
@@ -45,14 +52,12 @@ const getSummary = (summary: string) => {
   return summary.length > 200 ? summary.substring(0, 200) + '...' : summary
 }
 
-const hasPdf = computed(() => {
-  return !!props.audit.properties.VIEW_link
-})
+const openModal = () => {
+  isModalOpen.value = true
+}
 
-const handleView = () => {
-  if (props.audit.properties.VIEW_link) {
-    window.open(props.audit.properties.VIEW_link, '_blank')
-  }
+const closeModal = () => {
+  isModalOpen.value = false
 }
 </script>
 
@@ -151,30 +156,35 @@ const handleView = () => {
 }
 
 .view-btn {
-  background: #2563eb;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
+  background: #fff;
+  color: #2563eb;
+  border: 1px solid #2563eb;
+  padding: 0.4rem 0.8rem;
   border-radius: 8px;
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  transition: background 0.2s;
+  gap: 0.4rem;
+  transition: all 0.2s;
 }
 
 .view-btn:hover {
-  background: #1d4ed8;
-}
-
-.view-btn:disabled {
-  background: #9ca3af;
-  cursor: not-allowed;
+  background: #eff6ff;
 }
 
 .icon {
   font-size: 1rem;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

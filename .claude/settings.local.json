@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npm run dev:*)"
+      "Bash(npm run dev:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nAdd data files and Netlify config for deployment\n\n- Update .gitignore to exclude root data/ but include app/public/data/\n- Add audits.geojson and towns.geojson to git tracking\n- Add netlify.toml configuration for deploying app subdirectory\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n\\)\")"
     ]
   }
 }
