@@ -70,7 +70,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted, onUnmounted } from 'vue'
 
 const props = defineProps<{
   audit: any // Using specific type is better but 'any' allows flexibility with the GeoJSON feature structure
@@ -97,6 +97,21 @@ const openReport = () => {
     window.open(props.audit.properties.VIEW_link, '_blank')
   }
 }
+
+// Close on Escape key
+const handleKeydown = (e: KeyboardEvent) => {
+  if (e.key === 'Escape') {
+    emit('close')
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('keydown', handleKeydown)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('keydown', handleKeydown)
+})
 </script>
 
 <style scoped>

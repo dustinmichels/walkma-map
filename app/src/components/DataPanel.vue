@@ -141,17 +141,6 @@ const currentStats = computed(() => {
         </p>
       </div>
     </div>
-
-    <!-- Footer Action -->
-    <div class="p-5 bg-zinc-50 border-t border-zinc-100">
-      <button
-        :disabled="!selectedCity"
-        class="w-full py-3 rounded-lg font-bold text-white transition-all transform active:scale-95 shadow-lg"
-        :class="selectedCity ? 'bg-black hover:bg-zinc-800' : 'bg-zinc-300 cursor-not-allowed'"
-      >
-        Export PDF Report
-      </button>
-    </div>
   </aside>
 </template>
 
