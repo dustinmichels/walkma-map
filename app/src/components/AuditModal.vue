@@ -50,7 +50,7 @@
                   @click="$emit('close')"
                   aria-label="Close modal"
                 >
-                  <i class="fas fa-times"></i>
+                  <X :size="24" />
                 </button>
               </header>
 
@@ -147,7 +147,7 @@
                   @click="openReport"
                   :disabled="!hasPdf"
                 >
-                  <span class="text-lg">📄</span> View Full Report
+                  <FileText :size="20" /> View Full Report
                 </button>
               </footer>
             </DialogPanel>
@@ -161,6 +161,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { TransitionRoot, TransitionChild, Dialog, DialogPanel, DialogTitle } from '@headlessui/vue'
+import { X, FileText } from 'lucide-vue-next'
 import type { Audit } from '../types'
 
 const props = defineProps<{

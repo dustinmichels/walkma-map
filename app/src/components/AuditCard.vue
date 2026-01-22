@@ -35,7 +35,7 @@
         @click="emit('view', audit)"
         class="bg-white text-blue-600 border border-blue-600 px-3 py-1.5 rounded-lg text-sm font-semibold cursor-pointer flex items-center gap-2 transition-all hover:bg-blue-50 ml-auto"
       >
-        <i class="fas fa-eye text-base"></i> View
+        <Eye :size="16" /> View
       </button>
     </div>
   </div>
@@ -43,6 +43,7 @@
 
 <script setup lang="ts">
 import type { Audit } from '../types'
+import { Eye } from 'lucide-vue-next'
 
 defineProps<{
   audit: Audit

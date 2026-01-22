@@ -4,6 +4,7 @@ import type { Audit, Audits } from '../types'
 import AuditCard from './AuditCard.vue'
 import AuditModal from './AuditModal.vue'
 import { Listbox, ListboxButton, ListboxOptions, ListboxOption } from '@headlessui/vue'
+import { ChevronDown, Check, Tag, Building2 } from 'lucide-vue-next'
 
 const props = defineProps<{
   selectedCity: string
@@ -101,7 +102,7 @@ const selectedCityProxy = computed({
                 {{ selectedCity || 'Choose a city...' }}
               </span>
               <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                <i class="fas fa-chevron-down text-zinc-400"></i>
+                <ChevronDown class="text-zinc-400" :size="16" />
               </span>
             </ListboxButton>
 
@@ -133,7 +134,7 @@ const selectedCityProxy = computed({
                       v-if="selected"
                       class="absolute inset-y-0 left-0 flex items-center pl-3 text-brand-orange"
                     >
-                      <i class="fas fa-check"></i>
+                      <Check :size="16" />
                     </span>
                   </li>
                 </ListboxOption>
@@ -176,7 +177,7 @@ const selectedCityProxy = computed({
               :key="area"
               class="flex items-center gap-2 text-sm p-2 bg-white border border-zinc-100 rounded hover:shadow-sm transition-shadow"
             >
-              <i class="fas fa-tag text-brand-orange text-xs"></i>
+              <Tag class="text-brand-orange" :size="12" />
               {{ area }}
             </li>
           </ul>
@@ -188,7 +189,7 @@ const selectedCityProxy = computed({
         v-else
         class="h-64 flex flex-col items-center justify-center text-zinc-400 text-center border-2 border-dashed border-zinc-100 rounded-xl"
       >
-        <i class="fas fa-city text-4xl mb-3 opacity-20"></i>
+        <Building2 class="text-zinc-400 mb-3 opacity-20" :size="36" />
         <p class="text-sm">Select a city from the menu above to discover its walk audits</p>
       </div>
     </div>
