@@ -24,7 +24,7 @@
             leave-from="opacity-100 scale-100 translate-y-0"
             leave-to="opacity-0 scale-95 translate-y-4"
           >
-            <div class="relative w-full max-w-[700px] group">
+            <DialogPanel class="relative w-full max-w-[700px] group">
               <!-- Left Arrow (Previous) -->
               <button
                 v-if="hasPrev"
@@ -35,7 +35,7 @@
                 <ChevronLeft :size="32" />
               </button>
 
-              <DialogPanel
+              <div
                 v-if="audit"
                 class="w-full transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all flex flex-col max-h-[90vh]"
               >
@@ -161,7 +161,7 @@
                     <FileText :size="20" /> View Full Report
                   </button>
                 </footer>
-              </DialogPanel>
+              </div>
 
               <!-- Right Arrow (Next) -->
               <button
@@ -172,7 +172,7 @@
               >
                 <ChevronRight :size="32" />
               </button>
-            </div>
+            </DialogPanel>
           </TransitionChild>
         </div>
       </div>
