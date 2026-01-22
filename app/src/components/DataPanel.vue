@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import type { Audits } from '../types'
+import { computed, ref } from 'vue'
+import type { Audit, Audits } from '../types'
 import AuditCard from './AuditCard.vue'
+import AuditModal from './AuditModal.vue'
+import { Listbox, ListboxButton, ListboxOptions, ListboxOption } from '@headlessui/vue'
 
 const props = defineProps<{
   selectedCity: string
@@ -11,6 +13,15 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: 'update:selectedCity', value: string): void
 }>()
+
+// Modal State
+const selectedAudit = ref<Audit | null>(null)
+const isAuditModalOpen = ref(false)
+
+const handleViewAudit = (audit: Audit) => {
+  selectedAudit.value = audit
+  isAuditModalOpen.value = true
+}
 
 const cities = computed(() => {
   if (!props.audits) return []
@@ -62,40 +73,74 @@ const currentStats = computed(() => {
     areas: Array.from(allThemes).slice(0, 5), // Top 5 themes
   }
 })
+
+const selectedCityProxy = computed({
+  get: () => props.selectedCity,
+  set: (val) => emit('update:selectedCity', val),
+})
 </script>
 
 <template>
   <aside
-    class="w-full md:w-[400px] flex flex-col bg-white rounded-xl shadow-xl border border-zinc-200 overflow-hidden h-full"
+    class="w-full md:w-[400px] flex flex-col bg-white rounded-xl shadow-xl border border-zinc-200 overflow-hidden h-full relative"
   >
     <!-- Interactive Elements -->
     <div class="flex-grow overflow-y-auto p-5 custom-scrollbar space-y-6">
       <!-- City Selection -->
-      <div class="space-y-2">
-        <label
-          for="city-select"
-          class="block text-sm font-bold text-zinc-600 uppercase tracking-wider"
-        >
+      <div class="space-y-2 relative z-20">
+        <label class="block text-sm font-bold text-zinc-600 uppercase tracking-wider">
           Select City
         </label>
-        <div class="relative">
-          <select
-            id="city-select"
-            :value="selectedCity"
-            @change="emit('update:selectedCity', ($event.target as HTMLSelectElement).value)"
-            class="w-full appearance-none bg-white border-2 border-zinc-200 rounded-lg py-3 px-4 focus:outline-none focus:border-brand-orange transition-colors cursor-pointer pr-10"
-          >
-            <option value="" disabled>Choose a city...</option>
-            <option v-for="city in cities" :key="city.name" :value="city.name">
-              {{ city.name }} ({{ city.count }})
-            </option>
-          </select>
-          <div
-            class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-zinc-400"
-          >
-            <i class="fas fa-chevron-down"></i>
+
+        <Listbox v-model="selectedCityProxy">
+          <div class="relative mt-1">
+            <ListboxButton
+              class="relative w-full cursor-pointer bg-white border-2 border-zinc-200 rounded-lg py-3 pl-4 pr-10 text-left focus:outline-none focus-visible:border-brand-orange focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm hover:border-zinc-300 transition-colors"
+            >
+              <span class="block truncate text-base text-zinc-800">
+                {{ selectedCity || 'Choose a city...' }}
+              </span>
+              <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                <i class="fas fa-chevron-down text-zinc-400"></i>
+              </span>
+            </ListboxButton>
+
+            <transition
+              leave-active-class="transition duration-100 ease-in"
+              leave-from-class="opacity-100"
+              leave-to-class="opacity-0"
+            >
+              <ListboxOptions
+                class="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm z-50 custom-scrollbar"
+              >
+                <ListboxOption
+                  v-slot="{ active, selected }"
+                  v-for="city in cities"
+                  :key="city.name"
+                  :value="city.name"
+                  as="template"
+                >
+                  <li
+                    :class="[
+                      active ? 'bg-orange-50 text-orange-900' : 'text-zinc-900',
+                      'relative cursor-default select-none py-2 pl-10 pr-4',
+                    ]"
+                  >
+                    <span :class="[selected ? 'font-medium' : 'font-normal', 'block truncate']">
+                      {{ city.name }} ({{ city.count }})
+                    </span>
+                    <span
+                      v-if="selected"
+                      class="absolute inset-y-0 left-0 flex items-center pl-3 text-brand-orange"
+                    >
+                      <i class="fas fa-check"></i>
+                    </span>
+                  </li>
+                </ListboxOption>
+              </ListboxOptions>
+            </transition>
           </div>
-        </div>
+        </Listbox>
       </div>
 
       <!-- Statistics / Info Cards (Dynamic) -->
@@ -114,7 +159,12 @@ const currentStats = computed(() => {
         <div class="mt-6">
           <h4 class="text-sm font-bold text-zinc-700 uppercase mb-3">Recent Reports</h4>
           <div class="space-y-4">
-            <AuditCard v-for="(audit, index) in filteredAudits" :key="index" :audit="audit" />
+            <AuditCard
+              v-for="(audit, index) in filteredAudits"
+              :key="index"
+              :audit="audit"
+              @view="handleViewAudit"
+            />
           </div>
         </div>
 
@@ -142,6 +192,13 @@ const currentStats = computed(() => {
         <p class="text-sm">Select a city from the menu above to discover its walk audits</p>
       </div>
     </div>
+
+    <!-- Modal -->
+    <AuditModal
+      :isOpen="isAuditModalOpen"
+      :audit="selectedAudit"
+      @close="isAuditModalOpen = false"
+    />
   </aside>
 </template>
 

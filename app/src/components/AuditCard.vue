@@ -32,38 +32,25 @@
       </div>
 
       <button
-        @click="openModal"
+        @click="emit('view', audit)"
         class="bg-white text-blue-600 border border-blue-600 px-3 py-1.5 rounded-lg text-sm font-semibold cursor-pointer flex items-center gap-2 transition-all hover:bg-blue-50 ml-auto"
       >
         <i class="fas fa-eye text-base"></i> View
       </button>
     </div>
-
-    <Teleport to="body">
-      <Transition
-        enter-active-class="transition duration-200 ease-out"
-        enter-from-class="opacity-0"
-        enter-to-class="opacity-100"
-        leave-active-class="transition duration-200 ease-in"
-        leave-from-class="opacity-100"
-        leave-to-class="opacity-0"
-      >
-        <AuditModal v-if="isModalOpen" :audit="audit" @close="closeModal" />
-      </Transition>
-    </Teleport>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import AuditModal from './AuditModal.vue'
 import type { Audit } from '../types'
 
-const props = defineProps<{
+defineProps<{
   audit: Audit
 }>()
 
-const isModalOpen = ref(false)
+const emit = defineEmits<{
+  (e: 'view', audit: Audit): void
+}>()
 
 const getThemes = (themesStr: string) => {
   if (!themesStr) return []
@@ -76,13 +63,5 @@ const getThemes = (themesStr: string) => {
 const getSummary = (summary: string) => {
   if (!summary) return ''
   return summary.length > 200 ? summary.substring(0, 200) + '...' : summary
-}
-
-const openModal = () => {
-  isModalOpen.value = true
-}
-
-const closeModal = () => {
-  isModalOpen.value = false
 }
 </script>
