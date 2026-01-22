@@ -35,7 +35,7 @@ onMounted(async () => {
     >
       <!-- Left Side: Map Placeholder -->
       <div
-        class="flex-grow relative rounded-xl overflow-hidden border-2 border-zinc-200 bg-zinc-100 shadow-inner group"
+        class="flex-grow relative rounded-xl overflow-hidden border-2 border-zinc-200 bg-white shadow-inner group"
       >
         <Map :audits="audits" v-model:selectedCity="selectedCity" />
       </div>

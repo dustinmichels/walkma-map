@@ -299,7 +299,7 @@ onUnmounted(() => {
   <div class="map-wrap">
     <div
       v-if="isLoading"
-      class="absolute inset-0 z-50 flex flex-col items-center justify-center bg-zinc-100/90 backdrop-blur-sm"
+      class="absolute inset-0 z-50 flex flex-col items-center justify-center bg-white/90 backdrop-blur-sm"
     >
       <div class="animate-spin text-brand-orange mb-3">
         <svg class="h-10 w-10" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
