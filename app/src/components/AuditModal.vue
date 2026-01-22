@@ -62,22 +62,40 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6 bg-zinc-50 p-4 rounded-xl">
           <!-- Short Term -->
           <div v-if="audit['SHORT TERM RECOMMENDATIONS']" class="flex flex-col">
-            <h3 class="text-sm font-bold uppercase text-orange-600 mb-2 tracking-wide">
+            <h3 class="text-sm font-bold uppercase text-orange-600 mb-3 tracking-wide">
               Short Term Recommendations
             </h3>
-            <p class="text-base leading-relaxed text-zinc-700 whitespace-pre-wrap">
-              {{ audit['SHORT TERM RECOMMENDATIONS'] }}
-            </p>
+            <ul class="space-y-3 m-0 p-0 list-none">
+              <li
+                v-for="(item, index) in parseList(audit['SHORT TERM RECOMMENDATIONS'])"
+                :key="index"
+                class="flex gap-3 items-start group"
+              >
+                <div
+                  class="mt-2 w-1.5 h-1.5 rounded-full bg-orange-400 group-hover:bg-orange-600 group-hover:scale-125 transition-all shrink-0"
+                ></div>
+                <span class="text-base leading-relaxed text-zinc-700">{{ item }}</span>
+              </li>
+            </ul>
           </div>
 
           <!-- Long Term -->
           <div v-if="audit['LONG TERM RECOMMENDATIONS']" class="flex flex-col">
-            <h3 class="text-sm font-bold uppercase text-blue-600 mb-2 tracking-wide">
+            <h3 class="text-sm font-bold uppercase text-blue-600 mb-3 tracking-wide">
               Long Term Recommendations
             </h3>
-            <p class="text-base leading-relaxed text-zinc-700 whitespace-pre-wrap">
-              {{ audit['LONG TERM RECOMMENDATIONS'] }}
-            </p>
+            <ul class="space-y-3 m-0 p-0 list-none">
+              <li
+                v-for="(item, index) in parseList(audit['LONG TERM RECOMMENDATIONS'])"
+                :key="index"
+                class="flex gap-3 items-start group"
+              >
+                <div
+                  class="mt-2 w-1.5 h-1.5 rounded-full bg-blue-400 group-hover:bg-blue-600 group-hover:scale-125 transition-all shrink-0"
+                ></div>
+                <span class="text-base leading-relaxed text-zinc-700">{{ item }}</span>
+              </li>
+            </ul>
           </div>
         </div>
 
@@ -128,6 +146,18 @@ const getThemes = (themesStr: string) => {
 const hasPdf = computed(() => {
   return !!props.audit.VIEW_link
 })
+
+const parseList = (text: string | undefined): string[] => {
+  if (!text) return []
+  return (
+    text
+      .split('\n')
+      .map((line) => line.trim())
+      // Remove leading dashes, asterisks, or numbers followed by dot/paren
+      .map((line) => line.replace(/^[-*•]\s*|^(\d+)[\.)]\s*/, ''))
+      .filter((line) => line.length > 0)
+  )
+}
 
 const openReport = () => {
   if (props.audit.VIEW_link) {
