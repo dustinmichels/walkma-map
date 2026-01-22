@@ -79,6 +79,34 @@ const selectedCityProxy = computed({
   get: () => props.selectedCity,
   set: (val) => emit('update:selectedCity', val),
 })
+
+// Navigation Logic
+const selectedAuditIndex = computed(() => {
+  if (!selectedAudit.value || !filteredAudits.value) return -1
+  return filteredAudits.value.indexOf(selectedAudit.value)
+})
+
+const hasPrevAudit = computed(() => selectedAuditIndex.value > 0)
+// Check if current index is valid and not the last one
+const hasNextAudit = computed(() => {
+  return (
+    selectedAuditIndex.value !== -1 && selectedAuditIndex.value < filteredAudits.value.length - 1
+  )
+})
+
+const handlePrevAudit = () => {
+  if (hasPrevAudit.value) {
+    const prev = filteredAudits.value[selectedAuditIndex.value - 1]
+    if (prev) selectedAudit.value = prev
+  }
+}
+
+const handleNextAudit = () => {
+  if (hasNextAudit.value) {
+    const next = filteredAudits.value[selectedAuditIndex.value + 1]
+    if (next) selectedAudit.value = next
+  }
+}
 </script>
 
 <template>
@@ -198,7 +226,11 @@ const selectedCityProxy = computed({
     <AuditModal
       :isOpen="isAuditModalOpen"
       :audit="selectedAudit"
+      :hasPrev="hasPrevAudit"
+      :hasNext="hasNextAudit"
       @close="isAuditModalOpen = false"
+      @prev="handlePrevAudit"
+      @next="handleNextAudit"
     />
   </aside>
 </template>

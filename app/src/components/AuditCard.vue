@@ -1,6 +1,7 @@
 <template>
   <div
-    class="bg-white rounded-xl p-6 mb-4 shadow-sm border border-zinc-200 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
+    class="group bg-white rounded-xl p-6 mb-4 shadow-sm border border-zinc-200 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg cursor-pointer hover:bg-zinc-100 hover:border-zinc-300 hover:border-dashed"
+    @click="emit('view', audit)"
   >
     <div class="flex justify-between items-center mb-2">
       <h3 class="text-xl font-bold text-zinc-900 font-display m-0">
@@ -25,25 +26,23 @@
       {{ getSummary(audit.SUMMARY) }}
     </p>
 
-    <div class="flex justify-between items-center border-t border-zinc-100 pt-4">
+    <div class="flex items-center border-t border-zinc-100 pt-4 min-h-[3rem]">
       <div class="text-xs text-zinc-500" v-if="audit['FACILITATOR/AUTHOR']">
         <span class="font-semibold text-zinc-700">Facilitator:</span>
         {{ audit['FACILITATOR/AUTHOR'] }}
       </div>
 
-      <button
-        @click="emit('view', audit)"
-        class="bg-white text-blue-600 border border-blue-600 px-3 py-1.5 rounded-lg text-sm font-semibold cursor-pointer flex items-center gap-2 transition-all hover:bg-blue-50 ml-auto"
-      >
-        <Eye :size="16" /> View
-      </button>
+      <div class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+        <span class="bg-zinc-800 text-white text-xs px-2.5 py-1.5 rounded-md font-medium shadow-sm">
+          Open
+        </span>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import type { Audit } from '../types'
-import { Eye } from 'lucide-vue-next'
 
 defineProps<{
   audit: Audit
