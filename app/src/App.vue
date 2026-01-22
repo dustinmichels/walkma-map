@@ -46,7 +46,7 @@ onMounted(async () => {
 
     <!-- Footer -->
     <footer class="bg-zinc-900 text-zinc-500 py-3 px-6 text-xs flex justify-between">
-      <p>&copy; 2024 MassDOT Walkability Initiative</p>
+      <p>&copy; 2026 WalkMA</p>
       <div class="flex gap-4">
         <a href="#" class="hover:text-white">Privacy Policy</a>
         <a href="#" class="hover:text-white">Data Sources</a>

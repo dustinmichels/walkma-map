@@ -150,7 +150,7 @@ const selectedCityProxy = computed({
         class="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300"
       >
         <div class="p-4 rounded-lg bg-orange-50 border-l-4 border-brand-orange">
-          <h3 class="font-bold text-brand-orange text-sm uppercase">Active Audits</h3>
+          <h3 class="font-bold text-brand-orange text-sm uppercase">Audits So Far</h3>
           <p class="text-3xl font-black text-black">
             {{ currentStats.audits }}
           </p>
@@ -158,7 +158,7 @@ const selectedCityProxy = computed({
 
         <!-- Render list of audits -->
         <div class="mt-6">
-          <h4 class="text-sm font-bold text-zinc-700 uppercase mb-3">Recent Reports</h4>
+          <h4 class="text-sm font-bold text-zinc-700 uppercase mb-3">Audits</h4>
           <div class="space-y-4">
             <AuditCard
               v-for="(audit, index) in filteredAudits"
