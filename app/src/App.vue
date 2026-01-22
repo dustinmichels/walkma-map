@@ -9,7 +9,7 @@ const audits = ref<Audits | null>(null)
 
 onMounted(async () => {
   try {
-    const response = await fetch('/data/audits.geojson')
+    const response = await fetch('/data/audits.json')
     audits.value = await response.json()
   } catch (error) {
     console.error('Failed to load audits data:', error)

@@ -4,8 +4,8 @@
       <!-- Header -->
       <header class="modal-header">
         <div>
-          <span class="modal-year">{{ audit.properties.YEAR }}</span>
-          <h2 class="modal-title">{{ audit.properties['CITY/TOWN'] || audit.properties.CITY }}</h2>
+          <span class="modal-year">{{ audit.YEAR }}</span>
+          <h2 class="modal-title">{{ audit['CITY/TOWN'] || audit.CITY }}</h2>
         </div>
         <button class="close-btn" @click="$emit('close')" aria-label="Close modal">
           <i class="fas fa-times"></i>
@@ -15,47 +15,47 @@
       <!-- Scrollable Content -->
       <div class="modal-body custom-scrollbar">
         <!-- Themes -->
-        <div v-if="audit.properties.THEMES" class="section">
+        <div v-if="audit.THEMES" class="section">
           <div class="tags">
-            <span v-for="theme in getThemes(audit.properties.THEMES)" :key="theme" class="tag">
+            <span v-for="theme in getThemes(audit.THEMES)" :key="theme" class="tag">
               {{ theme }}
             </span>
           </div>
         </div>
 
         <!-- Summary -->
-        <div v-if="audit.properties.SUMMARY" class="section">
+        <div v-if="audit.SUMMARY" class="section">
           <h3 class="section-title">Summary</h3>
-          <p class="text-content">{{ audit.properties.SUMMARY }}</p>
+          <p class="text-content">{{ audit.SUMMARY }}</p>
         </div>
 
         <!-- Streets / Area -->
-        <div v-if="audit.properties['STREETS, INNTERSECTIONS + AREA COVERED']" class="section">
+        <div v-if="audit['STREETS, INNTERSECTIONS + AREA COVERED']" class="section">
           <h3 class="section-title">Area Covered</h3>
           <p class="text-content">
-            {{ audit.properties['STREETS, INNTERSECTIONS + AREA COVERED'] }}
+            {{ audit['STREETS, INNTERSECTIONS + AREA COVERED'] }}
           </p>
         </div>
 
         <!-- Recommendations Grid -->
         <div class="recommendations-grid">
           <!-- Short Term -->
-          <div v-if="audit.properties['SHORT TERM RECOMMENDATIONS']" class="recommendation-col">
+          <div v-if="audit['SHORT TERM RECOMMENDATIONS']" class="recommendation-col">
             <h3 class="section-title text-orange">Short Term Recommendations</h3>
-            <p class="text-content">{{ audit.properties['SHORT TERM RECOMMENDATIONS'] }}</p>
+            <p class="text-content">{{ audit['SHORT TERM RECOMMENDATIONS'] }}</p>
           </div>
 
           <!-- Long Term -->
-          <div v-if="audit.properties['LONG TERM RECOMMENDATIONS']" class="recommendation-col">
+          <div v-if="audit['LONG TERM RECOMMENDATIONS']" class="recommendation-col">
             <h3 class="section-title text-blue">Long Term Recommendations</h3>
-            <p class="text-content">{{ audit.properties['LONG TERM RECOMMENDATIONS'] }}</p>
+            <p class="text-content">{{ audit['LONG TERM RECOMMENDATIONS'] }}</p>
           </div>
         </div>
 
         <!-- Facilitator -->
-        <div v-if="audit.properties['FACILITATOR/AUTHOR']" class="section meta-section">
+        <div v-if="audit['FACILITATOR/AUTHOR']" class="section meta-section">
           <span class="label">Facilitator/Author:</span>
-          <span class="value">{{ audit.properties['FACILITATOR/AUTHOR'] }}</span>
+          <span class="value">{{ audit['FACILITATOR/AUTHOR'] }}</span>
         </div>
       </div>
 
@@ -89,12 +89,12 @@ const getThemes = (themesStr: string) => {
 }
 
 const hasPdf = computed(() => {
-  return !!props.audit.properties.VIEW_link
+  return !!props.audit.VIEW_link
 })
 
 const openReport = () => {
-  if (props.audit.properties.VIEW_link) {
-    window.open(props.audit.properties.VIEW_link, '_blank')
+  if (props.audit.VIEW_link) {
+    window.open(props.audit.VIEW_link, '_blank')
   }
 }
 

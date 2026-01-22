@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { Audits, AuditFeature } from '../types'
+import type { Audits } from '../types'
 import AuditCard from './AuditCard.vue'
 
 const props = defineProps<{
@@ -13,23 +13,23 @@ const emit = defineEmits<{
 }>()
 
 const cities = computed(() => {
-  if (!props.audits?.features) return []
+  if (!props.audits) return []
   const uniqueCities = new Set<string>()
-  props.audits.features.forEach((feature) => {
-    const city = feature.properties.CITY
+  props.audits.forEach((audit) => {
+    const city = audit.CITY
     if (city) uniqueCities.add(city)
   })
   return Array.from(uniqueCities).sort()
 })
 
 const filteredAudits = computed(() => {
-  if (!props.selectedCity || !props.audits?.features) return []
-  const filtered = props.audits.features.filter((feature) => {
-    const city = feature.properties.CITY
+  if (!props.selectedCity || !props.audits) return []
+  const filtered = props.audits.filter((audit) => {
+    const city = audit.CITY
     return city === props.selectedCity
   })
   // Sort by date (most recent first)
-  return filtered.sort((a, b) => b.properties.YEAR - a.properties.YEAR)
+  return filtered.sort((a, b) => b.YEAR - a.YEAR)
 })
 
 const currentStats = computed(() => {
@@ -47,8 +47,8 @@ const currentStats = computed(() => {
   // Extract unique themes as "focus areas"
   const allThemes = new Set<string>()
   cityAudits.forEach((audit) => {
-    if (audit.properties.THEMES) {
-      audit.properties.THEMES.split(',').forEach((t) => allThemes.add(t.trim().replace(/"/g, '')))
+    if (audit.THEMES) {
+      audit.THEMES.split(',').forEach((t) => allThemes.add(t.trim().replace(/"/g, '')))
     }
   })
 

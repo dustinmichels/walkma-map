@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import maplibregl from 'maplibre-gl';
-import 'maplibre-gl/dist/maplibre-gl.css';
-import { onMounted, onUnmounted, ref, shallowRef, watch } from 'vue';
-import type { Audits, Towns } from '../types';
+import maplibregl from 'maplibre-gl'
+import 'maplibre-gl/dist/maplibre-gl.css'
+import { onMounted, onUnmounted, ref, shallowRef, watch } from 'vue'
+import type { Audits, Towns } from '../types'
 
 const props = defineProps<{
   audits: Audits | null
@@ -39,16 +39,14 @@ const updateMapData = (audits: Audits | null) => {
 
   const counts: Record<number, number> = {}
 
-  if (audits.features) {
-    audits.features.forEach((feature) => {
+  if (audits) {
+    audits.forEach((audit) => {
       // Convert TOWN_ID to integer (it comes as float in the data)
-      let townId: number | undefined = feature.properties.TOWN_ID
-        ? Math.floor(feature.properties.TOWN_ID)
-        : undefined
+      let townId: number | undefined = audit.TOWN_ID ? Math.floor(audit.TOWN_ID) : undefined
 
       // Fallback: Lookup by City Name if TOWN_ID is missing or 0
       if (!townId) {
-        const cityName = feature.properties['CITY/TOWN'] || feature.properties.CITY
+        const cityName = audit['CITY/TOWN'] || audit.CITY
         if (cityName) {
           const standardizedName = cityName.toUpperCase().trim()
           townId = townIdMap.value[standardizedName]
@@ -256,7 +254,7 @@ watch(
   (newAudits) => {
     console.log(
       'Audits changed, updating map. Audits:',
-      newAudits ? `${newAudits.features?.length} features` : 'null',
+      newAudits ? `${newAudits.length} features` : 'null',
       'mapReady:',
       mapReady.value,
     )

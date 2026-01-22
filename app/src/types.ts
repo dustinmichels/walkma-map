@@ -48,20 +48,10 @@ export interface TownProperties {
 }
 
 // Audits Data
-export interface Audits {
-  type: string
-  name: string
-  crs: Crs
-  features?: AuditFeature[] | null
-}
+// Audits Data
+export type Audits = Audit[]
 
-export interface AuditFeature {
-  type: string
-  properties: AuditProperties
-  geometry: Geometry
-}
-
-export interface AuditProperties {
+export interface Audit {
   'CITY/TOWN': string
   YEAR: number
   SUMMARY: string
@@ -73,8 +63,8 @@ export interface AuditProperties {
   'FACILITATOR/AUTHOR': string
   VIEW_link: string
   CITY: string
-  NEIGHBORHOOD?: null
-  TOWN_ID: number
-  TYPE: string
-  COUNTY: string
+  NEIGHBORHOOD: any
+  TOWN_ID?: number
+  TYPE?: string
+  COUNTY?: string
 }

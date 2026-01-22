@@ -1,21 +1,21 @@
 <template>
   <div class="audit-card">
     <div class="audit-header">
-      <h3 class="audit-city">{{ audit.properties['CITY/TOWN'] || audit.properties.CITY }}</h3>
-      <span class="audit-year">{{ audit.properties.YEAR }}</span>
+      <h3 class="audit-city">{{ audit['CITY/TOWN'] || audit.CITY }}</h3>
+      <span class="audit-year">{{ audit.YEAR }}</span>
     </div>
 
-    <div class="audit-tags" v-if="audit.properties.THEMES">
-      <span v-for="theme in getThemes(audit.properties.THEMES)" :key="theme" class="audit-tag">
+    <div class="audit-tags" v-if="audit.THEMES">
+      <span v-for="theme in getThemes(audit.THEMES)" :key="theme" class="audit-tag">
         {{ theme }}
       </span>
     </div>
 
-    <p class="audit-summary">{{ getSummary(audit.properties.SUMMARY) }}</p>
+    <p class="audit-summary">{{ getSummary(audit.SUMMARY) }}</p>
 
     <div class="audit-footer">
-      <div class="audit-author" v-if="audit.properties['FACILITATOR/AUTHOR']">
-        <span class="label">Facilitator:</span> {{ audit.properties['FACILITATOR/AUTHOR'] }}
+      <div class="audit-author" v-if="audit['FACILITATOR/AUTHOR']">
+        <span class="label">Facilitator:</span> {{ audit['FACILITATOR/AUTHOR'] }}
       </div>
 
       <button class="view-btn" @click="openModal"><i class="fas fa-eye icon"></i> View</button>
