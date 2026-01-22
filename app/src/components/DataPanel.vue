@@ -136,9 +136,7 @@ const currentStats = computed(() => {
         class="h-64 flex flex-col items-center justify-center text-zinc-400 text-center border-2 border-dashed border-zinc-100 rounded-xl"
       >
         <i class="fas fa-city text-4xl mb-3 opacity-20"></i>
-        <p class="text-sm">
-          Select a city from the menu above to view walk audit metrics and geospatial data layers.
-        </p>
+        <p class="text-sm">Select a city from the menu above to discover its walk audits</p>
       </div>
     </div>
   </aside>
