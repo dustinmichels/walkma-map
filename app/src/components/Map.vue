@@ -296,7 +296,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="map-wrap">
+  <div class="relative w-full h-full group">
     <div
       v-if="isLoading"
       class="absolute inset-0 z-50 flex flex-col items-center justify-center bg-white/90 backdrop-blur-sm"
@@ -320,32 +320,42 @@ onUnmounted(() => {
       </div>
       <p class="text-zinc-600 font-semibold animate-pulse">Loading Map...</p>
     </div>
-    <div class="map" ref="mapContainer"></div>
-    <div class="legend">
-      <div class="legend-title">Audit Count</div>
-      <div class="legend-scale">
-        <div class="legend-item">
-          <span class="legend-color" style="background: #cccccc"></span>
-          <span class="legend-label">0</span>
+    <div class="absolute w-full h-full" ref="mapContainer"></div>
+
+    <!-- Legend -->
+    <div
+      class="absolute bottom-6 left-4 bg-white/95 backdrop-blur-sm py-3 px-4 rounded-lg shadow-lg z-10 flex items-center gap-4 border border-zinc-100"
+    >
+      <div class="text-xs font-bold text-zinc-800 uppercase tracking-wide">Audit Count</div>
+      <div class="flex flex-row gap-3">
+        <div class="flex items-center gap-2">
+          <span class="w-5 h-5 rounded border border-zinc-200" style="background: #cccccc"></span>
+          <span class="text-xs text-zinc-600 font-medium">0</span>
         </div>
-        <div class="legend-item">
-          <span class="legend-color" style="background: #ff9800"></span>
-          <span class="legend-label">1</span>
+        <div class="flex items-center gap-2">
+          <span class="w-5 h-5 rounded border border-zinc-200" style="background: #ff9800"></span>
+          <span class="text-xs text-zinc-600 font-medium">1</span>
         </div>
-        <div class="legend-item">
-          <span class="legend-color" style="background: #e65100"></span>
-          <span class="legend-label">5</span>
+        <div class="flex items-center gap-2">
+          <span class="w-5 h-5 rounded border border-zinc-200" style="background: #e65100"></span>
+          <span class="text-xs text-zinc-600 font-medium">5</span>
         </div>
-        <div class="legend-item">
-          <span class="legend-color" style="background: #b71c1c"></span>
-          <span class="legend-label">10+</span>
+        <div class="flex items-center gap-2">
+          <span class="w-5 h-5 rounded border border-zinc-200" style="background: #b71c1c"></span>
+          <span class="text-xs text-zinc-600 font-medium">10+</span>
         </div>
       </div>
     </div>
 
     <!-- Custom Map Controls -->
-    <div class="map-controls">
-      <button class="control-btn" @click="zoomIn" title="Zoom In">
+    <div
+      class="absolute top-5 left-5 z-10 flex flex-col bg-white rounded-lg shadow-lg overflow-hidden border border-zinc-200"
+    >
+      <button
+        class="flex items-center justify-center w-9 h-9 bg-white border-0 cursor-pointer text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-black active:bg-zinc-200"
+        @click="zoomIn"
+        title="Zoom In"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -357,7 +367,12 @@ onUnmounted(() => {
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
         </svg>
       </button>
-      <button class="control-btn" @click="zoomOut" title="Zoom Out">
+      <div class="h-px bg-zinc-100 w-full"></div>
+      <button
+        class="flex items-center justify-center w-9 h-9 bg-white border-0 cursor-pointer text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-black active:bg-zinc-200"
+        @click="zoomOut"
+        title="Zoom Out"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -369,8 +384,12 @@ onUnmounted(() => {
           <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
         </svg>
       </button>
-      <div class="divider"></div>
-      <button class="control-btn" @click="resetMap" title="Reset View">
+      <div class="h-px bg-zinc-100 w-full"></div>
+      <button
+        class="flex items-center justify-center w-9 h-9 bg-white border-0 cursor-pointer text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-black active:bg-zinc-200"
+        @click="resetMap"
+        title="Reset View"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -389,106 +408,3 @@ onUnmounted(() => {
     </div>
   </div>
 </template>
-
-<style scoped>
-.map-wrap {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-.map {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-}
-
-.legend {
-  position: absolute;
-  bottom: 30px;
-  left: 10px;
-  background: white;
-  padding: 10px 14px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.legend-title {
-  font-size: 13px;
-  font-weight: 600;
-  color: #333;
-  white-space: nowrap;
-}
-
-.legend-scale {
-  display: flex;
-  flex-direction: row;
-  gap: 12px;
-}
-
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.legend-color {
-  width: 20px;
-  height: 20px;
-  border-radius: 3px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.legend-label {
-  font-size: 12px;
-  color: #555;
-}
-
-.map-controls {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  overflow: hidden;
-}
-
-.control-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  background: white;
-  border: none;
-  cursor: pointer;
-  color: #555;
-  transition:
-    background 0.2s,
-    color 0.2s;
-}
-
-.control-btn:hover {
-  background: #f5f5f5;
-  color: #000;
-}
-
-.control-btn:active {
-  background: #ebebeb;
-}
-
-.divider {
-  height: 1px;
-  background: #eee;
-  width: 100%;
-}
-</style>

@@ -1,28 +1,53 @@
 <template>
-  <div class="audit-card">
-    <div class="audit-header">
-      <h3 class="audit-city">{{ audit['CITY/TOWN'] || audit.CITY }}</h3>
-      <span class="audit-year">{{ audit.YEAR }}</span>
+  <div
+    class="bg-white rounded-xl p-6 mb-4 shadow-sm border border-zinc-200 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
+  >
+    <div class="flex justify-between items-center mb-2">
+      <h3 class="text-xl font-bold text-zinc-900 font-display m-0">
+        {{ audit['CITY/TOWN'] || audit.CITY }}
+      </h3>
+      <span class="bg-zinc-100 text-zinc-600 px-3 py-1 rounded-full text-sm font-semibold">
+        {{ audit.YEAR }}
+      </span>
     </div>
 
-    <div class="audit-tags" v-if="audit.THEMES">
-      <span v-for="theme in getThemes(audit.THEMES)" :key="theme" class="audit-tag">
+    <div class="flex flex-wrap gap-2 mb-4" v-if="audit.THEMES">
+      <span
+        v-for="theme in getThemes(audit.THEMES)"
+        :key="theme"
+        class="bg-emerald-50 text-emerald-600 text-xs px-2 py-1 rounded-md font-medium uppercase tracking-wide"
+      >
         {{ theme }}
       </span>
     </div>
 
-    <p class="audit-summary">{{ getSummary(audit.SUMMARY) }}</p>
+    <p class="text-zinc-600 text-sm leading-relaxed mb-6 line-clamp-3">
+      {{ getSummary(audit.SUMMARY) }}
+    </p>
 
-    <div class="audit-footer">
-      <div class="audit-author" v-if="audit['FACILITATOR/AUTHOR']">
-        <span class="label">Facilitator:</span> {{ audit['FACILITATOR/AUTHOR'] }}
+    <div class="flex justify-between items-center border-t border-zinc-100 pt-4">
+      <div class="text-xs text-zinc-500" v-if="audit['FACILITATOR/AUTHOR']">
+        <span class="font-semibold text-zinc-700">Facilitator:</span>
+        {{ audit['FACILITATOR/AUTHOR'] }}
       </div>
 
-      <button class="view-btn" @click="openModal"><i class="fas fa-eye icon"></i> View</button>
+      <button
+        @click="openModal"
+        class="bg-white text-blue-600 border border-blue-600 px-3 py-1.5 rounded-lg text-sm font-semibold cursor-pointer flex items-center gap-2 transition-all hover:bg-blue-50 ml-auto"
+      >
+        <i class="fas fa-eye text-base"></i> View
+      </button>
     </div>
 
     <Teleport to="body">
-      <Transition name="fade">
+      <Transition
+        enter-active-class="transition duration-200 ease-out"
+        enter-from-class="opacity-0"
+        enter-to-class="opacity-100"
+        leave-active-class="transition duration-200 ease-in"
+        leave-from-class="opacity-100"
+        leave-to-class="opacity-0"
+      >
         <AuditModal v-if="isModalOpen" :audit="audit" @close="closeModal" />
       </Transition>
     </Teleport>
@@ -32,9 +57,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import AuditModal from './AuditModal.vue'
+import type { Audit } from '../types'
 
 const props = defineProps<{
-  audit: any
+  audit: Audit
 }>()
 
 const isModalOpen = ref(false)
@@ -60,131 +86,3 @@ const closeModal = () => {
   isModalOpen.value = false
 }
 </script>
-
-<style scoped>
-.audit-card {
-  background: white;
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin-bottom: 1rem;
-  box-shadow:
-    0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  transition:
-    transform 0.2s,
-    box-shadow 0.2s;
-  border: 1px solid #e5e7eb;
-}
-
-.audit-card:hover {
-  transform: translateY(-2px);
-  box-shadow:
-    0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05);
-}
-
-.audit-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
-}
-
-.audit-city {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #111827;
-  margin: 0;
-  font-family: 'Outfit', sans-serif;
-}
-
-.audit-year {
-  background: #f3f4f6;
-  color: #4b5563;
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.875rem;
-  font-weight: 600;
-}
-
-.audit-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.audit-tag {
-  background: #ecfdf5;
-  color: #059669;
-  font-size: 0.75rem;
-  padding: 0.25rem 0.5rem;
-  border-radius: 6px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.025em;
-}
-
-.audit-summary {
-  color: #4b5563;
-  font-size: 0.95rem;
-  line-height: 1.5;
-  margin-bottom: 1.5rem;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.audit-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-top: 1px solid #f3f4f6;
-  padding-top: 1rem;
-}
-
-.audit-author {
-  font-size: 0.85rem;
-  color: #6b7280;
-}
-
-.audit-author .label {
-  font-weight: 600;
-  color: #374151;
-}
-
-.view-btn {
-  background: #fff;
-  color: #2563eb;
-  border: 1px solid #2563eb;
-  padding: 0.4rem 0.8rem;
-  border-radius: 8px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  transition: all 0.2s;
-}
-
-.view-btn:hover {
-  background: #eff6ff;
-}
-
-.icon {
-  font-size: 1rem;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.2s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-</style>

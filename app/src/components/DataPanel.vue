@@ -14,12 +14,24 @@ const emit = defineEmits<{
 
 const cities = computed(() => {
   if (!props.audits) return []
-  const uniqueCities = new Set<string>()
+
+  const cityCounts = new Map<string, number>()
+
   props.audits.forEach((audit) => {
     const city = audit.CITY
-    if (city) uniqueCities.add(city)
+    if (city) {
+      cityCounts.set(city, (cityCounts.get(city) || 0) + 1)
+    }
   })
-  return Array.from(uniqueCities).sort()
+
+  // Ensure selectedCity is in the list even if it has no audits
+  if (props.selectedCity && !cityCounts.has(props.selectedCity)) {
+    cityCounts.set(props.selectedCity, 0)
+  }
+
+  return Array.from(cityCounts.entries())
+    .map(([name, count]) => ({ name, count }))
+    .sort((a, b) => a.name.localeCompare(b.name))
 })
 
 const filteredAudits = computed(() => {
@@ -36,13 +48,6 @@ const currentStats = computed(() => {
   if (!props.selectedCity) return null
 
   const cityAudits = filteredAudits.value
-  const participants = cityAudits.reduce((acc, feat) => {
-    // Estimating participants if not explicitly available, relying on summary text logic would be too complex here without NLP stats.
-    // However, none of the properties strictly give a "participant count".
-    // We can count distinct authors/facilitators maybe? Or keep hardcoded random-ish logic?
-    // Let's just return the number of audits for count.
-    return acc
-  }, 0)
 
   // Extract unique themes as "focus areas"
   const allThemes = new Set<string>()
@@ -54,8 +59,6 @@ const currentStats = computed(() => {
 
   return {
     audits: cityAudits.length,
-    score: Math.floor(Math.random() * 40) + 60, // Placeholder score as it's not in the data
-    users: 'N/A', // Not readily available in GeoJSON stats without parsing text
     areas: Array.from(allThemes).slice(0, 5), // Top 5 themes
   }
 })
@@ -83,8 +86,8 @@ const currentStats = computed(() => {
             class="w-full appearance-none bg-white border-2 border-zinc-200 rounded-lg py-3 px-4 focus:outline-none focus:border-brand-orange transition-colors cursor-pointer pr-10"
           >
             <option value="" disabled>Choose a city...</option>
-            <option v-for="city in cities" :key="city" :value="city">
-              {{ city }}
+            <option v-for="city in cities" :key="city.name" :value="city.name">
+              {{ city.name }} ({{ city.count }})
             </option>
           </select>
           <div

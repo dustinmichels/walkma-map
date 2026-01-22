@@ -1,68 +1,104 @@
 <template>
-  <div class="modal-overlay" @click.self="$emit('close')">
-    <div class="modal-container">
+  <div
+    class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9999] flex justify-center items-center p-4 animate-in fade-in duration-200"
+    @click.self="$emit('close')"
+  >
+    <div
+      class="bg-white w-full max-w-[700px] max-h-[90vh] rounded-2xl flex flex-col shadow-2xl overflow-hidden animate-in slide-in-from-bottom-4 duration-300"
+    >
       <!-- Header -->
-      <header class="modal-header">
+      <header class="p-6 border-b border-zinc-100 flex justify-between items-start bg-white">
         <div>
-          <span class="modal-year">{{ audit.YEAR }}</span>
-          <h2 class="modal-title">{{ audit['CITY/TOWN'] || audit.CITY }}</h2>
+          <span
+            class="inline-block bg-zinc-100 text-zinc-600 px-3 py-1 rounded-full text-xs font-bold mb-2"
+          >
+            {{ audit.YEAR }}
+          </span>
+          <h2 class="text-2xl font-extrabold text-zinc-900 leading-tight font-display m-0">
+            {{ audit['CITY/TOWN'] || audit.CITY }}
+          </h2>
         </div>
-        <button class="close-btn" @click="$emit('close')" aria-label="Close modal">
+        <button
+          class="bg-transparent border-none text-xl text-zinc-400 cursor-pointer p-2 rounded-full transition-all w-10 h-10 flex items-center justify-center hover:bg-zinc-100 hover:text-zinc-800"
+          @click="$emit('close')"
+          aria-label="Close modal"
+        >
           <i class="fas fa-times"></i>
         </button>
       </header>
 
       <!-- Scrollable Content -->
-      <div class="modal-body custom-scrollbar">
+      <div class="p-6 overflow-y-auto flex-1 custom-scrollbar">
         <!-- Themes -->
-        <div v-if="audit.THEMES" class="section">
-          <div class="tags">
-            <span v-for="theme in getThemes(audit.THEMES)" :key="theme" class="tag">
+        <div v-if="audit.THEMES" class="mb-6">
+          <div class="flex flex-wrap gap-2">
+            <span
+              v-for="theme in getThemes(audit.THEMES)"
+              :key="theme"
+              class="bg-emerald-50 text-emerald-600 text-xs px-3 py-1.5 rounded-md font-semibold uppercase tracking-wide"
+            >
               {{ theme }}
             </span>
           </div>
         </div>
 
         <!-- Summary -->
-        <div v-if="audit.SUMMARY" class="section">
-          <h3 class="section-title">Summary</h3>
-          <p class="text-content">{{ audit.SUMMARY }}</p>
+        <div v-if="audit.SUMMARY" class="mb-6">
+          <h3 class="text-sm font-bold uppercase text-zinc-500 mb-2 tracking-wide">Summary</h3>
+          <p class="text-base leading-relaxed text-zinc-700 whitespace-pre-wrap">
+            {{ audit.SUMMARY }}
+          </p>
         </div>
 
         <!-- Streets / Area -->
-        <div v-if="audit['STREETS, INNTERSECTIONS + AREA COVERED']" class="section">
-          <h3 class="section-title">Area Covered</h3>
-          <p class="text-content">
+        <div v-if="audit['STREETS, INNTERSECTIONS + AREA COVERED']" class="mb-6">
+          <h3 class="text-sm font-bold uppercase text-zinc-500 mb-2 tracking-wide">Area Covered</h3>
+          <p class="text-base leading-relaxed text-zinc-700 whitespace-pre-wrap">
             {{ audit['STREETS, INNTERSECTIONS + AREA COVERED'] }}
           </p>
         </div>
 
         <!-- Recommendations Grid -->
-        <div class="recommendations-grid">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6 bg-zinc-50 p-4 rounded-xl">
           <!-- Short Term -->
-          <div v-if="audit['SHORT TERM RECOMMENDATIONS']" class="recommendation-col">
-            <h3 class="section-title text-orange">Short Term Recommendations</h3>
-            <p class="text-content">{{ audit['SHORT TERM RECOMMENDATIONS'] }}</p>
+          <div v-if="audit['SHORT TERM RECOMMENDATIONS']" class="flex flex-col">
+            <h3 class="text-sm font-bold uppercase text-orange-600 mb-2 tracking-wide">
+              Short Term Recommendations
+            </h3>
+            <p class="text-base leading-relaxed text-zinc-700 whitespace-pre-wrap">
+              {{ audit['SHORT TERM RECOMMENDATIONS'] }}
+            </p>
           </div>
 
           <!-- Long Term -->
-          <div v-if="audit['LONG TERM RECOMMENDATIONS']" class="recommendation-col">
-            <h3 class="section-title text-blue">Long Term Recommendations</h3>
-            <p class="text-content">{{ audit['LONG TERM RECOMMENDATIONS'] }}</p>
+          <div v-if="audit['LONG TERM RECOMMENDATIONS']" class="flex flex-col">
+            <h3 class="text-sm font-bold uppercase text-blue-600 mb-2 tracking-wide">
+              Long Term Recommendations
+            </h3>
+            <p class="text-base leading-relaxed text-zinc-700 whitespace-pre-wrap">
+              {{ audit['LONG TERM RECOMMENDATIONS'] }}
+            </p>
           </div>
         </div>
 
         <!-- Facilitator -->
-        <div v-if="audit['FACILITATOR/AUTHOR']" class="section meta-section">
-          <span class="label">Facilitator/Author:</span>
-          <span class="value">{{ audit['FACILITATOR/AUTHOR'] }}</span>
+        <div
+          v-if="audit['FACILITATOR/AUTHOR']"
+          class="bg-zinc-50 p-4 rounded-lg border border-zinc-200 flex gap-2 items-baseline mb-6"
+        >
+          <span class="font-semibold text-zinc-500 text-sm">Facilitator/Author:</span>
+          <span class="text-zinc-700">{{ audit['FACILITATOR/AUTHOR'] }}</span>
         </div>
       </div>
 
       <!-- Footer -->
-      <footer class="modal-footer">
-        <button class="view-report-btn" @click="openReport" :disabled="!hasPdf">
-          <span class="icon">📄</span> View Full Report
+      <footer class="p-5 border-t border-zinc-100 bg-white flex justify-end">
+        <button
+          class="bg-zinc-900 text-white border-none py-3 px-6 rounded-xl text-sm font-semibold cursor-pointer flex items-center gap-2 transition-all shadow-md hover:bg-black hover:-translate-y-px hover:shadow-lg disabled:bg-zinc-400 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
+          @click="openReport"
+          :disabled="!hasPdf"
+        >
+          <span class="text-lg">📄</span> View Full Report
         </button>
       </footer>
     </div>
@@ -71,9 +107,10 @@
 
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted } from 'vue'
+import type { Audit } from '../types'
 
 const props = defineProps<{
-  audit: any // Using specific type is better but 'any' allows flexibility with the GeoJSON feature structure
+  audit: Audit
 }>()
 
 const emit = defineEmits<{
@@ -115,231 +152,6 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
-  z-index: 9999;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 1rem;
-  animation: fadeIn 0.2s ease-out;
-}
-
-.modal-container {
-  background: white;
-  width: 100%;
-  max-width: 700px;
-  max-height: 90vh;
-  border-radius: 16px;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  overflow: hidden;
-}
-
-.modal-header {
-  padding: 1.5rem;
-  border-bottom: 1px solid #f3f4f6;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  background: #fff;
-}
-
-.modal-title {
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: #111827;
-  margin: 0;
-  line-height: 1.2;
-  font-family: 'Outfit', sans-serif;
-}
-
-.modal-year {
-  display: inline-block;
-  background: #f3f4f6;
-  color: #4b5563;
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-}
-
-.close-btn {
-  background: transparent;
-  border: none;
-  font-size: 1.25rem;
-  color: #9ca3af;
-  cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 50%;
-  transition: all 0.2s;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.close-btn:hover {
-  background: #f3f4f6;
-  color: #1f2937;
-}
-
-.modal-body {
-  padding: 1.5rem;
-  overflow-y: auto;
-  flex: 1;
-}
-
-.section {
-  margin-bottom: 1.5rem;
-}
-
-.section-title {
-  font-size: 0.875rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: #6b7280;
-  margin-bottom: 0.5rem;
-  letter-spacing: 0.05em;
-}
-
-.text-content {
-  font-size: 1rem;
-  line-height: 1.6;
-  color: #374151;
-  white-space: pre-wrap;
-}
-
-.tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.tag {
-  background: #ecfdf5;
-  color: #059669;
-  font-size: 0.75rem;
-  padding: 0.375rem 0.75rem;
-  border-radius: 6px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.025em;
-}
-
-.recommendations-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
-  background: #f9fafb;
-  padding: 1rem;
-  border-radius: 12px;
-}
-
-@media (min-width: 640px) {
-  .recommendations-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-.recommendation-col {
-  display: flex;
-  flex-direction: column;
-}
-
-.text-orange {
-  color: #ea580c;
-}
-
-.text-blue {
-  color: #2563eb;
-}
-
-.meta-section {
-  background: #f8fafc;
-  padding: 1rem;
-  border-radius: 8px;
-  border: 1px solid #e2e8f0;
-  display: flex;
-  gap: 0.5rem;
-  align-items: baseline;
-}
-
-.meta-section .label {
-  font-weight: 600;
-  color: #64748b;
-  font-size: 0.875rem;
-}
-
-.modal-footer {
-  padding: 1.25rem 1.5rem;
-  border-top: 1px solid #f3f4f6;
-  background: #fff;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.view-report-btn {
-  background: #111827;
-  color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 10px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: all 0.2s;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-}
-
-.view-report-btn:hover {
-  background: #000;
-  transform: translateY(-1px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-}
-
-.view-report-btn:disabled {
-  background: #9ca3af;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-
-/* Animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slideUp {
-  from {
-    transform: translateY(20px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
 /* Scrollbar */
 .custom-scrollbar::-webkit-scrollbar {
   width: 8px;
