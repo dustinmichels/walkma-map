@@ -33,8 +33,10 @@
       </div>
 
       <div class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-        <span class="bg-zinc-800 text-white text-xs px-2.5 py-1.5 rounded-md font-medium shadow-sm">
-          Open
+        <span
+          class="bg-zinc-100 text-zinc-600 p-1.5 rounded-md inline-flex items-center justify-center"
+        >
+          <Eye class="w-4 h-4" />
         </span>
       </div>
     </div>
@@ -43,6 +45,7 @@
 
 <script setup lang="ts">
 import type { Audit } from '../types'
+import { Eye } from 'lucide-vue-next'
 
 defineProps<{
   audit: Audit
