@@ -6,6 +6,11 @@ import type { Audits } from './types'
 
 const selectedCity = ref('')
 const audits = ref<Audits | null>(null)
+const filteredAudits = ref<Audits | null>(null)
+
+const handleFilter = (filtered: Audits) => {
+  filteredAudits.value = filtered
+}
 
 onMounted(async () => {
   try {
@@ -37,11 +42,11 @@ onMounted(async () => {
       <div
         class="flex-grow relative rounded-xl overflow-hidden border-2 border-zinc-200 bg-white shadow-inner group"
       >
-        <Map :audits="audits" v-model:selectedCity="selectedCity" />
+        <Map :audits="filteredAudits || audits" v-model:selectedCity="selectedCity" />
       </div>
 
       <!-- Right Side: Data Panel -->
-      <DataPanel v-model:selectedCity="selectedCity" :audits="audits" />
+      <DataPanel v-model:selectedCity="selectedCity" :audits="audits" @filter="handleFilter" />
     </main>
 
     <!-- Footer -->

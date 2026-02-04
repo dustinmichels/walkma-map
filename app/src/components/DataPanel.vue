@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import type { Audit, Audits } from '../types'
 import AuditCard from './AuditCard.vue'
 import AuditModal from './AuditModal.vue'
 import { Listbox, ListboxButton, ListboxOptions, ListboxOption } from '@headlessui/vue'
-import { ChevronDown, Check, Tag, Building2 } from 'lucide-vue-next'
+import { ChevronDown, Check, Tag, Building2, Filter, X } from 'lucide-vue-next'
 
 const props = defineProps<{
   selectedCity: string
@@ -13,7 +13,69 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: 'update:selectedCity', value: string): void
+  (e: 'filter', value: Audits): void
 }>()
+
+// Filter State
+const selectedTags = ref<string[]>([])
+const selectedYears = ref<number[]>([])
+
+// Helper: Parse themes string to array
+const parseThemes = (themesStr: string | undefined): string[] => {
+  if (!themesStr) return []
+  return themesStr
+    .split(',')
+    .map((s) => s.trim().replace(/^"|"$/g, ''))
+    .filter(Boolean)
+}
+
+// Compute available options from all audits
+const availableTags = computed(() => {
+  if (!props.audits) return []
+  const tags = new Set<string>()
+  props.audits.forEach((audit) => {
+    parseThemes(audit.THEMES).forEach((tag) => tags.add(tag))
+  })
+  return Array.from(tags).sort()
+})
+
+const availableYears = computed(() => {
+  if (!props.audits) return []
+  const years = new Set<number>()
+  props.audits.forEach((audit) => {
+    if (audit.YEAR) years.add(audit.YEAR)
+  })
+  return Array.from(years).sort((a, b) => b - a)
+})
+
+// Global filtered audits based on Tags and Year
+const globalFilteredAudits = computed(() => {
+  if (!props.audits) return []
+  return props.audits.filter((audit) => {
+    // Filter by Year
+    if (selectedYears.value.length > 0) {
+      if (!selectedYears.value.includes(audit.YEAR)) return false
+    }
+
+    // Filter by Tags (OR logic: if audit has ANY of the selected tags)
+    if (selectedTags.value.length > 0) {
+      const auditTags = parseThemes(audit.THEMES)
+      const hasMatch = selectedTags.value.some((tag) => auditTags.includes(tag))
+      if (!hasMatch) return false
+    }
+
+    return true
+  })
+})
+
+watch(
+  globalFilteredAudits,
+  (newVal) => {
+    if (!props.audits) return
+    emit('filter', newVal)
+  },
+  { immediate: true },
+)
 
 // Modal State
 const selectedAudit = ref<Audit | null>(null)
@@ -24,22 +86,21 @@ const handleViewAudit = (audit: Audit) => {
   isAuditModalOpen.value = true
 }
 
+// Update cities based on globalFilteredAudits
 const cities = computed(() => {
-  if (!props.audits) return []
+  if (!globalFilteredAudits.value) return []
 
   const cityCounts = new Map<string, number>()
 
-  props.audits.forEach((audit) => {
+  globalFilteredAudits.value.forEach((audit) => {
     const city = audit.CITY
     if (city) {
       cityCounts.set(city, (cityCounts.get(city) || 0) + 1)
     }
   })
 
-  // Ensure selectedCity is in the list even if it has no audits
-  if (props.selectedCity && !cityCounts.has(props.selectedCity)) {
-    cityCounts.set(props.selectedCity, 0)
-  }
+  // Note: We removed the logic that forced selectedCity to be in the list
+  // because the requirement is to "sometimes remove cities entirely".
 
   return Array.from(cityCounts.entries())
     .map(([name, count]) => ({ name, count }))
@@ -47,8 +108,8 @@ const cities = computed(() => {
 })
 
 const filteredAudits = computed(() => {
-  if (!props.selectedCity || !props.audits) return []
-  const filtered = props.audits.filter((audit) => {
+  if (!props.selectedCity || !globalFilteredAudits.value) return []
+  const filtered = globalFilteredAudits.value.filter((audit) => {
     const city = audit.CITY
     return city === props.selectedCity
   })
@@ -118,6 +179,11 @@ const handleNextAudit = () => {
     if (next) selectedAudit.value = next
   }
 }
+
+const clearFilters = () => {
+  selectedTags.value = []
+  selectedYears.value = []
+}
 </script>
 
 <template>
@@ -126,61 +192,205 @@ const handleNextAudit = () => {
   >
     <!-- Interactive Elements -->
     <div class="flex-grow overflow-y-auto p-5 custom-scrollbar space-y-6">
-      <!-- City Selection -->
-      <div class="space-y-2 relative z-20">
-        <label class="block text-sm font-bold text-zinc-600 uppercase tracking-wider">
-          Select City
-        </label>
+      <!-- City & Filters Section -->
+      <div class="space-y-4 relative z-20">
+        <!-- City Selection -->
+        <div class="space-y-2">
+          <label class="block text-sm font-bold text-zinc-600 uppercase tracking-wider">
+            Select City
+          </label>
 
-        <Listbox v-model="selectedCityProxy">
-          <div class="relative mt-1">
-            <ListboxButton
-              class="relative w-full cursor-pointer bg-white border-2 border-zinc-200 rounded-lg py-3 pl-4 pr-10 text-left focus:outline-none focus-visible:border-brand-orange focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm hover:border-zinc-300 transition-colors"
-            >
-              <span class="block truncate text-base text-zinc-800">
-                {{ selectedCity || 'Choose a city...' }}
-              </span>
-              <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                <ChevronDown class="text-zinc-400" :size="16" />
-              </span>
-            </ListboxButton>
-
-            <transition
-              leave-active-class="transition duration-100 ease-in"
-              leave-from-class="opacity-100"
-              leave-to-class="opacity-0"
-            >
-              <ListboxOptions
-                class="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm z-50 custom-scrollbar"
+          <Listbox v-model="selectedCityProxy">
+            <div class="relative mt-1">
+              <ListboxButton
+                class="relative w-full cursor-pointer bg-white border-2 border-zinc-200 rounded-lg py-3 pl-4 pr-10 text-left focus:outline-none focus-visible:border-brand-orange focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm hover:border-zinc-300 transition-colors"
+                :class="{ 'opacity-50': cities.length === 0 }"
               >
-                <ListboxOption
-                  v-slot="{ active, selected }"
-                  v-for="city in cities"
-                  :key="city.name"
-                  :value="city.name"
-                  as="template"
+                <span class="block truncate text-base text-zinc-800">
+                  {{ selectedCity || 'Choose a city...' }}
+                </span>
+                <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                  <ChevronDown class="text-zinc-400" :size="16" />
+                </span>
+              </ListboxButton>
+
+              <transition
+                leave-active-class="transition duration-100 ease-in"
+                leave-from-class="opacity-100"
+                leave-to-class="opacity-0"
+              >
+                <ListboxOptions
+                  class="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm z-30 custom-scrollbar"
                 >
-                  <li
-                    :class="[
-                      active ? 'bg-orange-50 text-orange-900' : 'text-zinc-900',
-                      'relative cursor-default select-none py-2 pl-10 pr-4',
-                    ]"
+                  <ListboxOption
+                    v-slot="{ active, selected }"
+                    v-for="city in cities"
+                    :key="city.name"
+                    :value="city.name"
+                    as="template"
                   >
-                    <span :class="[selected ? 'font-medium' : 'font-normal', 'block truncate']">
-                      {{ city.name }} ({{ city.count }})
-                    </span>
-                    <span
-                      v-if="selected"
-                      class="absolute inset-y-0 left-0 flex items-center pl-3 text-brand-orange"
+                    <li
+                      :class="[
+                        active ? 'bg-orange-50 text-orange-900' : 'text-zinc-900',
+                        'relative cursor-default select-none py-2 pl-10 pr-4',
+                      ]"
                     >
-                      <Check :size="16" />
-                    </span>
+                      <span :class="[selected ? 'font-medium' : 'font-normal', 'block truncate']">
+                        {{ city.name }} ({{ city.count }})
+                      </span>
+                      <span
+                        v-if="selected"
+                        class="absolute inset-y-0 left-0 flex items-center pl-3 text-brand-orange"
+                      >
+                        <Check :size="16" />
+                      </span>
+                    </li>
+                  </ListboxOption>
+                  <li
+                    v-if="cities.length === 0"
+                    class="relative cursor-default select-none py-2 pl-4 pr-4 text-zinc-500 italic text-sm"
+                  >
+                    No cities match current filters
                   </li>
-                </ListboxOption>
-              </ListboxOptions>
-            </transition>
+                </ListboxOptions>
+              </transition>
+            </div>
+          </Listbox>
+        </div>
+
+        <!-- Filter Controls -->
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <label class="block text-sm font-bold text-zinc-600 uppercase tracking-wider">
+              Filter Audits
+            </label>
+            <button
+              v-if="selectedTags.length > 0 || selectedYears.length > 0"
+              @click="clearFilters"
+              class="text-xs text-brand-orange font-bold hover:underline flex items-center gap-1"
+            >
+              <X :size="12" /> Clear ({{ selectedTags.length + selectedYears.length }})
+            </button>
           </div>
-        </Listbox>
+
+          <div class="grid grid-cols-2 gap-3">
+            <!-- Tags Filter -->
+            <Listbox v-model="selectedTags" multiple>
+              <div class="relative">
+                <ListboxButton
+                  class="relative w-full cursor-pointer bg-white border border-zinc-200 rounded-lg py-2 pl-3 pr-8 text-left focus:outline-none focus:border-brand-orange sm:text-xs hover:border-zinc-300 transition-colors h-10"
+                >
+                  <span class="block truncate text-zinc-700">
+                    <span v-if="selectedTags.length > 0" class="flex items-center gap-1">
+                      <span class="bg-orange-100 text-orange-800 px-1.5 rounded font-medium">
+                        {{ selectedTags.length }} matches
+                      </span>
+                    </span>
+                    <span v-else class="text-zinc-500">All Tags</span>
+                  </span>
+                  <span
+                    class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
+                  >
+                    <Tag class="text-zinc-400" :size="14" />
+                  </span>
+                </ListboxButton>
+
+                <transition
+                  leave-active-class="transition duration-100 ease-in"
+                  leave-from-class="opacity-100"
+                  leave-to-class="opacity-0"
+                >
+                  <ListboxOptions
+                    class="absolute mt-1 max-h-48 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm z-50 custom-scrollbar"
+                  >
+                    <ListboxOption
+                      v-slot="{ active, selected }"
+                      v-for="tag in availableTags"
+                      :key="tag"
+                      :value="tag"
+                      as="template"
+                    >
+                      <li
+                        :class="[
+                          active ? 'bg-orange-50 text-orange-900' : 'text-zinc-900',
+                          'relative cursor-default select-none py-2 pl-9 pr-4 text-xs',
+                        ]"
+                      >
+                        <span :class="[selected ? 'font-medium' : 'font-normal', 'block truncate']">
+                          {{ tag }}
+                        </span>
+                        <span
+                          v-if="selected"
+                          class="absolute inset-y-0 left-0 flex items-center pl-3 text-brand-orange"
+                        >
+                          <Check :size="14" />
+                        </span>
+                      </li>
+                    </ListboxOption>
+                  </ListboxOptions>
+                </transition>
+              </div>
+            </Listbox>
+
+            <!-- Year Filter -->
+            <Listbox v-model="selectedYears" multiple>
+              <div class="relative">
+                <ListboxButton
+                  class="relative w-full cursor-pointer bg-white border border-zinc-200 rounded-lg py-2 pl-3 pr-8 text-left focus:outline-none focus:border-brand-orange sm:text-xs hover:border-zinc-300 transition-colors h-10"
+                >
+                  <span class="block truncate text-zinc-700">
+                    <span v-if="selectedYears.length > 0" class="flex items-center gap-1">
+                      <span class="bg-orange-100 text-orange-800 px-1.5 rounded font-medium">
+                        {{ selectedYears.join(', ') }}
+                      </span>
+                    </span>
+                    <span v-else class="text-zinc-500">All Years</span>
+                  </span>
+                  <span
+                    class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
+                  >
+                    <Filter class="text-zinc-400" :size="14" />
+                  </span>
+                </ListboxButton>
+
+                <transition
+                  leave-active-class="transition duration-100 ease-in"
+                  leave-from-class="opacity-100"
+                  leave-to-class="opacity-0"
+                >
+                  <ListboxOptions
+                    class="absolute mt-1 max-h-48 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm z-50 custom-scrollbar"
+                  >
+                    <ListboxOption
+                      v-slot="{ active, selected }"
+                      v-for="year in availableYears"
+                      :key="year"
+                      :value="year"
+                      as="template"
+                    >
+                      <li
+                        :class="[
+                          active ? 'bg-orange-50 text-orange-900' : 'text-zinc-900',
+                          'relative cursor-default select-none py-2 pl-9 pr-4 text-xs',
+                        ]"
+                      >
+                        <span :class="[selected ? 'font-medium' : 'font-normal', 'block truncate']">
+                          {{ year }}
+                        </span>
+                        <span
+                          v-if="selected"
+                          class="absolute inset-y-0 left-0 flex items-center pl-3 text-brand-orange"
+                        >
+                          <Check :size="14" />
+                        </span>
+                      </li>
+                    </ListboxOption>
+                  </ListboxOptions>
+                </transition>
+              </div>
+            </Listbox>
+          </div>
+        </div>
       </div>
 
       <!-- Statistics / Info Cards (Dynamic) -->
@@ -193,6 +403,12 @@ const handleNextAudit = () => {
           class="h-64 flex flex-col items-center justify-center text-center border-2 border-dashed border-zinc-100 rounded-xl bg-orange-50/30"
         >
           <p class="text-lg font-medium text-zinc-700 mb-2">Hey! You could do a walk audit here!</p>
+          <p
+            v-if="selectedTags.length > 0 || selectedYears.length > 0"
+            class="text-xs text-zinc-500 mb-2"
+          >
+            (No audits found matching your filters)
+          </p>
           <a
             href="https://walkmass.org/walk-audit-academy/"
             target="_blank"
