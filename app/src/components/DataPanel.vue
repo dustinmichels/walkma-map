@@ -61,17 +61,28 @@ const currentStats = computed(() => {
 
   const cityAudits = filteredAudits.value
 
-  // Extract unique themes as "focus areas"
-  const allThemes = new Set<string>()
+  // Count theme occurrences across all audits for this city
+  const themeCounts = new Map<string, number>()
   cityAudits.forEach((audit) => {
     if (audit.THEMES) {
-      audit.THEMES.split(',').forEach((t) => allThemes.add(t.trim().replace(/"/g, '')))
+      audit.THEMES.split(',').forEach((t) => {
+        const theme = t.trim().replace(/"/g, '')
+        if (theme) {
+          themeCounts.set(theme, (themeCounts.get(theme) || 0) + 1)
+        }
+      })
     }
   })
 
+  // Top 5 themes by frequency
+  const areas = Array.from(themeCounts.entries())
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+    .map(([theme, count]) => ({ theme, count }))
+
   return {
     audits: cityAudits.length,
-    areas: Array.from(allThemes).slice(0, 5), // Top 5 themes
+    areas,
   }
 })
 
@@ -177,39 +188,58 @@ const handleNextAudit = () => {
         v-if="selectedCity && currentStats"
         class="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300"
       >
-        <div class="p-4 rounded-lg bg-orange-50 border-l-4 border-brand-orange">
-          <h3 class="font-bold text-brand-orange text-sm uppercase">Audits So Far</h3>
-          <p class="text-3xl font-black text-black">
-            {{ currentStats.audits }}
-          </p>
+        <div
+          v-if="currentStats.audits === 0"
+          class="h-64 flex flex-col items-center justify-center text-center border-2 border-dashed border-zinc-100 rounded-xl bg-orange-50/30"
+        >
+          <p class="text-lg font-medium text-zinc-700 mb-2">Hey! You could do a walk audit here!</p>
+          <a
+            href="https://walkmass.org/walk-audit-academy/"
+            target="_blank"
+            class="text-brand-orange font-bold hover:underline"
+          >
+            Learn how
+          </a>
         </div>
 
-        <!-- Render list of audits -->
-        <div class="mt-6">
-          <h4 class="text-sm font-bold text-zinc-700 uppercase mb-3">Audits</h4>
-          <div class="space-y-4">
-            <AuditCard
-              v-for="(audit, index) in filteredAudits"
-              :key="index"
-              :audit="audit"
-              @view="handleViewAudit"
-            />
+        <template v-else>
+          <div
+            class="px-4 py-2 rounded-lg bg-orange-50 border-l-4 border-brand-orange flex items-center justify-between"
+          >
+            <h3 class="font-bold text-brand-orange text-sm uppercase">Audits To Date</h3>
+            <p class="text-2xl font-black text-black">
+              {{ currentStats.audits }}
+            </p>
           </div>
-        </div>
 
-        <div class="pt-4" v-if="currentStats.areas.length > 0">
-          <h4 class="text-xs font-bold text-zinc-500 uppercase mb-3">Key Themes</h4>
-          <ul class="space-y-2">
-            <li
-              v-for="area in currentStats.areas"
-              :key="area"
-              class="flex items-center gap-2 text-sm p-2 bg-white border border-zinc-100 rounded hover:shadow-sm transition-shadow"
-            >
-              <Tag class="text-brand-orange" :size="12" />
-              {{ area }}
-            </li>
-          </ul>
-        </div>
+          <!-- Render list of audits -->
+          <div class="mt-6">
+            <h4 class="text-sm font-bold text-zinc-700 uppercase mb-3">Audits</h4>
+            <div class="space-y-4">
+              <AuditCard
+                v-for="(audit, index) in filteredAudits"
+                :key="index"
+                :audit="audit"
+                @view="handleViewAudit"
+              />
+            </div>
+          </div>
+
+          <div class="pt-4" v-if="currentStats.areas.length > 0">
+            <h4 class="text-xs font-bold text-zinc-500 uppercase mb-3">Key Themes</h4>
+            <ul class="space-y-2">
+              <li
+                v-for="area in currentStats.areas"
+                :key="area.theme"
+                class="flex items-center gap-2 text-sm p-2 bg-white border border-zinc-100 rounded hover:shadow-sm transition-shadow"
+              >
+                <Tag class="text-brand-orange flex-shrink-0" :size="12" />
+                <span class="flex-1">{{ area.theme }}</span>
+                <span class="text-xs text-zinc-400 font-medium">(x{{ area.count }})</span>
+              </li>
+            </ul>
+          </div>
+        </template>
       </div>
 
       <!-- Placeholder if no city selected -->

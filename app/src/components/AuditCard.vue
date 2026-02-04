@@ -23,7 +23,8 @@
     </div>
 
     <p class="text-zinc-600 text-sm leading-relaxed mb-6 line-clamp-3">
-      {{ getSummary(audit.SUMMARY) }}
+      <span class="font-semibold text-zinc-900">Area covered:</span>
+      {{ formatText(audit['STREETS, INNTERSECTIONS + AREA COVERED']) }}
     </p>
 
     <div class="flex items-center border-t border-zinc-100 pt-4 min-h-[3rem]">
@@ -63,8 +64,8 @@ const getThemes = (themesStr: string) => {
     .filter((s) => s)
 }
 
-const getSummary = (summary: string) => {
-  if (!summary) return ''
-  return summary.length > 200 ? summary.substring(0, 200) + '...' : summary
+const formatText = (text: string) => {
+  if (!text) return ''
+  return text.length > 200 ? text.substring(0, 200) + '...' : text
 }
 </script>
