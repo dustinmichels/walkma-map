@@ -5,7 +5,7 @@ import {
   ListboxOption,
   ListboxOptions,
 } from '@headlessui/vue'
-import { Building2, Check, ChevronDown, Filter, Tag, X } from 'lucide-vue-next'
+import { Building2, Check, ChevronDown, Filter, Tag, Users, X } from 'lucide-vue-next'
 import { computed, ref, watch } from 'vue'
 import type { Audit, Audits } from '../types'
 import AuditCard from './AuditCard.vue'
@@ -24,6 +24,7 @@ const emit = defineEmits<{
 // Filter State
 const selectedTags = ref<string[]>([])
 const selectedYears = ref<string[]>([])
+const selectedOrganizer = ref('')
 
 // Helper: Parse themes string to array
 const parseThemes = (themesStr: string | undefined): string[] => {
@@ -59,6 +60,14 @@ const availableYears = computed(() => {
   return Array.from(years).sort((a, b) => Number(b) - Number(a))
 })
 
+const availableOrganizers = computed(() => {
+  const orgs = new Set<string>()
+  baseAuditsForFilters.value.forEach((audit) => {
+    if (audit.organizer_lead_organization) orgs.add(audit.organizer_lead_organization)
+  })
+  return Array.from(orgs).sort()
+})
+
 // Global filtered audits based on Tags and Year
 const globalFilteredAudits = computed(() => {
   if (!props.audits) return []
@@ -73,6 +82,11 @@ const globalFilteredAudits = computed(() => {
       const auditTags = parseThemes(audit.themes)
       const hasMatch = selectedTags.value.some((tag) => auditTags.includes(tag))
       if (!hasMatch) return false
+    }
+
+    // Filter by Organizer
+    if (selectedOrganizer.value) {
+      if (audit.organizer_lead_organization !== selectedOrganizer.value) return false
     }
 
     return true
@@ -195,7 +209,12 @@ const handleNextAudit = () => {
 const clearFilters = () => {
   selectedTags.value = []
   selectedYears.value = []
+  selectedOrganizer.value = ''
 }
+
+const activeFilterCount = computed(() =>
+  selectedTags.value.length + selectedYears.value.length + (selectedOrganizer.value ? 1 : 0)
+)
 </script>
 
 <template>
@@ -299,17 +318,15 @@ const clearFilters = () => {
               Filter Audits
             </label>
             <button
-              v-if="selectedTags.length > 0 || selectedYears.length > 0"
+              v-if="activeFilterCount > 0"
               @click="clearFilters"
               class="text-xs text-brand-orange font-bold hover:underline flex items-center gap-1"
             >
-              <X :size="12" /> Clear ({{
-                selectedTags.length + selectedYears.length
-              }})
+              <X :size="12" /> Clear ({{ activeFilterCount }})
             </button>
           </div>
 
-          <div class="grid grid-cols-2 gap-3">
+          <div class="grid grid-cols-3 gap-3">
             <!-- Tags Filter -->
             <Listbox v-model="selectedTags" multiple>
               <div class="relative">
@@ -449,6 +466,88 @@ const clearFilters = () => {
                 </transition>
               </div>
             </Listbox>
+
+            <!-- Organizer Filter -->
+            <Listbox v-model="selectedOrganizer">
+              <div class="relative">
+                <ListboxButton
+                  class="relative w-full cursor-pointer bg-white border border-zinc-200 rounded-lg py-2 pl-3 pr-8 text-left focus:outline-none focus:border-brand-orange sm:text-xs hover:border-zinc-300 transition-colors h-10"
+                >
+                  <span class="block truncate text-zinc-700">
+                    <span
+                      v-if="selectedOrganizer"
+                      class="bg-orange-100 text-orange-800 px-1.5 rounded font-medium"
+                    >
+                      {{ selectedOrganizer }}
+                    </span>
+                    <span v-else class="text-zinc-500">All Orgs</span>
+                  </span>
+                  <span
+                    class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
+                  >
+                    <Users class="text-zinc-400" :size="14" />
+                  </span>
+                </ListboxButton>
+
+                <transition
+                  leave-active-class="transition duration-100 ease-in"
+                  leave-from-class="opacity-100"
+                  leave-to-class="opacity-0"
+                >
+                  <ListboxOptions
+                    class="absolute right-0 mt-1 max-h-48 w-56 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm z-50 custom-scrollbar"
+                  >
+                    <ListboxOption
+                      v-slot="{ active }"
+                      :value="''"
+                      as="template"
+                    >
+                      <li
+                        :class="[
+                          active
+                            ? 'bg-orange-50 text-orange-900'
+                            : 'text-zinc-500',
+                          'relative cursor-default select-none py-2 pl-9 pr-4 text-xs italic',
+                        ]"
+                      >
+                        All Organizations
+                      </li>
+                    </ListboxOption>
+                    <ListboxOption
+                      v-slot="{ active, selected }"
+                      v-for="org in availableOrganizers"
+                      :key="org"
+                      :value="org"
+                      as="template"
+                    >
+                      <li
+                        :class="[
+                          active
+                            ? 'bg-orange-50 text-orange-900'
+                            : 'text-zinc-900',
+                          'relative cursor-default select-none py-2 pl-9 pr-4 text-xs',
+                        ]"
+                      >
+                        <span
+                          :class="[
+                            selected ? 'font-medium' : 'font-normal',
+                            'block truncate',
+                          ]"
+                        >
+                          {{ org }}
+                        </span>
+                        <span
+                          v-if="selected"
+                          class="absolute inset-y-0 left-0 flex items-center pl-3 text-brand-orange"
+                        >
+                          <Check :size="14" />
+                        </span>
+                      </li>
+                    </ListboxOption>
+                  </ListboxOptions>
+                </transition>
+              </div>
+            </Listbox>
           </div>
         </div>
       </div>
@@ -466,7 +565,7 @@ const clearFilters = () => {
             Hey! You could do a walk audit here!
           </p>
           <p
-            v-if="selectedTags.length > 0 || selectedYears.length > 0"
+            v-if="activeFilterCount > 0"
             class="text-xs text-zinc-500 mb-2"
           >
             (No audits found matching your filters)
