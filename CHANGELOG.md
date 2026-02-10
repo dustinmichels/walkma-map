@@ -2,6 +2,8 @@
 
 ## 2026-02-09
 
+- Add netlify functions to fetch live data from Google Sheet
+- Add filter by organization
 - Update filtering logic
 - Code formatting cleanup
 
