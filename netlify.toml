@@ -1,16 +1,16 @@
 [build]
-  base = "app"
-  command = "npm run build"
-  publish = "dist"
+base = "app"
+command = "npm run build"
+publish = "dist"
 
 [functions]
-  directory = "../netlify/functions"
+directory = "netlify/functions"
 
 [build.environment]
-  NODE_VERSION = "22.12.0"
+NODE_VERSION = "22.12.0"
 
 # Redirect rules for SPA
 [[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+from = "/*"
+to = "/index.html"
+status = 200

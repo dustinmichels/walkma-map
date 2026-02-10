@@ -1,0 +1,15 @@
+# Dependencies
+.venv/
+
+# Data
+data/
+
+# Python artifacts
+__pycache__/
+*.py[oc]
+*.egg-info
+.ipynb_checkpoints/
+
+# Misc
+.DS_Store
+uv.lock
