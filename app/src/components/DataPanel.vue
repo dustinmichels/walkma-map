@@ -34,20 +34,26 @@ const parseThemes = (themesStr: string | undefined): string[] => {
     .filter(Boolean)
 }
 
-// Compute available options from all audits
-const availableTags = computed(() => {
+// Compute available options based on selected city
+const baseAuditsForFilters = computed(() => {
   if (!props.audits) return []
+  if (props.selectedCity) {
+    return props.audits.filter((audit) => audit.CITY === props.selectedCity)
+  }
+  return props.audits
+})
+
+const availableTags = computed(() => {
   const tags = new Set<string>()
-  props.audits.forEach((audit) => {
+  baseAuditsForFilters.value.forEach((audit) => {
     parseThemes(audit.THEMES).forEach((tag) => tags.add(tag))
   })
   return Array.from(tags).sort()
 })
 
 const availableYears = computed(() => {
-  if (!props.audits) return []
   const years = new Set<number>()
-  props.audits.forEach((audit) => {
+  baseAuditsForFilters.value.forEach((audit) => {
     if (audit.YEAR) years.add(audit.YEAR)
   })
   return Array.from(years).sort((a, b) => b - a)
@@ -202,11 +208,20 @@ const clearFilters = () => {
       <div class="space-y-4 relative z-20">
         <!-- City Selection -->
         <div class="space-y-2">
-          <label
-            class="block text-sm font-bold text-zinc-600 uppercase tracking-wider"
-          >
-            Select City
-          </label>
+          <div class="flex items-center justify-between">
+            <label
+              class="block text-sm font-bold text-zinc-600 uppercase tracking-wider"
+            >
+              Select City
+            </label>
+            <button
+              v-if="selectedCity"
+              @click="selectedCityProxy = ''"
+              class="text-xs text-brand-orange font-bold hover:underline flex items-center gap-1"
+            >
+              <X :size="12" /> Deselect City
+            </button>
+          </div>
 
           <Listbox v-model="selectedCityProxy">
             <div class="relative mt-1">
