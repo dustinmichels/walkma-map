@@ -68,18 +68,13 @@ const updateMapData = (audits: Audits | null) => {
 
   if (audits) {
     audits.forEach((audit) => {
-      // Convert TOWN_ID to integer (it comes as float in the data)
-      let townId: number | undefined = audit.TOWN_ID
-        ? Math.floor(audit.TOWN_ID)
-        : undefined
-
-      // Fallback: Lookup by City Name if TOWN_ID is missing or 0
-      if (!townId) {
-        const cityName = audit['CITY/TOWN'] || audit.CITY
-        if (cityName) {
-          const standardizedName = cityName.toUpperCase().trim()
-          townId = townIdMap.value[standardizedName]
-        }
+      // Lookup by City Name
+      let townId: number | undefined
+      const cityName = audit.city_town || audit.city
+      if (cityName) {
+        // Strip parenthetical neighborhood info for matching
+        const baseName = cityName.replace(/\s*\(.*\)/, '').toUpperCase().trim()
+        townId = townIdMap.value[baseName]
       }
 
       if (townId) {

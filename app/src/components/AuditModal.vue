@@ -49,13 +49,13 @@
                     <span
                       class="inline-block bg-zinc-100 text-zinc-600 px-3 py-1 rounded-full text-xs font-bold mb-2"
                     >
-                      {{ audit.YEAR }}
+                      {{ audit.year }}
                     </span>
                     <DialogTitle
                       as="h3"
                       class="text-2xl font-extrabold text-zinc-900 leading-tight font-display m-0"
                     >
-                      {{ audit['CITY/TOWN'] || audit.CITY }}
+                      {{ audit.city_town || audit.city }}
                     </DialogTitle>
                   </div>
                   <button
@@ -70,10 +70,10 @@
                 <!-- Scrollable Content -->
                 <div class="p-6 overflow-y-auto flex-1 custom-scrollbar">
                   <!-- Themes -->
-                  <div v-if="audit.THEMES" class="mb-6">
+                  <div v-if="audit.themes" class="mb-6">
                     <div class="flex flex-wrap gap-2">
                       <span
-                        v-for="theme in getThemes(audit.THEMES)"
+                        v-for="theme in getThemes(audit.themes)"
                         :key="theme"
                         class="bg-emerald-50 text-emerald-600 text-xs px-3 py-1.5 rounded-md font-semibold uppercase tracking-wide"
                       >
@@ -83,7 +83,7 @@
                   </div>
 
                   <!-- Summary -->
-                  <div v-if="audit.SUMMARY" class="mb-6">
+                  <div v-if="audit.summary" class="mb-6">
                     <h3
                       class="text-sm font-bold uppercase text-zinc-500 mb-2 tracking-wide"
                     >
@@ -92,13 +92,13 @@
                     <p
                       class="text-base leading-relaxed text-zinc-700 whitespace-pre-wrap"
                     >
-                      {{ audit.SUMMARY }}
+                      {{ audit.summary }}
                     </p>
                   </div>
 
                   <!-- Streets / Area -->
                   <div
-                    v-if="audit['STREETS, INNTERSECTIONS + AREA COVERED']"
+                    v-if="audit.streets_intersections"
                     class="mb-6"
                   >
                     <h3
@@ -109,7 +109,7 @@
                     <p
                       class="text-base leading-relaxed text-zinc-700 whitespace-pre-wrap"
                     >
-                      {{ audit['STREETS, INNTERSECTIONS + AREA COVERED'] }}
+                      {{ audit.streets_intersections }}
                     </p>
                   </div>
 
@@ -119,7 +119,7 @@
                   >
                     <!-- Short Term -->
                     <div
-                      v-if="audit['SHORT TERM RECOMMENDATIONS']"
+                      v-if="audit.short_term_recommendations"
                       class="flex flex-col"
                     >
                       <h3
@@ -130,7 +130,7 @@
                       <ul class="space-y-3 m-0 p-0 list-none">
                         <li
                           v-for="(item, index) in parseList(
-                            audit['SHORT TERM RECOMMENDATIONS']
+                            audit.short_term_recommendations
                           )"
                           :key="index"
                           class="flex gap-3 items-start group"
@@ -148,7 +148,7 @@
 
                     <!-- Long Term -->
                     <div
-                      v-if="audit['LONG TERM RECOMMENDATIONS']"
+                      v-if="audit.long_term_recommendations"
                       class="flex flex-col"
                     >
                       <h3
@@ -159,7 +159,7 @@
                       <ul class="space-y-3 m-0 p-0 list-none">
                         <li
                           v-for="(item, index) in parseList(
-                            audit['LONG TERM RECOMMENDATIONS']
+                            audit.long_term_recommendations
                           )"
                           :key="index"
                           class="flex gap-3 items-start group"
@@ -178,14 +178,14 @@
 
                   <!-- Facilitator -->
                   <div
-                    v-if="audit['FACILITATOR/AUTHOR']"
+                    v-if="audit.facilitator_author"
                     class="bg-zinc-50 p-4 rounded-lg border border-zinc-200 flex gap-2 items-baseline mb-6"
                   >
                     <span class="font-semibold text-zinc-500 text-sm"
                       >Facilitator/Author:</span
                     >
                     <span class="text-zinc-700">{{
-                      audit['FACILITATOR/AUTHOR']
+                      audit.facilitator_author
                     }}</span>
                   </div>
                 </div>
@@ -273,7 +273,7 @@ const getThemes = (themesStr: string) => {
 }
 
 const hasPdf = computed(() => {
-  return !!props.audit?.VIEW_link
+  return !!props.audit?.view
 })
 
 const parseList = (text: string | undefined): string[] => {
@@ -289,8 +289,8 @@ const parseList = (text: string | undefined): string[] => {
 }
 
 const openReport = () => {
-  if (props.audit?.VIEW_link) {
-    window.open(props.audit.VIEW_link, '_blank')
+  if (props.audit?.view) {
+    window.open(props.audit.view, '_blank')
   }
 }
 </script>

@@ -48,23 +48,19 @@ export interface TownProperties {
 }
 
 // Audits Data
-// Audits Data
 export type Audits = Audit[]
 
 export interface Audit {
-  'CITY/TOWN': string
-  YEAR: number
-  SUMMARY: string
-  'LONG TERM RECOMMENDATIONS': string
-  'SHORT TERM RECOMMENDATIONS': string
-  'STREETS, INNTERSECTIONS + AREA COVERED': string
-  THEMES: string
-  VIEW: string
-  'FACILITATOR/AUTHOR': string
-  VIEW_link: string
-  CITY: string
-  NEIGHBORHOOD: any
-  TOWN_ID?: number
-  TYPE?: string
-  COUNTY?: string
+  city_town: string
+  city: string
+  neighborhood: string
+  year: string
+  summary: string
+  long_term_recommendations: string
+  short_term_recommendations: string
+  streets_intersections: string
+  themes: string
+  view: string
+  facilitator_author: string
+  organizer_lead_organization: string
 }

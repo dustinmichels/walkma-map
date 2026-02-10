@@ -5,18 +5,18 @@
   >
     <div class="flex justify-between items-center mb-2">
       <h3 class="text-xl font-bold text-zinc-900 font-display m-0">
-        {{ audit['CITY/TOWN'] || audit.CITY }}
+        {{ audit.city_town || audit.city }}
       </h3>
       <span
         class="bg-zinc-100 text-zinc-600 px-3 py-1 rounded-full text-sm font-semibold"
       >
-        {{ audit.YEAR }}
+        {{ audit.year }}
       </span>
     </div>
 
-    <div class="flex flex-wrap gap-2 mb-4" v-if="audit.THEMES">
+    <div class="flex flex-wrap gap-2 mb-4" v-if="audit.themes">
       <span
-        v-for="theme in getThemes(audit.THEMES)"
+        v-for="theme in getThemes(audit.themes)"
         :key="theme"
         class="bg-emerald-50 text-emerald-600 text-xs px-2 py-1 rounded-md font-medium uppercase tracking-wide"
       >
@@ -26,13 +26,13 @@
 
     <p class="text-zinc-600 text-sm leading-relaxed mb-6 line-clamp-3">
       <span class="font-semibold text-zinc-900">Area covered:</span>
-      {{ formatText(audit['STREETS, INNTERSECTIONS + AREA COVERED']) }}
+      {{ formatText(audit.streets_intersections) }}
     </p>
 
     <div class="flex items-center border-t border-zinc-100 pt-4 min-h-[3rem]">
-      <div class="text-xs text-zinc-500" v-if="audit['FACILITATOR/AUTHOR']">
+      <div class="text-xs text-zinc-500" v-if="audit.facilitator_author">
         <span class="font-semibold text-zinc-700">Facilitator:</span>
-        {{ audit['FACILITATOR/AUTHOR'] }}
+        {{ audit.facilitator_author }}
       </div>
 
       <div

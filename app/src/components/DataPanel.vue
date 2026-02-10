@@ -23,7 +23,7 @@ const emit = defineEmits<{
 
 // Filter State
 const selectedTags = ref<string[]>([])
-const selectedYears = ref<number[]>([])
+const selectedYears = ref<string[]>([])
 
 // Helper: Parse themes string to array
 const parseThemes = (themesStr: string | undefined): string[] => {
@@ -38,7 +38,7 @@ const parseThemes = (themesStr: string | undefined): string[] => {
 const baseAuditsForFilters = computed(() => {
   if (!props.audits) return []
   if (props.selectedCity) {
-    return props.audits.filter((audit) => audit.CITY === props.selectedCity)
+    return props.audits.filter((audit) => audit.city === props.selectedCity)
   }
   return props.audits
 })
@@ -46,17 +46,17 @@ const baseAuditsForFilters = computed(() => {
 const availableTags = computed(() => {
   const tags = new Set<string>()
   baseAuditsForFilters.value.forEach((audit) => {
-    parseThemes(audit.THEMES).forEach((tag) => tags.add(tag))
+    parseThemes(audit.themes).forEach((tag) => tags.add(tag))
   })
   return Array.from(tags).sort()
 })
 
 const availableYears = computed(() => {
-  const years = new Set<number>()
+  const years = new Set<string>()
   baseAuditsForFilters.value.forEach((audit) => {
-    if (audit.YEAR) years.add(audit.YEAR)
+    if (audit.year) years.add(audit.year)
   })
-  return Array.from(years).sort((a, b) => b - a)
+  return Array.from(years).sort((a, b) => Number(b) - Number(a))
 })
 
 // Global filtered audits based on Tags and Year
@@ -65,12 +65,12 @@ const globalFilteredAudits = computed(() => {
   return props.audits.filter((audit) => {
     // Filter by Year
     if (selectedYears.value.length > 0) {
-      if (!selectedYears.value.includes(audit.YEAR)) return false
+      if (!selectedYears.value.includes(audit.year)) return false
     }
 
     // Filter by Tags (OR logic: if audit has ANY of the selected tags)
     if (selectedTags.value.length > 0) {
-      const auditTags = parseThemes(audit.THEMES)
+      const auditTags = parseThemes(audit.themes)
       const hasMatch = selectedTags.value.some((tag) => auditTags.includes(tag))
       if (!hasMatch) return false
     }
@@ -104,7 +104,7 @@ const cities = computed(() => {
   const cityCounts = new Map<string, number>()
 
   globalFilteredAudits.value.forEach((audit) => {
-    const city = audit.CITY
+    const city = audit.city
     if (city) {
       cityCounts.set(city, (cityCounts.get(city) || 0) + 1)
     }
@@ -121,11 +121,11 @@ const cities = computed(() => {
 const filteredAudits = computed(() => {
   if (!props.selectedCity || !globalFilteredAudits.value) return []
   const filtered = globalFilteredAudits.value.filter((audit) => {
-    const city = audit.CITY
+    const city = audit.city
     return city === props.selectedCity
   })
   // Sort by date (most recent first)
-  return filtered.sort((a, b) => b.YEAR - a.YEAR)
+  return filtered.sort((a, b) => Number(b.year) - Number(a.year))
 })
 
 const currentStats = computed(() => {
@@ -136,8 +136,8 @@ const currentStats = computed(() => {
   // Count theme occurrences across all audits for this city
   const themeCounts = new Map<string, number>()
   cityAudits.forEach((audit) => {
-    if (audit.THEMES) {
-      audit.THEMES.split(',').forEach((t) => {
+    if (audit.themes) {
+      audit.themes.split(',').forEach((t) => {
         const theme = t.trim().replace(/"/g, '')
         if (theme) {
           themeCounts.set(theme, (themeCounts.get(theme) || 0) + 1)
