@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import { Home, Loader2, Minus, Plus } from 'lucide-vue-next'
 import maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
-import { onMounted, onUnmounted, ref, shallowRef, watch, computed } from 'vue'
-import { Loader2, Plus, Minus, Home } from 'lucide-vue-next'
+import { computed, onMounted, onUnmounted, ref, shallowRef, watch } from 'vue'
 import type { Audits, Towns } from '../types'
 
 const props = defineProps<{
@@ -43,7 +43,10 @@ const resetMap = () => {
 
 const updateMapData = (audits: Audits | null) => {
   if (!map.value || !audits) {
-    console.log('updateMapData skipped:', { hasMap: !!map.value, hasAudits: !!audits })
+    console.log('updateMapData skipped:', {
+      hasMap: !!map.value,
+      hasAudits: !!audits,
+    })
     return
   }
 
@@ -55,7 +58,10 @@ const updateMapData = (audits: Audits | null) => {
 
   // Reset all towns to 0 first
   for (const id of Object.values(townIdMap.value)) {
-    map.value.setFeatureState({ source: 'towns', id: Number(id) }, { auditCount: 0 })
+    map.value.setFeatureState(
+      { source: 'towns', id: Number(id) },
+      { auditCount: 0 }
+    )
   }
 
   const counts: Record<number, number> = {}
@@ -63,7 +69,9 @@ const updateMapData = (audits: Audits | null) => {
   if (audits) {
     audits.forEach((audit) => {
       // Convert TOWN_ID to integer (it comes as float in the data)
-      let townId: number | undefined = audit.TOWN_ID ? Math.floor(audit.TOWN_ID) : undefined
+      let townId: number | undefined = audit.TOWN_ID
+        ? Math.floor(audit.TOWN_ID)
+        : undefined
 
       // Fallback: Lookup by City Name if TOWN_ID is missing or 0
       if (!townId) {
@@ -85,7 +93,10 @@ const updateMapData = (audits: Audits | null) => {
   let matched = 0
   for (const [id, count] of Object.entries(counts)) {
     if (map.value.getSource('towns')) {
-      map.value.setFeatureState({ source: 'towns', id: Number(id) }, { auditCount: count })
+      map.value.setFeatureState(
+        { source: 'towns', id: Number(id) },
+        { auditCount: count }
+      )
       matched++
     }
   }
@@ -102,7 +113,11 @@ watch(
       const townId = townIdMap.value[newCity.toUpperCase().trim()]
       if (townId) {
         // Update the filter for the selected line layer
-        map.value.setFilter('towns-selected', ['==', ['get', 'TOWN_ID'], townId])
+        map.value.setFilter('towns-selected', [
+          '==',
+          ['get', 'TOWN_ID'],
+          townId,
+        ])
 
         // Optional: Fly to the town if needed, but simple highlighting is requested
       } else {
@@ -111,7 +126,7 @@ watch(
     } else {
       map.value.setFilter('towns-selected', ['==', ['get', 'TOWN_ID'], -1])
     }
-  },
+  }
 )
 
 onMounted(async () => {
@@ -138,7 +153,11 @@ onMounted(async () => {
           }
         }
       })
-      console.log('Loaded town ID map with', Object.keys(townIdMap.value).length, 'towns')
+      console.log(
+        'Loaded town ID map with',
+        Object.keys(townIdMap.value).length,
+        'towns'
+      )
     }
   } catch (err) {
     console.error('Failed to load towns data', err)
@@ -280,14 +299,14 @@ watch(
       'Audits changed, updating map. Audits:',
       newAudits ? `${newAudits.length} features` : 'null',
       'mapReady:',
-      mapReady.value,
+      mapReady.value
     )
     if (mapReady.value) {
       updateMapData(newAudits)
     } else {
       console.log('Map not ready yet, will update when loaded')
     }
-  },
+  }
 )
 
 onUnmounted(() => {
@@ -313,22 +332,36 @@ onUnmounted(() => {
     <div
       class="absolute bottom-6 left-4 bg-white/95 backdrop-blur-sm py-3 px-4 rounded-lg shadow-lg z-10 flex items-center gap-4 border border-zinc-100"
     >
-      <div class="text-xs font-bold text-zinc-800 uppercase tracking-wide">Audit Count</div>
+      <div class="text-xs font-bold text-zinc-800 uppercase tracking-wide">
+        Audit Count
+      </div>
       <div class="flex flex-row gap-3">
         <div class="flex items-center gap-2">
-          <span class="w-5 h-5 rounded border border-zinc-200" style="background: #cccccc"></span>
+          <span
+            class="w-5 h-5 rounded border border-zinc-200"
+            style="background: #cccccc"
+          ></span>
           <span class="text-xs text-zinc-600 font-medium">0</span>
         </div>
         <div class="flex items-center gap-2">
-          <span class="w-5 h-5 rounded border border-zinc-200" style="background: #ff9800"></span>
+          <span
+            class="w-5 h-5 rounded border border-zinc-200"
+            style="background: #ff9800"
+          ></span>
           <span class="text-xs text-zinc-600 font-medium">1</span>
         </div>
         <div class="flex items-center gap-2">
-          <span class="w-5 h-5 rounded border border-zinc-200" style="background: #e65100"></span>
+          <span
+            class="w-5 h-5 rounded border border-zinc-200"
+            style="background: #e65100"
+          ></span>
           <span class="text-xs text-zinc-600 font-medium">5</span>
         </div>
         <div class="flex items-center gap-2">
-          <span class="w-5 h-5 rounded border border-zinc-200" style="background: #b71c1c"></span>
+          <span
+            class="w-5 h-5 rounded border border-zinc-200"
+            style="background: #b71c1c"
+          ></span>
           <span class="text-xs text-zinc-600 font-medium">10+</span>
         </div>
       </div>

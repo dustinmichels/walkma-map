@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import Map from './components/Map.vue'
+import { onMounted, ref } from 'vue'
 import DataPanel from './components/DataPanel.vue'
+import Map from './components/Map.vue'
 import type { Audits } from './types'
 
 const selectedCity = ref('')
@@ -25,12 +25,16 @@ onMounted(async () => {
 <template>
   <div class="min-h-screen flex flex-col font-sans text-slate-900">
     <!-- Header -->
-    <header class="bg-brand-orange shadow-lg py-4 px-6 flex justify-between items-center z-10">
+    <header
+      class="bg-brand-orange shadow-lg py-4 px-6 flex justify-between items-center z-10"
+    >
       <div class="flex items-center gap-3">
         <div class="bg-black p-2 rounded-lg">
           <i class="fas fa-walking text-white text-2xl"></i>
         </div>
-        <h1 class="text-white text-2xl font-bold tracking-tight">Walk MA - Walk Audit Dashboard</h1>
+        <h1 class="text-white text-2xl font-bold tracking-tight">
+          Walk MA - Walk Audit Dashboard
+        </h1>
       </div>
     </header>
 
@@ -42,15 +46,24 @@ onMounted(async () => {
       <div
         class="flex-grow relative rounded-xl overflow-hidden border-2 border-zinc-200 bg-white shadow-inner group"
       >
-        <Map :audits="filteredAudits || audits" v-model:selectedCity="selectedCity" />
+        <Map
+          :audits="filteredAudits || audits"
+          v-model:selectedCity="selectedCity"
+        />
       </div>
 
       <!-- Right Side: Data Panel -->
-      <DataPanel v-model:selectedCity="selectedCity" :audits="audits" @filter="handleFilter" />
+      <DataPanel
+        v-model:selectedCity="selectedCity"
+        :audits="audits"
+        @filter="handleFilter"
+      />
     </main>
 
     <!-- Footer -->
-    <footer class="bg-zinc-900 text-zinc-500 py-3 px-6 text-xs flex justify-between">
+    <footer
+      class="bg-zinc-900 text-zinc-500 py-3 px-6 text-xs flex justify-between"
+    >
       <p>&copy; 2026 WalkMA</p>
       <div class="flex gap-4">
         <a href="#" class="hover:text-white">Privacy Policy</a>

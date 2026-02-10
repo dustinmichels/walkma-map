@@ -7,7 +7,9 @@
       <h3 class="text-xl font-bold text-zinc-900 font-display m-0">
         {{ audit['CITY/TOWN'] || audit.CITY }}
       </h3>
-      <span class="bg-zinc-100 text-zinc-600 px-3 py-1 rounded-full text-sm font-semibold">
+      <span
+        class="bg-zinc-100 text-zinc-600 px-3 py-1 rounded-full text-sm font-semibold"
+      >
         {{ audit.YEAR }}
       </span>
     </div>
@@ -33,7 +35,9 @@
         {{ audit['FACILITATOR/AUTHOR'] }}
       </div>
 
-      <div class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+      <div
+        class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+      >
         <span
           class="bg-zinc-100 text-zinc-600 p-1.5 rounded-md inline-flex items-center justify-center"
         >
@@ -45,8 +49,8 @@
 </template>
 
 <script setup lang="ts">
-import type { Audit } from '../types'
 import { Eye } from 'lucide-vue-next'
+import type { Audit } from '../types'
 
 defineProps<{
   audit: Audit

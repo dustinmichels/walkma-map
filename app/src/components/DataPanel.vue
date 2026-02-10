@@ -1,10 +1,15 @@
 <script setup lang="ts">
+import {
+  Listbox,
+  ListboxButton,
+  ListboxOption,
+  ListboxOptions,
+} from '@headlessui/vue'
+import { Building2, Check, ChevronDown, Filter, Tag, X } from 'lucide-vue-next'
 import { computed, ref, watch } from 'vue'
 import type { Audit, Audits } from '../types'
 import AuditCard from './AuditCard.vue'
 import AuditModal from './AuditModal.vue'
-import { Listbox, ListboxButton, ListboxOptions, ListboxOption } from '@headlessui/vue'
-import { ChevronDown, Check, Tag, Building2, Filter, X } from 'lucide-vue-next'
 
 const props = defineProps<{
   selectedCity: string
@@ -74,7 +79,7 @@ watch(
     if (!props.audits) return
     emit('filter', newVal)
   },
-  { immediate: true },
+  { immediate: true }
 )
 
 // Modal State
@@ -162,7 +167,8 @@ const hasPrevAudit = computed(() => selectedAuditIndex.value > 0)
 // Check if current index is valid and not the last one
 const hasNextAudit = computed(() => {
   return (
-    selectedAuditIndex.value !== -1 && selectedAuditIndex.value < filteredAudits.value.length - 1
+    selectedAuditIndex.value !== -1 &&
+    selectedAuditIndex.value < filteredAudits.value.length - 1
   )
 })
 
@@ -196,7 +202,9 @@ const clearFilters = () => {
       <div class="space-y-4 relative z-20">
         <!-- City Selection -->
         <div class="space-y-2">
-          <label class="block text-sm font-bold text-zinc-600 uppercase tracking-wider">
+          <label
+            class="block text-sm font-bold text-zinc-600 uppercase tracking-wider"
+          >
             Select City
           </label>
 
@@ -209,7 +217,9 @@ const clearFilters = () => {
                 <span class="block truncate text-base text-zinc-800">
                   {{ selectedCity || 'Choose a city...' }}
                 </span>
-                <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                <span
+                  class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
+                >
                   <ChevronDown class="text-zinc-400" :size="16" />
                 </span>
               </ListboxButton>
@@ -231,11 +241,18 @@ const clearFilters = () => {
                   >
                     <li
                       :class="[
-                        active ? 'bg-orange-50 text-orange-900' : 'text-zinc-900',
+                        active
+                          ? 'bg-orange-50 text-orange-900'
+                          : 'text-zinc-900',
                         'relative cursor-default select-none py-2 pl-10 pr-4',
                       ]"
                     >
-                      <span :class="[selected ? 'font-medium' : 'font-normal', 'block truncate']">
+                      <span
+                        :class="[
+                          selected ? 'font-medium' : 'font-normal',
+                          'block truncate',
+                        ]"
+                      >
                         {{ city.name }} ({{ city.count }})
                       </span>
                       <span
@@ -261,7 +278,9 @@ const clearFilters = () => {
         <!-- Filter Controls -->
         <div class="space-y-2">
           <div class="flex items-center justify-between">
-            <label class="block text-sm font-bold text-zinc-600 uppercase tracking-wider">
+            <label
+              class="block text-sm font-bold text-zinc-600 uppercase tracking-wider"
+            >
               Filter Audits
             </label>
             <button
@@ -269,7 +288,9 @@ const clearFilters = () => {
               @click="clearFilters"
               class="text-xs text-brand-orange font-bold hover:underline flex items-center gap-1"
             >
-              <X :size="12" /> Clear ({{ selectedTags.length + selectedYears.length }})
+              <X :size="12" /> Clear ({{
+                selectedTags.length + selectedYears.length
+              }})
             </button>
           </div>
 
@@ -281,8 +302,13 @@ const clearFilters = () => {
                   class="relative w-full cursor-pointer bg-white border border-zinc-200 rounded-lg py-2 pl-3 pr-8 text-left focus:outline-none focus:border-brand-orange sm:text-xs hover:border-zinc-300 transition-colors h-10"
                 >
                   <span class="block truncate text-zinc-700">
-                    <span v-if="selectedTags.length > 0" class="flex items-center gap-1">
-                      <span class="bg-orange-100 text-orange-800 px-1.5 rounded font-medium">
+                    <span
+                      v-if="selectedTags.length > 0"
+                      class="flex items-center gap-1"
+                    >
+                      <span
+                        class="bg-orange-100 text-orange-800 px-1.5 rounded font-medium"
+                      >
                         {{ selectedTags.length }} matches
                       </span>
                     </span>
@@ -312,11 +338,18 @@ const clearFilters = () => {
                     >
                       <li
                         :class="[
-                          active ? 'bg-orange-50 text-orange-900' : 'text-zinc-900',
+                          active
+                            ? 'bg-orange-50 text-orange-900'
+                            : 'text-zinc-900',
                           'relative cursor-default select-none py-2 pl-9 pr-4 text-xs',
                         ]"
                       >
-                        <span :class="[selected ? 'font-medium' : 'font-normal', 'block truncate']">
+                        <span
+                          :class="[
+                            selected ? 'font-medium' : 'font-normal',
+                            'block truncate',
+                          ]"
+                        >
                           {{ tag }}
                         </span>
                         <span
@@ -339,8 +372,13 @@ const clearFilters = () => {
                   class="relative w-full cursor-pointer bg-white border border-zinc-200 rounded-lg py-2 pl-3 pr-8 text-left focus:outline-none focus:border-brand-orange sm:text-xs hover:border-zinc-300 transition-colors h-10"
                 >
                   <span class="block truncate text-zinc-700">
-                    <span v-if="selectedYears.length > 0" class="flex items-center gap-1">
-                      <span class="bg-orange-100 text-orange-800 px-1.5 rounded font-medium">
+                    <span
+                      v-if="selectedYears.length > 0"
+                      class="flex items-center gap-1"
+                    >
+                      <span
+                        class="bg-orange-100 text-orange-800 px-1.5 rounded font-medium"
+                      >
                         {{ selectedYears.join(', ') }}
                       </span>
                     </span>
@@ -370,11 +408,18 @@ const clearFilters = () => {
                     >
                       <li
                         :class="[
-                          active ? 'bg-orange-50 text-orange-900' : 'text-zinc-900',
+                          active
+                            ? 'bg-orange-50 text-orange-900'
+                            : 'text-zinc-900',
                           'relative cursor-default select-none py-2 pl-9 pr-4 text-xs',
                         ]"
                       >
-                        <span :class="[selected ? 'font-medium' : 'font-normal', 'block truncate']">
+                        <span
+                          :class="[
+                            selected ? 'font-medium' : 'font-normal',
+                            'block truncate',
+                          ]"
+                        >
                           {{ year }}
                         </span>
                         <span
@@ -402,7 +447,9 @@ const clearFilters = () => {
           v-if="currentStats.audits === 0"
           class="h-64 flex flex-col items-center justify-center text-center border-2 border-dashed border-zinc-100 rounded-xl bg-orange-50/30"
         >
-          <p class="text-lg font-medium text-zinc-700 mb-2">Hey! You could do a walk audit here!</p>
+          <p class="text-lg font-medium text-zinc-700 mb-2">
+            Hey! You could do a walk audit here!
+          </p>
           <p
             v-if="selectedTags.length > 0 || selectedYears.length > 0"
             class="text-xs text-zinc-500 mb-2"
@@ -422,7 +469,9 @@ const clearFilters = () => {
           <div
             class="px-4 py-2 rounded-lg bg-orange-50 border-l-4 border-brand-orange flex items-center justify-between"
           >
-            <h3 class="font-bold text-brand-orange text-sm uppercase">Audits To Date</h3>
+            <h3 class="font-bold text-brand-orange text-sm uppercase">
+              Audits To Date
+            </h3>
             <p class="text-2xl font-black text-black">
               {{ currentStats.audits }}
             </p>
@@ -430,7 +479,9 @@ const clearFilters = () => {
 
           <!-- Render list of audits -->
           <div class="mt-6">
-            <h4 class="text-sm font-bold text-zinc-700 uppercase mb-3">Audits</h4>
+            <h4 class="text-sm font-bold text-zinc-700 uppercase mb-3">
+              Audits
+            </h4>
             <div class="space-y-4">
               <AuditCard
                 v-for="(audit, index) in filteredAudits"
@@ -442,7 +493,9 @@ const clearFilters = () => {
           </div>
 
           <div class="pt-4" v-if="currentStats.areas.length > 0">
-            <h4 class="text-xs font-bold text-zinc-500 uppercase mb-3">Key Themes</h4>
+            <h4 class="text-xs font-bold text-zinc-500 uppercase mb-3">
+              Key Themes
+            </h4>
             <ul class="space-y-2">
               <li
                 v-for="area in currentStats.areas"
@@ -451,7 +504,9 @@ const clearFilters = () => {
               >
                 <Tag class="text-brand-orange flex-shrink-0" :size="12" />
                 <span class="flex-1">{{ area.theme }}</span>
-                <span class="text-xs text-zinc-400 font-medium">(x{{ area.count }})</span>
+                <span class="text-xs text-zinc-400 font-medium"
+                  >(x{{ area.count }})</span
+                >
               </li>
             </ul>
           </div>
@@ -464,7 +519,9 @@ const clearFilters = () => {
         class="h-64 flex flex-col items-center justify-center text-zinc-400 text-center border-2 border-dashed border-zinc-100 rounded-xl"
       >
         <Building2 class="text-zinc-400 mb-3 opacity-20" :size="36" />
-        <p class="text-sm">Select a city from the menu above to discover its walk audits</p>
+        <p class="text-sm">
+          Select a city from the menu above to discover its walk audits
+        </p>
       </div>
     </div>
 
