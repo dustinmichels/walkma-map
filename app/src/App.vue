@@ -14,7 +14,7 @@ const handleFilter = (filtered: Audits) => {
 
 onMounted(async () => {
   try {
-    const response = await fetch('/data/audits.json')
+    const response = await fetch('/.netlify/functions/gsheet')
     audits.value = await response.json()
   } catch (error) {
     console.error('Failed to load audits data:', error)
