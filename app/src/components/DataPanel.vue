@@ -5,7 +5,7 @@ import {
   ListboxOption,
   ListboxOptions,
 } from '@headlessui/vue'
-import { Building2, Check, ChevronDown, Filter, Tag, Users, X } from 'lucide-vue-next'
+import { Building2, Check, ChevronDown, Tag, Users, X } from 'lucide-vue-next'
 import { computed, ref, watch } from 'vue'
 import type { Audit, Audits } from '../types'
 import AuditCard from './AuditCard.vue'
@@ -23,7 +23,7 @@ const emit = defineEmits<{
 
 // Filter State
 const selectedTags = ref<string[]>([])
-const selectedYears = ref<string[]>([])
+const selectedMaxYear = ref<number | null>(null)
 const selectedOrganizer = ref('')
 
 // Helper: Parse themes string to array
@@ -52,12 +52,21 @@ const availableTags = computed(() => {
   return Array.from(tags).sort()
 })
 
-const availableYears = computed(() => {
-  const years = new Set<string>()
-  baseAuditsForFilters.value.forEach((audit) => {
-    if (audit.year) years.add(audit.year)
+const yearRange = computed(() => {
+  if (!props.audits) return { min: 0, max: 0 }
+  const years: number[] = []
+  props.audits.forEach((audit) => {
+    if (audit.year) years.push(Number(audit.year))
   })
-  return Array.from(years).sort((a, b) => Number(b) - Number(a))
+  if (years.length === 0) return { min: 0, max: 0 }
+  return { min: Math.min(...years), max: Math.max(...years) }
+})
+
+// Initialize slider to max year (show all) when data loads
+watch(yearRange, (range) => {
+  if (range.max > 0 && selectedMaxYear.value === null) {
+    selectedMaxYear.value = range.max
+  }
 })
 
 const availableOrganizers = computed(() => {
@@ -72,9 +81,9 @@ const availableOrganizers = computed(() => {
 const globalFilteredAudits = computed(() => {
   if (!props.audits) return []
   return props.audits.filter((audit) => {
-    // Filter by Year
-    if (selectedYears.value.length > 0) {
-      if (!selectedYears.value.includes(audit.year)) return false
+    // Filter by Year (show audits up to selected year)
+    if (selectedMaxYear.value !== null && yearRange.value.max > 0) {
+      if (Number(audit.year) > selectedMaxYear.value) return false
     }
 
     // Filter by Tags (OR logic: if audit has ANY of the selected tags)
@@ -208,12 +217,16 @@ const handleNextAudit = () => {
 
 const clearFilters = () => {
   selectedTags.value = []
-  selectedYears.value = []
+  selectedMaxYear.value = yearRange.value.max || null
   selectedOrganizer.value = ''
 }
 
+const isYearFiltered = computed(() =>
+  selectedMaxYear.value !== null && yearRange.value.max > 0 && selectedMaxYear.value < yearRange.value.max
+)
+
 const activeFilterCount = computed(() =>
-  selectedTags.value.length + selectedYears.value.length + (selectedOrganizer.value ? 1 : 0)
+  selectedTags.value.length + (isYearFiltered.value ? 1 : 0) + (selectedOrganizer.value ? 1 : 0)
 )
 </script>
 
@@ -310,12 +323,12 @@ const activeFilterCount = computed(() =>
         </div>
 
         <!-- Filter Controls -->
-        <div class="space-y-2">
+        <div class="space-y-2 border border-zinc-200 rounded-lg p-3 bg-zinc-50">
           <div class="flex items-center justify-between">
             <label
               class="block text-sm font-bold text-zinc-600 uppercase tracking-wider"
             >
-              Filter Audits
+              Filter <span class="underline decoration-dotted decoration-zinc-400">{{ selectedCity || 'All' }}</span> Audits
             </label>
             <button
               v-if="activeFilterCount > 0"
@@ -326,7 +339,7 @@ const activeFilterCount = computed(() =>
             </button>
           </div>
 
-          <div class="grid grid-cols-3 gap-3">
+          <div class="grid grid-cols-2 gap-3">
             <!-- Tags Filter -->
             <Listbox v-model="selectedTags" multiple>
               <div class="relative">
@@ -383,76 +396,6 @@ const activeFilterCount = computed(() =>
                           ]"
                         >
                           {{ tag }}
-                        </span>
-                        <span
-                          v-if="selected"
-                          class="absolute inset-y-0 left-0 flex items-center pl-3 text-brand-orange"
-                        >
-                          <Check :size="14" />
-                        </span>
-                      </li>
-                    </ListboxOption>
-                  </ListboxOptions>
-                </transition>
-              </div>
-            </Listbox>
-
-            <!-- Year Filter -->
-            <Listbox v-model="selectedYears" multiple>
-              <div class="relative">
-                <ListboxButton
-                  class="relative w-full cursor-pointer bg-white border border-zinc-200 rounded-lg py-2 pl-3 pr-8 text-left focus:outline-none focus:border-brand-orange sm:text-xs hover:border-zinc-300 transition-colors h-10"
-                >
-                  <span class="block truncate text-zinc-700">
-                    <span
-                      v-if="selectedYears.length > 0"
-                      class="flex items-center gap-1"
-                    >
-                      <span
-                        class="bg-orange-100 text-orange-800 px-1.5 rounded font-medium"
-                      >
-                        {{ selectedYears.join(', ') }}
-                      </span>
-                    </span>
-                    <span v-else class="text-zinc-500">All Years</span>
-                  </span>
-                  <span
-                    class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
-                  >
-                    <Filter class="text-zinc-400" :size="14" />
-                  </span>
-                </ListboxButton>
-
-                <transition
-                  leave-active-class="transition duration-100 ease-in"
-                  leave-from-class="opacity-100"
-                  leave-to-class="opacity-0"
-                >
-                  <ListboxOptions
-                    class="absolute mt-1 max-h-48 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm z-50 custom-scrollbar"
-                  >
-                    <ListboxOption
-                      v-slot="{ active, selected }"
-                      v-for="year in availableYears"
-                      :key="year"
-                      :value="year"
-                      as="template"
-                    >
-                      <li
-                        :class="[
-                          active
-                            ? 'bg-orange-50 text-orange-900'
-                            : 'text-zinc-900',
-                          'relative cursor-default select-none py-2 pl-9 pr-4 text-xs',
-                        ]"
-                      >
-                        <span
-                          :class="[
-                            selected ? 'font-medium' : 'font-normal',
-                            'block truncate',
-                          ]"
-                        >
-                          {{ year }}
                         </span>
                         <span
                           v-if="selected"
@@ -548,6 +491,26 @@ const activeFilterCount = computed(() =>
                 </transition>
               </div>
             </Listbox>
+          </div>
+
+          <!-- Year Slider -->
+          <div v-if="yearRange.max > 0" class="pt-1" :class="{ 'opacity-40 pointer-events-none': baseAuditsForFilters.length === 0 }">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs text-zinc-500">{{ yearRange.min }}</span>
+              <span class="text-xs font-bold text-zinc-700">
+                Through {{ selectedMaxYear }}
+              </span>
+              <span class="text-xs text-zinc-500">{{ yearRange.max }}</span>
+            </div>
+            <input
+              type="range"
+              :min="yearRange.min"
+              :max="yearRange.max"
+              :value="selectedMaxYear"
+              :disabled="baseAuditsForFilters.length === 0"
+              @input="selectedMaxYear = Number(($event.target as HTMLInputElement).value)"
+              class="year-slider w-full h-2 rounded-lg appearance-none cursor-pointer"
+            />
           </div>
         </div>
       </div>
@@ -666,5 +629,30 @@ const activeFilterCount = computed(() =>
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #ffa100;
+}
+
+/* Year Slider */
+.year-slider {
+  background: linear-gradient(to right, #ffa100, #fed7aa);
+}
+.year-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ffa100;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+.year-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ffa100;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 </style>
