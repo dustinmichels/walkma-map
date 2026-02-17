@@ -274,7 +274,7 @@ onUnmounted(() => {
 })
 
 const sanitizeName = (name: string): string => {
-  const first = name.split(',')[0].trim()
+  const first = (name.split(',')[0] ?? name).trim()
   return first.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '')
 }
 
