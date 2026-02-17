@@ -69,6 +69,15 @@
 
                 <!-- Scrollable Content -->
                 <div class="p-6 overflow-y-auto flex-1 custom-scrollbar">
+                  <!-- Image -->
+                  <div v-if="imageSrc" class="mb-6 rounded-xl overflow-hidden">
+                    <img
+                      :src="imageSrc"
+                      :alt="`Walk audit photo for ${audit.city_town || audit.city}`"
+                      class="w-full h-auto max-h-[300px] object-cover"
+                    />
+                  </div>
+
                   <!-- Themes -->
                   <div v-if="audit.themes" class="mb-6">
                     <div class="flex flex-wrap gap-2">
@@ -230,7 +239,7 @@ import {
   TransitionRoot,
 } from '@headlessui/vue'
 import { ChevronLeft, ChevronRight, FileText, X } from 'lucide-vue-next'
-import { computed, onMounted, onUnmounted } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import type { Audit } from '../types'
 
 const props = defineProps<{
@@ -263,6 +272,39 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('keydown', handleKeydown)
 })
+
+const sanitizeName = (name: string): string => {
+  const first = name.split(',')[0].trim()
+  return first.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '')
+}
+
+const IMAGE_EXTENSIONS = ['jpeg', 'png', 'jpx']
+const imageSrc = ref<string | null>(null)
+
+const tryLoadImage = (basePath: string, extIndex: number) => {
+  if (extIndex >= IMAGE_EXTENSIONS.length) {
+    imageSrc.value = null
+    return
+  }
+  const src = `${basePath}.${IMAGE_EXTENSIONS[extIndex]}`
+  const img = new Image()
+  img.onload = () => { imageSrc.value = src }
+  img.onerror = () => { tryLoadImage(basePath, extIndex + 1) }
+  img.src = src
+}
+
+watch(() => props.audit, (audit) => {
+  imageSrc.value = null
+  if (!audit) return
+  const citySlug = sanitizeName(audit.city_town || audit.city)
+  const yearSlug = audit.year?.replace(/\.0$/, '')
+  const streetSlug = audit.streets_intersections ? sanitizeName(audit.streets_intersections) : ''
+  if (!citySlug || !yearSlug) return
+  const basePath = streetSlug
+    ? `/data/images/${citySlug}_${yearSlug}_${streetSlug}`
+    : `/data/images/${citySlug}_${yearSlug}`
+  tryLoadImage(basePath, 0)
+}, { immediate: true })
 
 const getThemes = (themesStr: string) => {
   if (!themesStr) return []

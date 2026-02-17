@@ -4,6 +4,14 @@ Interactive data map.
 
 Using vue 3, vite, bun, and maplibre-gl.
 
+## Usage
+
+Since I am using a netlify function, best to test with:
+
+```sh
+netlify dev
+```
+
 ## Data Pipeline
 
 Audit data is sourced from a Google Sheet and served via a Netlify Function (`netlify/functions/gsheet`). The app fetches from `/.netlify/functions/gsheet` at page load.
