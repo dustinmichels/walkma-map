@@ -2,12 +2,12 @@
 .venv/
 
 # Data
-data/
+data/townssurvey_gdb
 
 # Python artifacts
-__pycache__/
-*.py[oc]
-*.egg-info
+**pycache**/
+_.py[oc]
+_.egg-info
 .ipynb_checkpoints/
 
 # Misc
