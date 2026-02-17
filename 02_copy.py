@@ -45,6 +45,19 @@ _face_cascade = cv2.CascadeClassifier(
 # --- Configuration ---
 OUTPUT_DIR = "data/download"
 PRIMARY_IMAGE_DIR = "app/public/data/images"
+MAX_WIDTH = 1200  # px — images wider than this are downscaled
+JPEG_QUALITY = 85  # 0–95; 85 is a good web balance of size vs. quality
+
+
+def save_compressed(src_path, dest_path):
+    """Resize to MAX_WIDTH and save as JPEG. Returns output file size in KB."""
+    with Image.open(src_path) as img:
+        img = img.convert("RGB")  # drop alpha, normalise mode for JPEG
+        if img.width > MAX_WIDTH:
+            new_height = int(img.height * MAX_WIDTH / img.width)
+            img = img.resize((MAX_WIDTH, new_height), Image.LANCZOS)
+        img.save(dest_path, format="JPEG", quality=JPEG_QUALITY, optimize=True)
+    return os.path.getsize(dest_path) // 1024
 
 
 def count_faces(image_path):
@@ -110,7 +123,7 @@ def copy_best_images():
         f for f in os.listdir(OUTPUT_DIR) if os.path.isdir(os.path.join(OUTPUT_DIR, f))
     )
 
-    results = []  # (folder_name, n_candidates, best_score, n_faces) or score=None for skipped
+    results = []  # (folder_name, n_candidates, best_score, n_faces, size_kb) — score=None if skipped
 
     with Progress(
         TextColumn("[progress.description]{task.description}"),
@@ -125,7 +138,7 @@ def copy_best_images():
 
             images_path = os.path.join(OUTPUT_DIR, folder_name, "images")
             if not os.path.exists(images_path):
-                results.append((folder_name, 0, None, 0))
+                results.append((folder_name, 0, None, 0, 0))
                 progress.advance(task)
                 continue
 
@@ -135,7 +148,7 @@ def copy_best_images():
                 if f.startswith("image_")
             ]
             if not img_files:
-                results.append((folder_name, 0, None, 0))
+                results.append((folder_name, 0, None, 0, 0))
                 progress.advance(task)
                 continue
 
@@ -145,11 +158,11 @@ def copy_best_images():
                 reverse=True,
             )
             best_img, best_score, best_faces = scored[0]
-            ext = best_img.rsplit(".", 1)[-1]
-            shutil.copy2(
-                best_img, os.path.join(PRIMARY_IMAGE_DIR, f"{folder_name}.{ext}")
+            dest = os.path.join(PRIMARY_IMAGE_DIR, f"{folder_name}.jpeg")
+            size_kb = save_compressed(best_img, dest)
+            results.append(
+                (folder_name, len(img_files), best_score, best_faces, size_kb)
             )
-            results.append((folder_name, len(img_files), best_score, best_faces))
             progress.advance(task)
 
     # Summary table
@@ -158,14 +171,15 @@ def copy_best_images():
     table.add_column("Candidates", justify="right")
     table.add_column("Faces", justify="right")
     table.add_column("Score", justify="right")
+    table.add_column("Size", justify="right")
     table.add_column("Status", justify="center")
 
-    selected = sum(1 for _, n, s, f in results if s is not None)
+    selected = sum(1 for _, n, s, f, sz in results if s is not None)
     skipped = len(results) - selected
 
-    for folder_name, n_candidates, score, n_faces in results:
+    for folder_name, n_candidates, score, n_faces, size_kb in results:
         if score is None:
-            table.add_row(folder_name, "—", "—", "—", "[yellow]skipped[/yellow]")
+            table.add_row(folder_name, "—", "—", "—", "—", "[yellow]skipped[/yellow]")
         else:
             face_str = f"[green]{n_faces}[/green]" if n_faces > 0 else "[dim]0[/dim]"
             table.add_row(
@@ -173,6 +187,7 @@ def copy_best_images():
                 str(n_candidates),
                 face_str,
                 str(int(score)),
+                f"{size_kb} KB",
                 "[green]✓[/green]",
             )
 
