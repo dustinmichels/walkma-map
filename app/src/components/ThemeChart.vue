@@ -78,7 +78,7 @@ const processData = (
   // Identify top 10 global themes to establish the "Full List"
   const topGlobalThemes = Array.from(globalCounts.entries())
     .sort((a, b) => b[1] - a[1])
-    .slice(0, 10)
+    .slice(0, 15)
     .map((item) => item[0])
 
   // Get counts for the current filtered set

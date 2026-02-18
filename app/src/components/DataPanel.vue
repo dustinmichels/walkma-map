@@ -1,128 +1,12 @@
 <script setup lang="ts">
-import {
-  Listbox,
-  ListboxButton,
-  ListboxOption,
-  ListboxOptions,
-} from '@headlessui/vue'
-import { Check, ChevronDown, ListFilter, Tag, Users, X } from 'lucide-vue-next'
 import { computed, ref, watch } from 'vue'
 import type { Audit, Audits } from '../types'
 import AuditCard from './AuditCard.vue'
 import AuditModal from './AuditModal.vue'
 
 const props = defineProps<{
-  selectedCity: string
   audits: Audits | null
 }>()
-
-const emit = defineEmits<{
-  (e: 'update:selectedCity', value: string): void
-  (e: 'filter', value: Audits): void
-}>()
-
-// Filter State
-// Filter State
-const selectedTags = defineModel<string[]>('selectedTags', {
-  default: () => [],
-})
-const selectedMaxYear = ref<number | null>(null)
-const selectedOrganizer = ref('')
-const yearFilterMode = ref<'through' | 'in'>('through')
-
-// Helper: Parse themes string to array
-const parseThemes = (themesStr: string | undefined): string[] => {
-  if (!themesStr) return []
-  return themesStr
-    .split(',')
-    .map((s) => s.trim().replace(/^"|"$/g, ''))
-    .filter(Boolean)
-}
-
-// Compute available options based on selected city
-const baseAuditsForFilters = computed(() => {
-  if (!props.audits) return []
-  if (props.selectedCity) {
-    return props.audits.filter((audit) => audit.city === props.selectedCity)
-  }
-  return props.audits
-})
-
-const availableTags = computed(() => {
-  const tags = new Set<string>()
-  baseAuditsForFilters.value.forEach((audit) => {
-    parseThemes(audit.themes).forEach((tag) => tags.add(tag))
-  })
-  return Array.from(tags).sort()
-})
-
-const yearRange = computed(() => {
-  if (!props.audits) return { min: 0, max: 0 }
-  const years: number[] = []
-  props.audits.forEach((audit) => {
-    if (audit.year) years.push(Number(audit.year))
-  })
-  if (years.length === 0) return { min: 0, max: 0 }
-  return { min: Math.min(...years), max: Math.max(...years) }
-})
-
-// Initialize slider to max year (show all) when data loads
-watch(yearRange, (range) => {
-  if (range.max > 0 && selectedMaxYear.value === null) {
-    selectedMaxYear.value = range.max
-  }
-})
-
-const availableOrganizers = computed(() => {
-  const orgs = new Set<string>()
-  baseAuditsForFilters.value.forEach((audit) => {
-    if (audit.organizer_lead_organization)
-      orgs.add(audit.organizer_lead_organization)
-  })
-  return Array.from(orgs).sort()
-})
-
-// Global filtered audits based on Tags and Year
-const globalFilteredAudits = computed(() => {
-  if (!props.audits) return []
-  return props.audits.filter((audit) => {
-    // Filter by Year
-    if (selectedMaxYear.value !== null && yearRange.value.max > 0) {
-      if (yearFilterMode.value === 'in') {
-        if (Number(audit.year) !== selectedMaxYear.value) return false
-      } else {
-        if (Number(audit.year) > selectedMaxYear.value) return false
-      }
-    }
-
-    // Filter by Tags (AND logic: audit must have ALL selected tags)
-    if (selectedTags.value.length > 0) {
-      const auditTags = parseThemes(audit.themes)
-      // Check if auditTags includes *every* selected tag
-      const hasMatch = selectedTags.value.every((tag) =>
-        auditTags.includes(tag)
-      )
-      if (!hasMatch) return false
-    }
-
-    // Filter by Organizer
-    if (selectedOrganizer.value) {
-      if (audit.organizer_lead_organization !== selectedOrganizer.value)
-        return false
-    }
-
-    return true
-  })
-})
-
-watch(
-  globalFilteredAudits,
-  (newVal) => {
-    if (!props.audits) return
-    emit('filter', newVal)
-  },
-  { immediate: true }
-)
 
 // Modal State
 const selectedAudit = ref<Audit | null>(null)
@@ -133,55 +17,51 @@ const handleViewAudit = (audit: Audit) => {
   isAuditModalOpen.value = true
 }
 
-// Update cities based on globalFilteredAudits
-const cities = computed(() => {
-  if (!globalFilteredAudits.value) return []
-
-  const cityCounts = new Map<string, number>()
-
-  globalFilteredAudits.value.forEach((audit) => {
-    const city = audit.city
-    if (city) {
-      cityCounts.set(city, (cityCounts.get(city) || 0) + 1)
-    }
-  })
-
-  // Note: We removed the logic that forced selectedCity to be in the list
-  // because the requirement is to "sometimes remove cities entirely".
-
-  return Array.from(cityCounts.entries())
-    .map(([name, count]) => ({ name, count }))
-    .sort((a, b) => a.name.localeCompare(b.name))
+// Navigation Logic
+const selectedAuditIndex = computed(() => {
+  if (!selectedAudit.value || !props.audits) return -1
+  return props.audits.indexOf(selectedAudit.value)
 })
 
-const filteredAudits = computed(() => {
-  if (!globalFilteredAudits.value) return []
+const hasPrevAudit = computed(() => selectedAuditIndex.value > 0)
+// Check if current index is valid and not the last one
+const hasNextAudit = computed(() => {
+  return (
+    props.audits &&
+    selectedAuditIndex.value !== -1 &&
+    selectedAuditIndex.value < props.audits.length - 1
+  )
+})
 
-  // If specific city selected, filter by it
-  let filtered = globalFilteredAudits.value
-  if (props.selectedCity) {
-    filtered = globalFilteredAudits.value.filter((audit) => {
-      const city = audit.city
-      return city === props.selectedCity
-    })
+const handlePrevAudit = () => {
+  if (hasPrevAudit.value && props.audits) {
+    const prev = props.audits[selectedAuditIndex.value - 1]
+    if (prev) selectedAudit.value = prev
   }
+}
 
-  // Sort by date (most recent first)
-  return filtered.sort((a, b) => Number(b.year) - Number(a.year))
-})
+const handleNextAudit = () => {
+  if (hasNextAudit.value && props.audits) {
+    const next = props.audits[selectedAuditIndex.value + 1]
+    if (next) selectedAudit.value = next
+  }
+}
 
 // Infinite loading
 const visibleLimit = ref(20)
 const loadingMore = ref(false)
 
 const displayedAudits = computed(() => {
-  return filteredAudits.value.slice(0, visibleLimit.value)
+  if (!props.audits) return []
+  return props.audits.slice(0, visibleLimit.value)
 })
 
+const scrollContainer = ref<HTMLElement | null>(null)
+
 watch(
-  () => [props.selectedCity, globalFilteredAudits.value],
+  () => props.audits,
   () => {
-    // Reset limit when filters change
+    // Reset limit when filters change (detected by audits prop change)
     visibleLimit.value = 20
     if (scrollContainer.value) {
       scrollContainer.value.scrollTop = 0
@@ -189,16 +69,15 @@ watch(
   }
 )
 
-const scrollContainer = ref<HTMLElement | null>(null)
 const handleScroll = (e: Event) => {
   const target = e.target as HTMLElement
   scrollContainer.value = target // update ref
 
-  if (loadingMore.value) return
+  if (loadingMore.value || !props.audits) return
 
   // Check if scrolled near bottom (within 100px)
   if (target.scrollHeight - target.scrollTop - target.clientHeight < 100) {
-    if (visibleLimit.value < filteredAudits.value.length) {
+    if (visibleLimit.value < props.audits.length) {
       loadingMore.value = true
       // Small delay to show spinner/prevent hammering
       setTimeout(() => {
@@ -208,411 +87,26 @@ const handleScroll = (e: Event) => {
     }
   }
 }
-
-const currentStats = computed(() => {
-  const cityAudits = filteredAudits.value
-
-  // Count theme occurrences across all audits for this city
-  const themeCounts = new Map<string, number>()
-  cityAudits.forEach((audit) => {
-    if (audit.themes) {
-      audit.themes.split(',').forEach((t) => {
-        const theme = t.trim().replace(/"/g, '')
-        if (theme) {
-          themeCounts.set(theme, (themeCounts.get(theme) || 0) + 1)
-        }
-      })
-    }
-  })
-
-  // Top 5 themes by frequency
-  const areas = Array.from(themeCounts.entries())
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 5)
-    .map(([theme, count]) => ({ theme, count }))
-
-  return {
-    audits: cityAudits.length,
-    areas,
-  }
-})
-
-const selectedCityProxy = computed({
-  get: () => props.selectedCity,
-  set: (val) => emit('update:selectedCity', val),
-})
-
-// Navigation Logic
-const selectedAuditIndex = computed(() => {
-  if (!selectedAudit.value || !filteredAudits.value) return -1
-  return filteredAudits.value.indexOf(selectedAudit.value)
-})
-
-const hasPrevAudit = computed(() => selectedAuditIndex.value > 0)
-// Check if current index is valid and not the last one
-const hasNextAudit = computed(() => {
-  return (
-    selectedAuditIndex.value !== -1 &&
-    selectedAuditIndex.value < filteredAudits.value.length - 1
-  )
-})
-
-const handlePrevAudit = () => {
-  if (hasPrevAudit.value) {
-    const prev = filteredAudits.value[selectedAuditIndex.value - 1]
-    if (prev) selectedAudit.value = prev
-  }
-}
-
-const handleNextAudit = () => {
-  if (hasNextAudit.value) {
-    const next = filteredAudits.value[selectedAuditIndex.value + 1]
-    if (next) selectedAudit.value = next
-  }
-}
-
-const clearFilters = () => {
-  selectedCityProxy.value = ''
-  selectedTags.value = []
-  selectedMaxYear.value = yearRange.value.max || null
-  selectedOrganizer.value = ''
-  yearFilterMode.value = 'through'
-}
-
-const isYearFiltered = computed(() => {
-  if (selectedMaxYear.value === null || yearRange.value.max === 0) return false
-  if (yearFilterMode.value === 'in') return true
-  return selectedMaxYear.value < yearRange.value.max
-})
-
-const activeFilterCount = computed(
-  () =>
-    selectedTags.value.length +
-    (isYearFiltered.value ? 1 : 0) +
-    (selectedOrganizer.value ? 1 : 0) +
-    (props.selectedCity ? 1 : 0)
-)
 </script>
 
 <template>
   <aside
-    class="w-full md:w-[400px] flex flex-col bg-white rounded-xl shadow-xl border border-zinc-200 overflow-hidden h-full relative"
+    class="w-full flex flex-col bg-white rounded-xl shadow-xl border border-zinc-200 overflow-hidden flex-1 min-h-0 relative"
   >
     <!-- Interactive Elements -->
     <div
       class="flex-grow overflow-y-auto p-5 custom-scrollbar space-y-6"
       @scroll="handleScroll"
     >
-      <!-- City & Filters Section -->
-      <div
-        class="space-y-4 relative z-20 border border-zinc-200 rounded-lg p-3 bg-zinc-50"
-      >
-        <!-- Header -->
-        <div class="flex items-center justify-between">
-          <label
-            class="flex items-center gap-2 text-sm font-bold text-zinc-600 uppercase tracking-wider"
-          >
-            <ListFilter :size="16" />
-            Filter
-          </label>
-          <div class="flex items-center gap-3">
-            <button
-              v-if="activeFilterCount > 0"
-              @click="clearFilters"
-              class="text-xs text-brand-orange font-bold hover:underline flex items-center gap-1"
-            >
-              <X :size="12" /> Clear ({{ activeFilterCount }})
-            </button>
-          </div>
-        </div>
-
-        <!-- City Selection -->
-        <div class="space-y-2">
-          <Listbox v-model="selectedCityProxy">
-            <div class="relative mt-1">
-              <ListboxButton
-                class="relative w-full cursor-pointer bg-white border-2 border-zinc-200 rounded-lg py-3 pl-4 pr-10 text-left focus:outline-none focus-visible:border-brand-orange focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm hover:border-zinc-300 transition-colors"
-                :class="{ 'opacity-50': cities.length === 0 }"
-              >
-                <span class="block truncate text-base text-zinc-800">
-                  {{ selectedCity || 'All Cities' }}
-                </span>
-                <span
-                  class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
-                >
-                  <ChevronDown class="text-zinc-400" :size="16" />
-                </span>
-              </ListboxButton>
-
-              <transition
-                leave-active-class="transition duration-100 ease-in"
-                leave-from-class="opacity-100"
-                leave-to-class="opacity-0"
-              >
-                <ListboxOptions
-                  class="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm z-30 custom-scrollbar"
-                >
-                  <ListboxOption
-                    v-slot="{ active, selected }"
-                    v-for="city in cities"
-                    :key="city.name"
-                    :value="city.name"
-                    as="template"
-                  >
-                    <li
-                      :class="[
-                        active
-                          ? 'bg-orange-50 text-orange-900'
-                          : 'text-zinc-900',
-                        'relative cursor-default select-none py-2 pl-10 pr-4',
-                      ]"
-                    >
-                      <span
-                        :class="[
-                          selected ? 'font-medium' : 'font-normal',
-                          'block truncate',
-                        ]"
-                      >
-                        {{ city.name }} ({{ city.count }})
-                      </span>
-                      <span
-                        v-if="selected"
-                        class="absolute inset-y-0 left-0 flex items-center pl-3 text-brand-orange"
-                      >
-                        <Check :size="16" />
-                      </span>
-                    </li>
-                  </ListboxOption>
-                  <li
-                    v-if="cities.length === 0"
-                    class="relative cursor-default select-none py-2 pl-4 pr-4 text-zinc-500 italic text-sm"
-                  >
-                    No cities match current filters
-                  </li>
-                </ListboxOptions>
-              </transition>
-            </div>
-          </Listbox>
-        </div>
-
-        <!-- Filter Controls -->
-        <div class="space-y-2">
-          <div class="flex flex-col gap-3">
-            <!-- Tags Filter -->
-            <Listbox v-model="selectedTags" multiple>
-              <div class="relative">
-                <ListboxButton
-                  class="relative w-full cursor-pointer bg-white border border-zinc-200 rounded-lg py-2 pl-3 pr-8 text-left focus:outline-none focus:border-brand-orange sm:text-xs hover:border-zinc-300 transition-colors h-10"
-                >
-                  <span class="block truncate text-zinc-700">
-                    <span
-                      v-if="selectedTags.length > 0"
-                      class="flex items-center gap-1 overflow-hidden"
-                    >
-                      <span
-                        v-for="tag in selectedTags"
-                        :key="tag"
-                        class="bg-orange-100 text-orange-800 px-1.5 rounded font-medium whitespace-nowrap"
-                      >
-                        {{ tag }}
-                      </span>
-                    </span>
-                    <span v-else class="text-zinc-500">All Tags</span>
-                  </span>
-                  <span
-                    class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
-                  >
-                    <Tag class="text-zinc-400" :size="14" />
-                  </span>
-                </ListboxButton>
-
-                <transition
-                  leave-active-class="transition duration-100 ease-in"
-                  leave-from-class="opacity-100"
-                  leave-to-class="opacity-0"
-                >
-                  <ListboxOptions
-                    class="absolute mt-1 max-h-48 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm z-50 custom-scrollbar"
-                  >
-                    <ListboxOption
-                      v-slot="{ active, selected }"
-                      v-for="tag in availableTags"
-                      :key="tag"
-                      :value="tag"
-                      as="template"
-                    >
-                      <li
-                        :class="[
-                          active
-                            ? 'bg-orange-50 text-orange-900'
-                            : 'text-zinc-900',
-                          'relative cursor-default select-none py-2 pl-9 pr-4 text-xs',
-                        ]"
-                      >
-                        <span
-                          :class="[
-                            selected ? 'font-medium' : 'font-normal',
-                            'block truncate',
-                          ]"
-                        >
-                          {{ tag }}
-                        </span>
-                        <span
-                          v-if="selected"
-                          class="absolute inset-y-0 left-0 flex items-center pl-3 text-brand-orange"
-                        >
-                          <Check :size="14" />
-                        </span>
-                      </li>
-                    </ListboxOption>
-                  </ListboxOptions>
-                </transition>
-              </div>
-            </Listbox>
-
-            <!-- Organizer Filter -->
-            <Listbox v-model="selectedOrganizer">
-              <div class="relative">
-                <ListboxButton
-                  class="relative w-full cursor-pointer bg-white border border-zinc-200 rounded-lg py-2 pl-3 pr-8 text-left focus:outline-none focus:border-brand-orange sm:text-xs hover:border-zinc-300 transition-colors h-10"
-                >
-                  <span class="block truncate text-zinc-700">
-                    <span
-                      v-if="selectedOrganizer"
-                      class="bg-orange-100 text-orange-800 px-1.5 rounded font-medium"
-                    >
-                      {{ selectedOrganizer }}
-                    </span>
-                    <span v-else class="text-zinc-500">All Orgs</span>
-                  </span>
-                  <span
-                    class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
-                  >
-                    <Users class="text-zinc-400" :size="14" />
-                  </span>
-                </ListboxButton>
-
-                <transition
-                  leave-active-class="transition duration-100 ease-in"
-                  leave-from-class="opacity-100"
-                  leave-to-class="opacity-0"
-                >
-                  <ListboxOptions
-                    class="absolute right-0 mt-1 max-h-48 w-56 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm z-50 custom-scrollbar"
-                  >
-                    <ListboxOption
-                      v-slot="{ active }"
-                      :value="''"
-                      as="template"
-                    >
-                      <li
-                        :class="[
-                          active
-                            ? 'bg-orange-50 text-orange-900'
-                            : 'text-zinc-500',
-                          'relative cursor-default select-none py-2 pl-9 pr-4 text-xs italic',
-                        ]"
-                      >
-                        All Organizations
-                      </li>
-                    </ListboxOption>
-                    <ListboxOption
-                      v-slot="{ active, selected }"
-                      v-for="org in availableOrganizers"
-                      :key="org"
-                      :value="org"
-                      as="template"
-                    >
-                      <li
-                        :class="[
-                          active
-                            ? 'bg-orange-50 text-orange-900'
-                            : 'text-zinc-900',
-                          'relative cursor-default select-none py-2 pl-9 pr-4 text-xs',
-                        ]"
-                      >
-                        <span
-                          :class="[
-                            selected ? 'font-medium' : 'font-normal',
-                            'block truncate',
-                          ]"
-                        >
-                          {{ org }}
-                        </span>
-                        <span
-                          v-if="selected"
-                          class="absolute inset-y-0 left-0 flex items-center pl-3 text-brand-orange"
-                        >
-                          <Check :size="14" />
-                        </span>
-                      </li>
-                    </ListboxOption>
-                  </ListboxOptions>
-                </transition>
-              </div>
-            </Listbox>
-          </div>
-
-          <!-- Year Slider -->
-          <div
-            v-if="yearRange.max > 0"
-            class="pt-1"
-            :class="{
-              'opacity-40 pointer-events-none':
-                baseAuditsForFilters.length === 0,
-            }"
-          >
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs text-zinc-500">{{ yearRange.min }}</span>
-              <span class="text-xs font-bold text-zinc-700">
-                <button
-                  @click="
-                    yearFilterMode =
-                      yearFilterMode === 'through' ? 'in' : 'through'
-                  "
-                  class="underline decoration-dotted underline-offset-2 cursor-pointer text-brand-orange hover:text-orange-600 transition-colors"
-                  :title="
-                    yearFilterMode === 'through'
-                      ? 'Click to show only this year'
-                      : 'Click to show all years up to this year'
-                  "
-                >
-                  {{ yearFilterMode === 'through' ? 'Through' : 'In' }}
-                </button>
-                {{ selectedMaxYear }}
-              </span>
-              <span class="text-xs text-zinc-500">{{ yearRange.max }}</span>
-            </div>
-            <input
-              type="range"
-              :min="yearRange.min"
-              :max="yearRange.max"
-              :value="selectedMaxYear"
-              :disabled="baseAuditsForFilters.length === 0"
-              @input="
-                selectedMaxYear = Number(
-                  ($event.target as HTMLInputElement).value
-                )
-              "
-              class="year-slider w-full h-2 rounded-lg appearance-none cursor-pointer"
-            />
-          </div>
-        </div>
-      </div>
-
-      <!-- Statistics / Info Cards (Dynamic) -->
       <div
         class="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300"
       >
         <div
-          v-if="currentStats && currentStats.audits === 0"
+          v-if="!audits || audits.length === 0"
           class="h-64 flex flex-col items-center justify-center text-center border-2 border-dashed border-zinc-100 rounded-xl bg-orange-50/30"
         >
           <p class="text-lg font-medium text-zinc-700 mb-2">
             Hey! You could do a walk audit here!
-          </p>
-          <p v-if="activeFilterCount > 0" class="text-xs text-zinc-500 mb-2">
-            (No audits found matching your filters)
           </p>
           <a
             href="https://walkmass.org/walk-audit-academy/"
@@ -623,9 +117,9 @@ const activeFilterCount = computed(
           </a>
         </div>
 
-        <template v-else-if="currentStats">
+        <template v-else>
           <!-- Render list of audits -->
-          <div class="mt-6">
+          <div class="mt-2">
             <h4 class="text-sm font-bold text-zinc-700 uppercase mb-3">
               Audits
             </h4>
@@ -672,30 +166,5 @@ const activeFilterCount = computed(
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #ffa100;
-}
-
-/* Year Slider */
-.year-slider {
-  background: linear-gradient(to right, #ffa100, #fed7aa);
-}
-.year-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #ffa100;
-  cursor: pointer;
-  border: 2px solid white;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-}
-.year-slider::-moz-range-thumb {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #ffa100;
-  cursor: pointer;
-  border: 2px solid white;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 </style>

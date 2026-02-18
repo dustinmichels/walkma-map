@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
+import AuditFilters from './components/AuditFilters.vue'
 import DataPanel from './components/DataPanel.vue'
 import Map from './components/Map.vue'
 import ThemeChart from './components/ThemeChart.vue'
@@ -89,13 +90,18 @@ onMounted(async () => {
         </div>
       </div>
 
-      <!-- Right Side: Data Panel -->
-      <DataPanel
-        v-model:selectedCity="selectedCity"
-        v-model:selectedTags="selectedTags"
-        :audits="audits"
-        @filter="handleFilter"
-      />
+      <!-- Right Side: Data Panel & Filters -->
+      <div
+        class="flex-shrink-0 w-full md:w-[420px] flex flex-col gap-4 h-full min-w-0"
+      >
+        <AuditFilters
+          :audits="audits"
+          v-model:selectedCity="selectedCity"
+          v-model:selectedTags="selectedTags"
+          @filter="handleFilter"
+        />
+        <DataPanel :audits="relevantAudits" />
+      </div>
     </main>
 
     <!-- Footer -->
