@@ -19,7 +19,7 @@
 
     <div class="flex flex-wrap gap-1.5 mb-2" v-if="audit.themes">
       <span
-        v-for="theme in getThemes(audit.themes)"
+        v-for="theme in parseThemes(audit.themes)"
         :key="theme"
         class="bg-emerald-50 text-emerald-600 text-[10px] px-2 py-0.5 rounded-full font-medium uppercase border border-emerald-100/50"
       >
@@ -54,6 +54,7 @@
 <script setup lang="ts">
 import { Eye } from 'lucide-vue-next'
 import type { Audit } from '../types'
+import { parseThemes } from '../utils'
 
 defineProps<{
   audit: Audit
@@ -62,14 +63,6 @@ defineProps<{
 const emit = defineEmits<{
   (e: 'view', audit: Audit): void
 }>()
-
-const getThemes = (themesStr: string) => {
-  if (!themesStr) return []
-  return themesStr
-    .split(',')
-    .map((s) => s.trim().replace(/^"|"$/g, ''))
-    .filter((s) => s)
-}
 
 const formatText = (text: string) => {
   if (!text) return ''

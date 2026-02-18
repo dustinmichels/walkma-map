@@ -8,6 +8,7 @@ import {
 import { Check, ChevronDown, ListFilter, Tag, Users, X } from 'lucide-vue-next'
 import { computed, ref, watch } from 'vue'
 import type { Audits } from '../types'
+import { parseThemes } from '../utils'
 
 const props = defineProps<{
   audits: Audits | null
@@ -26,15 +27,6 @@ const selectedTags = defineModel<string[]>('selectedTags', {
 const selectedMaxYear = ref<number | null>(null)
 const selectedOrganizer = ref('')
 const yearFilterMode = ref<'through' | 'in'>('through')
-
-// Helper: Parse themes string to array
-const parseThemes = (themesStr: string | undefined): string[] => {
-  if (!themesStr) return []
-  return themesStr
-    .split(',')
-    .map((s) => s.trim().replace(/^"|"$/g, ''))
-    .filter(Boolean)
-}
 
 // Compute available options based on selected city
 const baseAuditsForFilters = computed(() => {
@@ -122,89 +114,13 @@ const availableOrganizers = computed(() => {
   return Array.from(orgs).sort()
 })
 
-// Global filtered audits based on Tags, Year, Organizer AND City
-const filteredAudits = computed(() => {
-  if (!props.audits) return []
-  let result = props.audits.filter((audit) => {
-    // Filter by Year
-    if (selectedMaxYear.value !== null && yearRange.value.max > 0) {
-      if (yearFilterMode.value === 'in') {
-        if (Number(audit.year) !== selectedMaxYear.value) return false
-      } else {
-        if (Number(audit.year) > selectedMaxYear.value) return false
-      }
-    }
-
-    // Filter by Tags (AND logic: audit must have ALL selected tags)
-    if (selectedTags.value.length > 0) {
-      const auditTags = parseThemes(audit.themes)
-      const hasMatch = selectedTags.value.every((tag) =>
-        auditTags.includes(tag)
-      )
-      if (!hasMatch) return false
-    }
-
-    // Filter by Organizer
-    if (selectedOrganizer.value) {
-      if (audit.organizer_lead_organization !== selectedOrganizer.value)
-        return false
-    }
-
-    return true
-  })
-
-  // Filter by City
-  if (props.selectedCity) {
-    result = result.filter((audit) => audit.city === props.selectedCity)
-  }
-
-  // Sort by date (most recent first)
-  return result.sort((a, b) => Number(b.year) - Number(a.year))
-})
-
-// Note: In the original DataPanel, 'globalFilteredAudits' (without city filter)
-// was watched to emit 'filter'. 'filteredAudits' (with city) was used for display.
-// Here we are emitting the FINAL filtered list (including city) to be displayed by DataPanel.
-// However, the Map and Chart might expect 'global' filters ignoring city?
-// Original App.vue:
-// relevantAudits = filteredAudits.value || audits.value.
-// If selectedCity, it filters base.
-// So App.vue expected 'filteredAudits' to be mostly global?
-// Let's re-read DataPanel.
-// DataPanel emit('filter', newVal) where newVal is globalFilteredAudits (NO city filter).
-// Then App.vue computes `relevantAudits` which ADDS city filter if needed.
-// AND Map.vue takes `filteredAudits || audits`. Map.vue usually wants to show all dots,
-// but highlight selected city. If we pass it only the selected city's audits, the other dots disappear.
-//
-// So, we should emit the audits filtered by Tags/Year/Org but NOT City.
-// Call it 'contentFilteredAudits'.
-
 const contentFilteredAudits = computed(() => {
   if (!props.audits) return []
-  return props.audits.filter((audit) => {
-    // Filter by Year
-    if (selectedMaxYear.value !== null && yearRange.value.max > 0) {
-      if (yearFilterMode.value === 'in') {
-        if (Number(audit.year) !== selectedMaxYear.value) return false
-      } else {
-        if (Number(audit.year) > selectedMaxYear.value) return false
-      }
-    }
-    // Filter by Tags
-    if (selectedTags.value.length > 0) {
-      const auditTags = parseThemes(audit.themes)
-      const hasMatch = selectedTags.value.every((tag) =>
-        auditTags.includes(tag)
-      )
-      if (!hasMatch) return false
-    }
-    // Filter by Organizer
-    if (selectedOrganizer.value) {
-      if (audit.organizer_lead_organization !== selectedOrganizer.value)
-        return false
-    }
-    return true
-  })
+  let result = props.audits
+  result = filterByYear(result, selectedMaxYear.value, yearFilterMode.value)
+  result = filterByTags(result, selectedTags.value)
+  result = filterByOrganizer(result, selectedOrganizer.value)
+  return result
 })
 
 watch(
@@ -625,21 +541,6 @@ const activeFilterCount = computed(
 </template>
 
 <style scoped>
-/* Custom Scrollbar */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
-}
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #ccc;
-  border-radius: 10px;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #ffa100;
-}
-
 /* Year Slider */
 .year-slider {
   background: linear-gradient(to right, #ffa100, #fed7aa);

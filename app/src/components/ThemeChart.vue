@@ -11,6 +11,7 @@ import {
 } from 'chart.js'
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import type { Audits } from '../types'
+import { parseThemes } from '../utils'
 
 Chart.register(
   BarController,
@@ -47,17 +48,6 @@ const totalCities = computed(() => {
   const cities = new Set(props.audits.map((a) => a.city))
   return cities.size
 })
-
-const parseThemes = (themesStr: string | undefined): string[] => {
-  if (!themesStr) return []
-  return (
-    themesStr
-      .split(',')
-      // Remove quotes and trim spaces
-      .map((s) => s.trim().replace(/^"|"$/g, ''))
-      .filter(Boolean)
-  )
-}
 
 const getThemeCounts = (audits: Audits | null) => {
   const counts = new Map<string, number>()
@@ -323,7 +313,7 @@ onUnmounted(() => {
     >
       <!-- Scrollable Vertical Container -->
       <div
-        class="flex-grow overflow-y-auto custom-scrollbar relative p-2"
+        class="flex-grow overflow-y-auto custom-scrollbar-subtle relative p-2"
         ref="scrollContainer"
       >
         <div class="w-full relative" :style="{ height: `${chartHeight}px` }">
@@ -333,20 +323,3 @@ onUnmounted(() => {
     </div>
   </div>
 </template>
-
-<style scoped>
-/* Vertical Scrollbar */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
-}
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #e4e4e7;
-  border-radius: 10px;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #d4d4d8;
-}
-</style>

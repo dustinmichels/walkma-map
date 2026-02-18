@@ -8,3 +8,33 @@
 
   --color-brand-orange: #ffa100;
 }
+
+/* Custom Scrollbar — orange hover (DataPanel, AuditFilters) */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #ffa100;
+}
+
+/* Custom Scrollbar — subtle grey hover (AuditModal, ThemeChart) */
+.custom-scrollbar-subtle::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scrollbar-subtle::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar-subtle::-webkit-scrollbar-thumb {
+  background: #e4e4e7;
+  border-radius: 10px;
+}
+.custom-scrollbar-subtle::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}

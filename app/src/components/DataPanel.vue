@@ -80,7 +80,6 @@ watch(
 
 const handleScroll = (e: Event) => {
   const target = e.target as HTMLElement
-  scrollContainer.value = target // update ref
 
   if (loadingMore.value || !props.audits) return
 
@@ -104,6 +103,7 @@ const handleScroll = (e: Event) => {
   >
     <!-- Interactive Elements -->
     <div
+      ref="scrollContainer"
       class="flex-grow overflow-y-auto p-3 custom-scrollbar space-y-3"
       @scroll="handleScroll"
     >
@@ -134,8 +134,8 @@ const handleScroll = (e: Event) => {
             </h4>
             <div class="space-y-4">
               <AuditCard
-                v-for="(audit, index) in displayedAudits"
-                :key="index"
+                v-for="audit in displayedAudits"
+                :key="`${audit.city_town}-${audit.year}-${audit.facilitator_author}`"
                 :audit="audit"
                 @view="handleViewAudit"
               />
@@ -160,20 +160,3 @@ const handleScroll = (e: Event) => {
     />
   </aside>
 </template>
-
-<style scoped>
-/* Custom Scrollbar for the Data Panel */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
-}
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #ccc;
-  border-radius: 10px;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #ffa100;
-}
-</style>

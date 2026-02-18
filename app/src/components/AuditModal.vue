@@ -68,7 +68,7 @@
                 </header>
 
                 <!-- Scrollable Content -->
-                <div class="p-6 overflow-y-auto flex-1 custom-scrollbar">
+                <div class="p-6 overflow-y-auto flex-1 custom-scrollbar-subtle">
                   <!-- Image -->
                   <div v-if="imageSrc" class="mb-6 rounded-xl overflow-hidden">
                     <img
@@ -82,7 +82,7 @@
                   <div v-if="audit.themes" class="mb-6">
                     <div class="flex flex-wrap gap-2">
                       <span
-                        v-for="theme in getThemes(audit.themes)"
+                        v-for="theme in parseThemes(audit.themes)"
                         :key="theme"
                         class="bg-emerald-50 text-emerald-600 text-xs px-3 py-1.5 rounded-md font-semibold uppercase tracking-wide"
                       >
@@ -241,6 +241,7 @@ import {
 import { ChevronLeft, ChevronRight, FileText, X } from 'lucide-vue-next'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import type { Audit } from '../types'
+import { parseThemes } from '../utils'
 
 const props = defineProps<{
   audit: Audit | null
@@ -328,14 +329,6 @@ watch(() => props.audit, (audit) => {
   img.src = src
 }, { immediate: true })
 
-const getThemes = (themesStr: string) => {
-  if (!themesStr) return []
-  return themesStr
-    .split(',')
-    .map((s) => s.trim().replace(/^"|"$/g, ''))
-    .filter((s) => s)
-}
-
 const hasPdf = computed(() => {
   return !!props.audit?.view
 })
@@ -358,22 +351,3 @@ const openReport = () => {
   }
 }
 </script>
-
-<style scoped>
-/* Scrollbar */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 8px;
-}
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #d1d5db;
-  border-radius: 20px;
-  border: 3px solid transparent;
-  background-clip: content-box;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background-color: #9ca3af;
-}
-</style>
