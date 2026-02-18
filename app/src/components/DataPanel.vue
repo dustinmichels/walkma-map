@@ -27,7 +27,7 @@ const hasPrevAudit = computed(() => selectedAuditIndex.value > 0)
 // Check if current index is valid and not the last one
 const hasNextAudit = computed(() => {
   return (
-    props.audits &&
+    !!props.audits &&
     selectedAuditIndex.value !== -1 &&
     selectedAuditIndex.value < props.audits.length - 1
   )
@@ -95,7 +95,7 @@ const handleScroll = (e: Event) => {
   >
     <!-- Interactive Elements -->
     <div
-      class="flex-grow overflow-y-auto p-5 custom-scrollbar space-y-6"
+      class="flex-grow overflow-y-auto p-3 custom-scrollbar space-y-3"
       @scroll="handleScroll"
     >
       <div
@@ -120,7 +120,7 @@ const handleScroll = (e: Event) => {
         <template v-else>
           <!-- Render list of audits -->
           <div class="mt-2">
-            <h4 class="text-sm font-bold text-zinc-700 uppercase mb-3">
+            <h4 class="text-xs font-bold text-zinc-700 uppercase mb-1.5">
               Audits
             </h4>
             <div class="space-y-4">

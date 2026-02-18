@@ -1,20 +1,20 @@
 <template>
   <div
-    class="group bg-white rounded-xl p-6 mb-4 shadow-sm border border-zinc-200 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg cursor-pointer hover:bg-zinc-100 hover:border-zinc-300 hover:border-dashed"
+    class="group bg-white rounded-xl p-4 mb-2 shadow-sm border border-zinc-200 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg cursor-pointer hover:bg-zinc-100 hover:border-zinc-300 hover:border-dashed"
     @click="emit('view', audit)"
   >
-    <div class="flex justify-between items-center mb-2">
-      <h3 class="text-xl font-bold text-zinc-900 font-display m-0">
+    <div class="flex justify-between items-center mb-1">
+      <h3 class="text-lg font-bold text-zinc-900 font-display m-0">
         {{ audit.city_town || audit.city }}
       </h3>
       <span
-        class="bg-zinc-100 text-zinc-600 px-3 py-1 rounded-full text-sm font-semibold"
+        class="bg-zinc-100 text-zinc-600 px-2 py-0.5 rounded-full text-xs font-semibold"
       >
         {{ audit.year }}
       </span>
     </div>
 
-    <div class="flex flex-wrap gap-2 mb-4" v-if="audit.themes">
+    <div class="flex flex-wrap gap-1.5 mb-2" v-if="audit.themes">
       <span
         v-for="theme in getThemes(audit.themes)"
         :key="theme"
@@ -24,12 +24,12 @@
       </span>
     </div>
 
-    <p class="text-zinc-600 text-sm leading-relaxed mb-6 line-clamp-3">
+    <p class="text-zinc-600 text-xs leading-snug mb-3 line-clamp-3">
       <span class="font-semibold text-zinc-900">Area covered:</span>
       {{ formatText(audit.streets_intersections) }}
     </p>
 
-    <div class="flex items-center border-t border-zinc-100 pt-4 min-h-[3rem]">
+    <div class="flex items-center border-t border-zinc-100 pt-2 min-h-[2rem]">
       <div class="text-xs text-zinc-500" v-if="audit.facilitator_author">
         <span class="font-semibold text-zinc-700">Facilitator:</span>
         {{ audit.facilitator_author }}

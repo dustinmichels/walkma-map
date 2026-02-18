@@ -49,16 +49,16 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="min-h-screen flex flex-col font-sans text-slate-900">
+  <div class="h-screen overflow-hidden flex flex-col font-sans text-slate-900">
     <!-- Header -->
     <header
-      class="bg-brand-orange shadow-lg py-3 px-6 flex justify-between items-center z-10"
+      class="bg-brand-orange shadow-lg py-2 px-4 flex justify-between items-center z-10"
     >
-      <div class="flex items-center gap-3">
-        <div class="bg-black p-2 rounded-lg">
-          <i class="fas fa-walking text-white text-xl"></i>
+      <div class="flex items-center gap-2">
+        <div class="bg-black p-1.5 rounded-lg">
+          <i class="fas fa-walking text-white text-lg"></i>
         </div>
-        <h1 class="text-white text-xl font-bold tracking-tight">
+        <h1 class="text-white text-lg font-bold tracking-tight">
           Walk MA - Walk Audit Dashboard
         </h1>
       </div>
@@ -66,7 +66,7 @@ onMounted(async () => {
 
     <!-- Main Content Area -->
     <main
-      class="flex-grow flex flex-col md:flex-row p-4 md:p-6 gap-6 h-[calc(100vh-72px)] overflow-hidden"
+      class="flex-grow flex flex-col md:flex-row p-2 md:p-4 gap-4 overflow-hidden"
     >
       <!-- Left Side: Map & Chart -->
       <div class="flex-grow flex flex-col gap-4 overflow-hidden h-full min-w-0">
@@ -92,7 +92,7 @@ onMounted(async () => {
 
       <!-- Right Side: Data Panel & Filters -->
       <div
-        class="flex-shrink-0 w-full md:w-[420px] flex flex-col gap-4 h-full min-w-0"
+        class="flex-shrink-0 w-full md:w-[420px] flex flex-col gap-2 h-full min-w-0"
       >
         <AuditFilters
           :audits="audits"

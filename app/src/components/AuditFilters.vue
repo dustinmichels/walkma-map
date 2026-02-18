@@ -247,6 +247,11 @@ const clearFilters = () => {
   yearFilterMode.value = 'through'
 }
 
+const resetYear = () => {
+  selectedMaxYear.value = yearRange.value.max || null
+  yearFilterMode.value = 'through'
+}
+
 const isYearFiltered = computed(() => {
   if (selectedMaxYear.value === null || yearRange.value.max === 0) return false
   if (yearFilterMode.value === 'in') return true
@@ -264,12 +269,12 @@ const activeFilterCount = computed(
 
 <template>
   <div
-    class="bg-white rounded-xl shadow-xl border border-zinc-200 p-3 bg-zinc-50 space-y-4"
+    class="bg-white rounded-xl shadow-xl border border-zinc-200 p-2 bg-zinc-50 space-y-2"
   >
     <!-- Header -->
     <div class="flex items-center justify-between">
       <label
-        class="flex items-center gap-2 text-sm font-bold text-zinc-600 uppercase tracking-wider"
+        class="flex items-center gap-1.5 text-xs font-bold text-zinc-600 uppercase tracking-wider"
       >
         <ListFilter :size="16" />
         Filter
@@ -291,10 +296,10 @@ const activeFilterCount = computed(
         <div class="flex items-center gap-2 mt-1">
           <div class="relative flex-grow">
             <ListboxButton
-              class="relative w-full cursor-pointer bg-white border-2 border-zinc-200 rounded-lg py-3 pl-4 pr-10 text-left focus:outline-none focus-visible:border-brand-orange focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm hover:border-zinc-300 transition-colors"
+              class="relative w-full cursor-pointer bg-white border border-zinc-200 rounded-lg py-1.5 pl-3 pr-8 text-left focus:outline-none focus-visible:border-brand-orange focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 text-xs sm:text-sm hover:border-zinc-300 transition-colors"
               :class="{ 'opacity-50': cities.length === 0 }"
             >
-              <span class="block truncate text-base text-zinc-800">
+              <span class="block truncate text-sm text-zinc-800">
                 {{ selectedCity || 'All Cities' }}
               </span>
               <span
@@ -354,7 +359,7 @@ const activeFilterCount = computed(
           <button
             @click="selectedCityProxy = ''"
             :disabled="!selectedCity"
-            class="p-2 rounded-md hover:bg-zinc-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            class="p-1.5 rounded-md hover:bg-zinc-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             title="Clear city selection"
           >
             <X
@@ -374,7 +379,7 @@ const activeFilterCount = computed(
           <div class="flex items-center gap-2">
             <div class="relative flex-grow min-w-0">
               <ListboxButton
-                class="relative w-full cursor-pointer bg-white border border-zinc-200 rounded-lg py-2 pl-3 pr-8 text-left focus:outline-none focus:border-brand-orange sm:text-xs hover:border-zinc-300 transition-colors h-10"
+                class="relative w-full cursor-pointer bg-white border border-zinc-200 rounded-lg py-1.5 pl-2 pr-6 text-left focus:outline-none focus:border-brand-orange sm:text-xs hover:border-zinc-300 transition-colors h-8"
               >
                 <span class="block truncate text-zinc-700">
                   <span
@@ -444,7 +449,7 @@ const activeFilterCount = computed(
             <button
               @click="selectedTags = []"
               :disabled="selectedTags.length === 0"
-              class="p-2 rounded-md hover:bg-zinc-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              class="p-1.5 rounded-md hover:bg-zinc-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               title="Clear tags"
             >
               <X
@@ -464,7 +469,7 @@ const activeFilterCount = computed(
           <div class="flex items-center gap-2">
             <div class="relative flex-grow min-w-0">
               <ListboxButton
-                class="relative w-full cursor-pointer bg-white border border-zinc-200 rounded-lg py-2 pl-3 pr-8 text-left focus:outline-none focus:border-brand-orange sm:text-xs hover:border-zinc-300 transition-colors h-10"
+                class="relative w-full cursor-pointer bg-white border border-zinc-200 rounded-lg py-1.5 pl-2 pr-6 text-left focus:outline-none focus:border-brand-orange sm:text-xs hover:border-zinc-300 transition-colors h-8"
               >
                 <span class="block truncate text-zinc-700">
                   <span
@@ -540,7 +545,7 @@ const activeFilterCount = computed(
             <button
               @click="selectedOrganizer = ''"
               :disabled="!selectedOrganizer"
-              class="p-2 rounded-md hover:bg-zinc-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              class="p-1.5 rounded-md hover:bg-zinc-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               title="Clear organizer"
             >
               <X
@@ -562,37 +567,58 @@ const activeFilterCount = computed(
           'opacity-40 pointer-events-none': baseAuditsForFilters.length === 0,
         }"
       >
-        <div class="flex items-center justify-between mb-1">
-          <span class="text-xs text-zinc-500">{{ yearRange.min }}</span>
-          <span class="text-xs font-bold text-zinc-700">
-            <button
-              @click="
-                yearFilterMode = yearFilterMode === 'through' ? 'in' : 'through'
+        <div class="flex items-center gap-2">
+          <div
+            class="relative flex-grow min-w-0 bg-white border border-zinc-200 rounded-lg p-1.5 hover:border-zinc-300 transition-colors"
+          >
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs text-zinc-500">{{ yearRange.min }}</span>
+              <span class="text-xs font-bold text-zinc-700">
+                <button
+                  @click="
+                    yearFilterMode =
+                      yearFilterMode === 'through' ? 'in' : 'through'
+                  "
+                  class="underline decoration-dotted underline-offset-2 cursor-pointer text-brand-orange hover:text-orange-600 transition-colors"
+                  :title="
+                    yearFilterMode === 'through'
+                      ? 'Click to show only this year'
+                      : 'Click to show all years up to this year'
+                  "
+                >
+                  {{ yearFilterMode === 'through' ? 'Through' : 'In' }}
+                </button>
+                {{ selectedMaxYear }}
+              </span>
+              <span class="text-xs text-zinc-500">{{ yearRange.max }}</span>
+            </div>
+            <input
+              type="range"
+              :min="yearRange.min"
+              :max="yearRange.max"
+              :value="selectedMaxYear"
+              :disabled="baseAuditsForFilters.length === 0"
+              @input="
+                selectedMaxYear = Number(
+                  ($event.target as HTMLInputElement).value
+                )
               "
-              class="underline decoration-dotted underline-offset-2 cursor-pointer text-brand-orange hover:text-orange-600 transition-colors"
-              :title="
-                yearFilterMode === 'through'
-                  ? 'Click to show only this year'
-                  : 'Click to show all years up to this year'
-              "
-            >
-              {{ yearFilterMode === 'through' ? 'Through' : 'In' }}
-            </button>
-            {{ selectedMaxYear }}
-          </span>
-          <span class="text-xs text-zinc-500">{{ yearRange.max }}</span>
+              class="year-slider w-full h-2 rounded-lg appearance-none cursor-pointer"
+            />
+          </div>
+
+          <button
+            @click="resetYear"
+            :disabled="!isYearFiltered"
+            class="p-1.5 rounded-md hover:bg-zinc-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            title="Reset year"
+          >
+            <X
+              :size="20"
+              :class="isYearFiltered ? 'text-brand-orange' : 'text-zinc-300'"
+            />
+          </button>
         </div>
-        <input
-          type="range"
-          :min="yearRange.min"
-          :max="yearRange.max"
-          :value="selectedMaxYear"
-          :disabled="baseAuditsForFilters.length === 0"
-          @input="
-            selectedMaxYear = Number(($event.target as HTMLInputElement).value)
-          "
-          class="year-slider w-full h-2 rounded-lg appearance-none cursor-pointer"
-        />
       </div>
     </div>
   </div>
