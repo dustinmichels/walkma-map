@@ -1,20 +1,45 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import DataPanel from './components/DataPanel.vue'
 import Map from './components/Map.vue'
+import ThemeChart from './components/ThemeChart.vue'
 import type { Audits } from './types'
 
 const selectedCity = ref('')
 const audits = ref<Audits | null>(null)
 const filteredAudits = ref<Audits | null>(null)
+const selectedTags = ref<string[]>([])
 
 const handleFilter = (filtered: Audits) => {
   filteredAudits.value = filtered
 }
 
+const handleThemeClick = (theme: string) => {
+  if (selectedTags.value.includes(theme)) {
+    selectedTags.value = selectedTags.value.filter((t) => t !== theme)
+  } else {
+    selectedTags.value = [...selectedTags.value, theme]
+  }
+}
+
+// Compute audits relevant to the chart (includes city filter)
+const relevantAudits = computed(() => {
+  const base = filteredAudits.value || audits.value
+  if (!base) return null
+  if (selectedCity.value) {
+    return base.filter((a) => a.city === selectedCity.value)
+  }
+  return base
+})
+
 onMounted(async () => {
   try {
     const response = await fetch('/.netlify/functions/gsheet')
+    if (!response.ok) {
+      const text = await response.text()
+      console.error(`gsheet function returned ${response.status}:`, text)
+      return
+    }
     audits.value = await response.json()
   } catch (error) {
     console.error('Failed to load audits data:', error)
@@ -26,13 +51,13 @@ onMounted(async () => {
   <div class="min-h-screen flex flex-col font-sans text-slate-900">
     <!-- Header -->
     <header
-      class="bg-brand-orange shadow-lg py-4 px-6 flex justify-between items-center z-10"
+      class="bg-brand-orange shadow-lg py-3 px-6 flex justify-between items-center z-10"
     >
       <div class="flex items-center gap-3">
         <div class="bg-black p-2 rounded-lg">
-          <i class="fas fa-walking text-white text-2xl"></i>
+          <i class="fas fa-walking text-white text-xl"></i>
         </div>
-        <h1 class="text-white text-2xl font-bold tracking-tight">
+        <h1 class="text-white text-xl font-bold tracking-tight">
           Walk MA - Walk Audit Dashboard
         </h1>
       </div>
@@ -42,19 +67,32 @@ onMounted(async () => {
     <main
       class="flex-grow flex flex-col md:flex-row p-4 md:p-6 gap-6 h-[calc(100vh-72px)] overflow-hidden"
     >
-      <!-- Left Side: Map Placeholder -->
-      <div
-        class="flex-grow relative rounded-xl overflow-hidden border-2 border-zinc-200 bg-white shadow-inner group"
-      >
-        <Map
-          :audits="filteredAudits || audits"
-          v-model:selectedCity="selectedCity"
-        />
+      <!-- Left Side: Map & Chart -->
+      <div class="flex-grow flex flex-col gap-4 overflow-hidden h-full min-w-0">
+        <!-- Map -->
+        <div
+          class="flex-grow relative rounded-xl overflow-hidden border-2 border-zinc-200 bg-white shadow-inner group min-h-0"
+        >
+          <Map
+            :audits="filteredAudits || audits"
+            v-model:selectedCity="selectedCity"
+          />
+        </div>
+
+        <!-- Chart -->
+        <div class="h-48 flex-shrink-0">
+          <ThemeChart
+            :audits="relevantAudits"
+            :all-audits="audits"
+            @select="handleThemeClick"
+          />
+        </div>
       </div>
 
       <!-- Right Side: Data Panel -->
       <DataPanel
         v-model:selectedCity="selectedCity"
+        v-model:selectedTags="selectedTags"
         :audits="audits"
         @filter="handleFilter"
       />

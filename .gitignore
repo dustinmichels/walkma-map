@@ -3,6 +3,8 @@
 
 .DS_Store
 
+yolov8n.pt
+
 # Python-generated files
 __pycache__/
 *.py[oc]

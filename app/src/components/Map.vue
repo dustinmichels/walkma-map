@@ -73,7 +73,10 @@ const updateMapData = (audits: Audits | null) => {
       const cityName = audit.city_town || audit.city
       if (cityName) {
         // Strip parenthetical neighborhood info for matching
-        const baseName = cityName.replace(/\s*\(.*\)/, '').toUpperCase().trim()
+        const baseName = cityName
+          .replace(/\s*\(.*\)/, '')
+          .toUpperCase()
+          .trim()
         townId = townIdMap.value[baseName]
       }
 
@@ -107,19 +110,19 @@ watch(
     if (newCity) {
       const townId = townIdMap.value[newCity.toUpperCase().trim()]
       if (townId) {
-        // Update the filter for the selected line layer
-        map.value.setFilter('towns-selected', [
-          '==',
-          ['get', 'TOWN_ID'],
-          townId,
-        ])
-
-        // Optional: Fly to the town if needed, but simple highlighting is requested
+        // Update the filter for the selected town layers
+        const filter: any = ['==', ['get', 'TOWN_ID'], townId]
+        map.value.setFilter('towns-selected-fill', filter)
+        map.value.setFilter('towns-selected-border', filter)
       } else {
-        map.value.setFilter('towns-selected', ['==', ['get', 'TOWN_ID'], -1])
+        const filter: any = ['==', ['get', 'TOWN_ID'], -1]
+        map.value.setFilter('towns-selected-fill', filter)
+        map.value.setFilter('towns-selected-border', filter)
       }
     } else {
-      map.value.setFilter('towns-selected', ['==', ['get', 'TOWN_ID'], -1])
+      const filter: any = ['==', ['get', 'TOWN_ID'], -1]
+      map.value.setFilter('towns-selected-fill', filter)
+      map.value.setFilter('towns-selected-border', filter)
     }
   }
 )
@@ -232,14 +235,29 @@ onMounted(async () => {
       },
     })
 
-    // Selected Town Border Layer
+    // Selected Town Highlight Layer - Fill
     map.value.addLayer({
-      id: 'towns-selected',
+      id: 'towns-selected-fill',
+      type: 'fill',
+      source: 'towns',
+      filter: ['==', ['get', 'TOWN_ID'], -1], // Initially hide
+      paint: {
+        'fill-color': 'transparent',
+        'fill-opacity': 0.0,
+      },
+      layout: {
+        'fill-sort-key': 100, // Ensure it renders on top
+      },
+    })
+
+    // Selected Town Highlight Layer - Border
+    map.value.addLayer({
+      id: 'towns-selected-border',
       type: 'line',
       source: 'towns',
       filter: ['==', ['get', 'TOWN_ID'], -1], // Initially hide
       paint: {
-        'line-color': '#ff0000', // Bright Red
+        'line-color': '#dc2626', // Red-600
         'line-width': 3,
         'line-opacity': 1,
       },

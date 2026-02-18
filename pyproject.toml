@@ -15,4 +15,5 @@ dependencies = [
     "pymupdf>=1.27.1",
     "pyogrio>=0.12.1",
     "rich>=14.3.2",
+    "ultralytics>=8.4.14",
 ]

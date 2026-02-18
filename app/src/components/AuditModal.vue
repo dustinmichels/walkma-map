@@ -273,37 +273,59 @@ onUnmounted(() => {
   window.removeEventListener('keydown', handleKeydown)
 })
 
-const sanitizeName = (name: string): string => {
-  const first = (name.split(',')[0] ?? name).trim()
-  return first.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '')
-}
+// Mirrors Python's _slug(): lowercase, non-alphanumeric runs → hyphens, trim hyphens
+const slug = (text: string): string =>
+  text.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
 
-const IMAGE_EXTENSIONS = ['jpeg', 'png', 'jpx']
-const imageSrc = ref<string | null>(null)
+// Mirrors Python's get_audit_identifier():
+//   - structural parts separated by underscores
+//   - within-part words separated by hyphens
+//   - neighborhood extracted from parentheses in city name (e.g. "Boston (East)")
+//   - only first 4 words of street used
+const getAuditIdentifier = (cityRaw: string, yearRaw: string | number, streetRaw: string): string | null => {
+  const raw = String(cityRaw ?? '').trim()
+  const match = raw.match(/^(.*?)\s*\(([^)]+)\)\s*$/)
 
-const tryLoadImage = (basePath: string, extIndex: number) => {
-  if (extIndex >= IMAGE_EXTENSIONS.length) {
-    imageSrc.value = null
-    return
+  let city: string
+  let neighborhood: string | null
+
+  if (match) {
+    city = slug(match[1]!)
+    neighborhood = slug(match[2]!)
+  } else {
+    city = slug(raw)
+    neighborhood = null
   }
-  const src = `${basePath}.${IMAGE_EXTENSIONS[extIndex]}`
-  const img = new Image()
-  img.onload = () => { imageSrc.value = src }
-  img.onerror = () => { tryLoadImage(basePath, extIndex + 1) }
-  img.src = src
+
+  if (!city) return null
+
+  const year = yearRaw != null ? String(parseInt(String(yearRaw))) : 'unknown'
+  const street = slug(streetRaw).split('-').slice(0, 4).join('-')
+
+  const parts = [city, year]
+  if (neighborhood) parts.push(neighborhood)
+  if (street) parts.push(street)
+  return parts.join('_')
 }
+
+const imageSrc = ref<string | null>(null)
 
 watch(() => props.audit, (audit) => {
   imageSrc.value = null
   if (!audit) return
-  const citySlug = sanitizeName(audit.city_town || audit.city)
-  const yearSlug = audit.year?.replace(/\.0$/, '')
-  const streetSlug = audit.streets_intersections ? sanitizeName(audit.streets_intersections) : ''
-  if (!citySlug || !yearSlug) return
-  const basePath = streetSlug
-    ? `/data/images/${citySlug}_${yearSlug}_${streetSlug}`
-    : `/data/images/${citySlug}_${yearSlug}`
-  tryLoadImage(basePath, 0)
+
+  const identifier = getAuditIdentifier(
+    audit.city_town || audit.city,
+    audit.year,
+    audit.streets_intersections ?? '',
+  )
+  if (!identifier) return
+
+  const src = `/data/images/${identifier}.jpeg`
+  const img = new Image()
+  img.onload = () => { imageSrc.value = src }
+  img.onerror = () => { imageSrc.value = null }
+  img.src = src
 }, { immediate: true })
 
 const getThemes = (themesStr: string) => {

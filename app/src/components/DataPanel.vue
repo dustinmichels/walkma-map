@@ -5,7 +5,7 @@ import {
   ListboxOption,
   ListboxOptions,
 } from '@headlessui/vue'
-import { Building2, Check, ChevronDown, Tag, Users, X } from 'lucide-vue-next'
+import { Check, ChevronDown, Tag, Users, X } from 'lucide-vue-next'
 import { computed, ref, watch } from 'vue'
 import type { Audit, Audits } from '../types'
 import AuditCard from './AuditCard.vue'
@@ -22,9 +22,13 @@ const emit = defineEmits<{
 }>()
 
 // Filter State
-const selectedTags = ref<string[]>([])
+// Filter State
+const selectedTags = defineModel<string[]>('selectedTags', {
+  default: () => [],
+})
 const selectedMaxYear = ref<number | null>(null)
 const selectedOrganizer = ref('')
+const yearFilterMode = ref<'through' | 'in'>('through')
 
 // Helper: Parse themes string to array
 const parseThemes = (themesStr: string | undefined): string[] => {
@@ -72,7 +76,8 @@ watch(yearRange, (range) => {
 const availableOrganizers = computed(() => {
   const orgs = new Set<string>()
   baseAuditsForFilters.value.forEach((audit) => {
-    if (audit.organizer_lead_organization) orgs.add(audit.organizer_lead_organization)
+    if (audit.organizer_lead_organization)
+      orgs.add(audit.organizer_lead_organization)
   })
   return Array.from(orgs).sort()
 })
@@ -81,21 +86,29 @@ const availableOrganizers = computed(() => {
 const globalFilteredAudits = computed(() => {
   if (!props.audits) return []
   return props.audits.filter((audit) => {
-    // Filter by Year (show audits up to selected year)
+    // Filter by Year
     if (selectedMaxYear.value !== null && yearRange.value.max > 0) {
-      if (Number(audit.year) > selectedMaxYear.value) return false
+      if (yearFilterMode.value === 'in') {
+        if (Number(audit.year) !== selectedMaxYear.value) return false
+      } else {
+        if (Number(audit.year) > selectedMaxYear.value) return false
+      }
     }
 
-    // Filter by Tags (OR logic: if audit has ANY of the selected tags)
+    // Filter by Tags (AND logic: audit must have ALL selected tags)
     if (selectedTags.value.length > 0) {
       const auditTags = parseThemes(audit.themes)
-      const hasMatch = selectedTags.value.some((tag) => auditTags.includes(tag))
+      // Check if auditTags includes *every* selected tag
+      const hasMatch = selectedTags.value.every((tag) =>
+        auditTags.includes(tag)
+      )
       if (!hasMatch) return false
     }
 
     // Filter by Organizer
     if (selectedOrganizer.value) {
-      if (audit.organizer_lead_organization !== selectedOrganizer.value) return false
+      if (audit.organizer_lead_organization !== selectedOrganizer.value)
+        return false
     }
 
     return true
@@ -142,18 +155,61 @@ const cities = computed(() => {
 })
 
 const filteredAudits = computed(() => {
-  if (!props.selectedCity || !globalFilteredAudits.value) return []
-  const filtered = globalFilteredAudits.value.filter((audit) => {
-    const city = audit.city
-    return city === props.selectedCity
-  })
+  if (!globalFilteredAudits.value) return []
+
+  // If specific city selected, filter by it
+  let filtered = globalFilteredAudits.value
+  if (props.selectedCity) {
+    filtered = globalFilteredAudits.value.filter((audit) => {
+      const city = audit.city
+      return city === props.selectedCity
+    })
+  }
+
   // Sort by date (most recent first)
   return filtered.sort((a, b) => Number(b.year) - Number(a.year))
 })
 
-const currentStats = computed(() => {
-  if (!props.selectedCity) return null
+// Infinite loading
+const visibleLimit = ref(20)
+const loadingMore = ref(false)
 
+const displayedAudits = computed(() => {
+  return filteredAudits.value.slice(0, visibleLimit.value)
+})
+
+watch(
+  () => [props.selectedCity, globalFilteredAudits.value],
+  () => {
+    // Reset limit when filters change
+    visibleLimit.value = 20
+    if (scrollContainer.value) {
+      scrollContainer.value.scrollTop = 0
+    }
+  }
+)
+
+const scrollContainer = ref<HTMLElement | null>(null)
+const handleScroll = (e: Event) => {
+  const target = e.target as HTMLElement
+  scrollContainer.value = target // update ref
+
+  if (loadingMore.value) return
+
+  // Check if scrolled near bottom (within 100px)
+  if (target.scrollHeight - target.scrollTop - target.clientHeight < 100) {
+    if (visibleLimit.value < filteredAudits.value.length) {
+      loadingMore.value = true
+      // Small delay to show spinner/prevent hammering
+      setTimeout(() => {
+        visibleLimit.value += 20
+        loadingMore.value = false
+      }, 300)
+    }
+  }
+}
+
+const currentStats = computed(() => {
   const cityAudits = filteredAudits.value
 
   // Count theme occurrences across all audits for this city
@@ -219,14 +275,20 @@ const clearFilters = () => {
   selectedTags.value = []
   selectedMaxYear.value = yearRange.value.max || null
   selectedOrganizer.value = ''
+  yearFilterMode.value = 'through'
 }
 
-const isYearFiltered = computed(() =>
-  selectedMaxYear.value !== null && yearRange.value.max > 0 && selectedMaxYear.value < yearRange.value.max
-)
+const isYearFiltered = computed(() => {
+  if (selectedMaxYear.value === null || yearRange.value.max === 0) return false
+  if (yearFilterMode.value === 'in') return true
+  return selectedMaxYear.value < yearRange.value.max
+})
 
-const activeFilterCount = computed(() =>
-  selectedTags.value.length + (isYearFiltered.value ? 1 : 0) + (selectedOrganizer.value ? 1 : 0)
+const activeFilterCount = computed(
+  () =>
+    selectedTags.value.length +
+    (isYearFiltered.value ? 1 : 0) +
+    (selectedOrganizer.value ? 1 : 0)
 )
 </script>
 
@@ -235,9 +297,14 @@ const activeFilterCount = computed(() =>
     class="w-full md:w-[400px] flex flex-col bg-white rounded-xl shadow-xl border border-zinc-200 overflow-hidden h-full relative"
   >
     <!-- Interactive Elements -->
-    <div class="flex-grow overflow-y-auto p-5 custom-scrollbar space-y-6">
+    <div
+      class="flex-grow overflow-y-auto p-5 custom-scrollbar space-y-6"
+      @scroll="handleScroll"
+    >
       <!-- City & Filters Section -->
-      <div class="space-y-4 relative z-20">
+      <div
+        class="space-y-4 relative z-20 border border-zinc-200 rounded-lg p-3 bg-zinc-50"
+      >
         <!-- City Selection -->
         <div class="space-y-2">
           <div class="flex items-center justify-between">
@@ -262,7 +329,7 @@ const activeFilterCount = computed(() =>
                 :class="{ 'opacity-50': cities.length === 0 }"
               >
                 <span class="block truncate text-base text-zinc-800">
-                  {{ selectedCity || 'Choose a city...' }}
+                  {{ selectedCity || 'All Cities' }}
                 </span>
                 <span
                   class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
@@ -323,12 +390,16 @@ const activeFilterCount = computed(() =>
         </div>
 
         <!-- Filter Controls -->
-        <div class="space-y-2 border border-zinc-200 rounded-lg p-3 bg-zinc-50">
+        <div class="space-y-2">
           <div class="flex items-center justify-between">
             <label
               class="block text-sm font-bold text-zinc-600 uppercase tracking-wider"
             >
-              Filter <span class="underline decoration-dotted decoration-zinc-400">{{ selectedCity || 'All' }}</span> Audits
+              Filter
+              <span class="underline decoration-dotted decoration-zinc-400">{{
+                selectedCity || 'All'
+              }}</span>
+              Audits
             </label>
             <button
               v-if="activeFilterCount > 0"
@@ -494,11 +565,32 @@ const activeFilterCount = computed(() =>
           </div>
 
           <!-- Year Slider -->
-          <div v-if="yearRange.max > 0" class="pt-1" :class="{ 'opacity-40 pointer-events-none': baseAuditsForFilters.length === 0 }">
+          <div
+            v-if="yearRange.max > 0"
+            class="pt-1"
+            :class="{
+              'opacity-40 pointer-events-none':
+                baseAuditsForFilters.length === 0,
+            }"
+          >
             <div class="flex items-center justify-between mb-1">
               <span class="text-xs text-zinc-500">{{ yearRange.min }}</span>
               <span class="text-xs font-bold text-zinc-700">
-                Through {{ selectedMaxYear }}
+                <button
+                  @click="
+                    yearFilterMode =
+                      yearFilterMode === 'through' ? 'in' : 'through'
+                  "
+                  class="underline decoration-dotted underline-offset-2 cursor-pointer text-brand-orange hover:text-orange-600 transition-colors"
+                  :title="
+                    yearFilterMode === 'through'
+                      ? 'Click to show only this year'
+                      : 'Click to show all years up to this year'
+                  "
+                >
+                  {{ yearFilterMode === 'through' ? 'Through' : 'In' }}
+                </button>
+                {{ selectedMaxYear }}
               </span>
               <span class="text-xs text-zinc-500">{{ yearRange.max }}</span>
             </div>
@@ -508,7 +600,11 @@ const activeFilterCount = computed(() =>
               :max="yearRange.max"
               :value="selectedMaxYear"
               :disabled="baseAuditsForFilters.length === 0"
-              @input="selectedMaxYear = Number(($event.target as HTMLInputElement).value)"
+              @input="
+                selectedMaxYear = Number(
+                  ($event.target as HTMLInputElement).value
+                )
+              "
               class="year-slider w-full h-2 rounded-lg appearance-none cursor-pointer"
             />
           </div>
@@ -517,20 +613,16 @@ const activeFilterCount = computed(() =>
 
       <!-- Statistics / Info Cards (Dynamic) -->
       <div
-        v-if="selectedCity && currentStats"
         class="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300"
       >
         <div
-          v-if="currentStats.audits === 0"
+          v-if="currentStats && currentStats.audits === 0"
           class="h-64 flex flex-col items-center justify-center text-center border-2 border-dashed border-zinc-100 rounded-xl bg-orange-50/30"
         >
           <p class="text-lg font-medium text-zinc-700 mb-2">
             Hey! You could do a walk audit here!
           </p>
-          <p
-            v-if="activeFilterCount > 0"
-            class="text-xs text-zinc-500 mb-2"
-          >
+          <p v-if="activeFilterCount > 0" class="text-xs text-zinc-500 mb-2">
             (No audits found matching your filters)
           </p>
           <a
@@ -542,18 +634,7 @@ const activeFilterCount = computed(() =>
           </a>
         </div>
 
-        <template v-else>
-          <div
-            class="px-4 py-2 rounded-lg bg-orange-50 border-l-4 border-brand-orange flex items-center justify-between"
-          >
-            <h3 class="font-bold text-brand-orange text-sm uppercase">
-              Audits To Date
-            </h3>
-            <p class="text-2xl font-black text-black">
-              {{ currentStats.audits }}
-            </p>
-          </div>
-
+        <template v-else-if="currentStats">
           <!-- Render list of audits -->
           <div class="mt-6">
             <h4 class="text-sm font-bold text-zinc-700 uppercase mb-3">
@@ -561,44 +642,17 @@ const activeFilterCount = computed(() =>
             </h4>
             <div class="space-y-4">
               <AuditCard
-                v-for="(audit, index) in filteredAudits"
+                v-for="(audit, index) in displayedAudits"
                 :key="index"
                 :audit="audit"
                 @view="handleViewAudit"
               />
+              <div v-if="loadingMore" class="py-4 text-center">
+                <span class="text-sm text-zinc-400">Loading more...</span>
+              </div>
             </div>
           </div>
-
-          <div class="pt-4" v-if="currentStats.areas.length > 0">
-            <h4 class="text-xs font-bold text-zinc-500 uppercase mb-3">
-              Key Themes
-            </h4>
-            <ul class="space-y-2">
-              <li
-                v-for="area in currentStats.areas"
-                :key="area.theme"
-                class="flex items-center gap-2 text-sm p-2 bg-white border border-zinc-100 rounded hover:shadow-sm transition-shadow"
-              >
-                <Tag class="text-brand-orange flex-shrink-0" :size="12" />
-                <span class="flex-1">{{ area.theme }}</span>
-                <span class="text-xs text-zinc-400 font-medium"
-                  >(x{{ area.count }})</span
-                >
-              </li>
-            </ul>
-          </div>
         </template>
-      </div>
-
-      <!-- Placeholder if no city selected -->
-      <div
-        v-else
-        class="h-64 flex flex-col items-center justify-center text-zinc-400 text-center border-2 border-dashed border-zinc-100 rounded-xl"
-      >
-        <Building2 class="text-zinc-400 mb-3 opacity-20" :size="36" />
-        <p class="text-sm">
-          Select a city from the menu above to discover its walk audits
-        </p>
       </div>
     </div>
 

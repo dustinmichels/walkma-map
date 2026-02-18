@@ -18,7 +18,7 @@
       <span
         v-for="theme in getThemes(audit.themes)"
         :key="theme"
-        class="bg-emerald-50 text-emerald-600 text-xs px-2 py-1 rounded-md font-medium uppercase tracking-wide"
+        class="bg-emerald-50 text-emerald-600 text-[10px] px-2 py-0.5 rounded-full font-medium uppercase border border-emerald-100/50"
       >
         {{ theme }}
       </span>
