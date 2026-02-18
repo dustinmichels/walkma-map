@@ -130,7 +130,8 @@ onMounted(() => {
             {
               label: 'Audits',
               data: [],
-              backgroundColor: '#ffa100', // Brand Orange
+              backgroundColor: '#ffa100',
+              hoverBackgroundColor: '#ffa100',
               borderRadius: 4,
               barPercentage: 0.6,
               categoryPercentage: 0.9,
@@ -277,11 +278,13 @@ onUnmounted(() => {
   <div class="w-full h-full flex gap-4">
     <!-- Combined Stats Panel -->
     <div
-      class="flex-shrink-0 bg-white rounded-xl border-2 border-zinc-200 shadow-sm flex items-center justify-center p-4 gap-6"
+      class="flex-shrink-0 bg-white rounded-xl border-2 border-zinc-200 shadow-sm flex items-center justify-center p-4 gap-6 w-44"
     >
       <!-- Audits -->
       <div class="flex flex-col justify-center items-center">
-        <span class="text-4xl font-black text-brand-orange leading-none mb-1">
+        <span
+          class="text-4xl font-black text-brand-orange leading-none mb-1 w-16 text-center"
+        >
           {{ totalAudits }}
         </span>
         <span
@@ -296,7 +299,9 @@ onUnmounted(() => {
 
       <!-- Cities -->
       <div class="flex flex-col justify-center items-center">
-        <span class="text-4xl font-black text-brand-orange leading-none mb-1">
+        <span
+          class="text-4xl font-black text-brand-orange leading-none mb-1 w-16 text-center"
+        >
           {{ totalCities }}
         </span>
         <span

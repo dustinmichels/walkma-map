@@ -13,7 +13,7 @@ import {
 import { Check, ChevronDown, ListFilter, Tag, Users, X } from 'lucide-vue-next'
 import { computed, ref, watch } from 'vue'
 import type { Audits } from '../types'
-import { parseThemes } from '../utils'
+import { parseOrgs, parseThemes } from '../utils'
 
 const props = defineProps<{
   audits: Audits | null
@@ -32,6 +32,17 @@ const selectedTags = defineModel<string[]>('selectedTags', {
 const selectedMaxYear = ref<number | null>(null)
 const selectedOrganizer = ref('')
 const yearFilterMode = ref<'through' | 'in'>('through')
+
+const proxySelectedTags = computed({
+  get: () => selectedTags.value,
+  set: (val: string[]) => {
+    if (val.includes('__ALL__')) {
+      selectedTags.value = []
+    } else {
+      selectedTags.value = val
+    }
+  },
+})
 
 // Compute available options based on selected city
 const baseAuditsForFilters = computed(() => {
@@ -85,7 +96,9 @@ const filterByTags = (audits: Audits, tags: string[]) => {
 // Helper to filter by Organizer
 const filterByOrganizer = (audits: Audits, org: string) => {
   if (!org) return audits
-  return audits.filter((a) => a.organizer_lead_organization === org)
+  return audits.filter((a) =>
+    parseOrgs(a.organizer_lead_organization).includes(org)
+  )
 }
 
 const availableTags = computed(() => {
@@ -113,8 +126,7 @@ const availableOrganizers = computed(() => {
 
   const orgs = new Set<string>()
   audits.forEach((audit) => {
-    if (audit.organizer_lead_organization)
-      orgs.add(audit.organizer_lead_organization)
+    parseOrgs(audit.organizer_lead_organization).forEach((org) => orgs.add(org))
   })
   return Array.from(orgs).sort()
 })
@@ -307,7 +319,7 @@ const activeFilterCount = computed(
     <div class="space-y-2">
       <div class="flex flex-col gap-3">
         <!-- Tags Filter -->
-        <Listbox v-model="selectedTags" multiple>
+        <Listbox v-model="proxySelectedTags" multiple>
           <div class="flex items-center gap-2">
             <div class="relative flex-grow min-w-0">
               <ListboxButton
@@ -343,6 +355,22 @@ const activeFilterCount = computed(
                 <ListboxOptions
                   class="absolute mt-1 max-h-48 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm z-50 custom-scrollbar"
                 >
+                  <ListboxOption
+                    v-slot="{ active }"
+                    value="__ALL__"
+                    as="template"
+                  >
+                    <li
+                      :class="[
+                        active
+                          ? 'bg-orange-50 text-orange-900'
+                          : 'text-zinc-500',
+                        'relative cursor-default select-none py-2 pl-9 pr-4 text-xs italic',
+                      ]"
+                    >
+                      All Tags
+                    </li>
+                  </ListboxOption>
                   <ListboxOption
                     v-slot="{ active, selected }"
                     v-for="tag in availableTags"
@@ -425,7 +453,7 @@ const activeFilterCount = computed(
                 leave-to-class="opacity-0"
               >
                 <ListboxOptions
-                  class="absolute right-0 mt-1 max-h-48 w-56 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm z-50 custom-scrollbar"
+                  class="absolute mt-1 max-h-48 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm z-50 custom-scrollbar"
                 >
                   <ListboxOption v-slot="{ active }" :value="''" as="template">
                     <li
