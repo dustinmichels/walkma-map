@@ -90,7 +90,7 @@ func FetchWalkAudits() ([]WalkAudit, error) {
 	doc.Find("tbody tr").Each(func(i int, s *goquery.Selection) {
 		// Get all cells in the row
 		cells := s.Find("td")
-		if cells.Length() < 10 {
+		if cells.Length() < 12 {
 			return
 		}
 
@@ -99,7 +99,7 @@ func FetchWalkAudits() ([]WalkAudit, error) {
 			return strings.TrimSpace(cells.Eq(idx).Text())
 		}
 
-		// Special handling for "View" column (index 7) to get the link
+		// Special handling for "View" column (index 8) to get the link
 		getViewLink := func(idx int) string {
 			cell := cells.Eq(idx)
 			// check for anchor tag
@@ -113,8 +113,10 @@ func FetchWalkAudits() ([]WalkAudit, error) {
 			return strings.TrimSpace(cell.Text())
 		}
 
-		// Parse CityTown, City, and Neighborhood using helper function
-		cityTown, cityClean, neighborhood := parseCity(getText(0))
+		// Parse CityTown and City using helper function
+		// Neighborhood now has its own dedicated column (index 1)
+		cityTown, cityClean, _ := parseCity(getText(0))
+		neighborhood := getText(3)
 
 		// Filter out Header rows or Title rows (using the cleaned value)
 		if cityTown == "CITY/TOWN" || strings.Contains(cityTown, "WALK AUDIT DATABASE") {
@@ -122,7 +124,7 @@ func FetchWalkAudits() ([]WalkAudit, error) {
 		}
 
 		// If city is empty, check if it's just an empty row
-		if cityTown == "" && getText(1) == "" {
+		if cityTown == "" && neighborhood == "" {
 			return
 		}
 
@@ -130,15 +132,15 @@ func FetchWalkAudits() ([]WalkAudit, error) {
 			CityTown:                  cityTown,
 			City:                      cityClean,
 			Neighborhood:              neighborhood,
-			Year:                      getText(1),
-			Summary:                   getText(2),
-			LongTermRecommendations:   getText(3),
-			ShortTermRecommendations:  getText(4),
-			StreetsIntersections:      getText(5),
-			Themes:                    getText(6),
-			View:                      getViewLink(7),
-			FacilitatorAuthor:         getText(8),
-			OrganizerLeadOrganization: getText(9),
+			Year:                      getText(2),
+			Summary:                   getText(4),
+			LongTermRecommendations:   getText(5),
+			ShortTermRecommendations:  getText(6),
+			StreetsIntersections:      getText(7),
+			Themes:                    getText(8),
+			View:                      getViewLink(9),
+			FacilitatorAuthor:         getText(10),
+			OrganizerLeadOrganization: getText(11),
 		}
 
 		audits = append(audits, audit)

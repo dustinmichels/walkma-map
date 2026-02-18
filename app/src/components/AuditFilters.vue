@@ -1,5 +1,10 @@
 <script setup lang="ts">
 import {
+  Combobox,
+  ComboboxButton,
+  ComboboxInput,
+  ComboboxOption,
+  ComboboxOptions,
   Listbox,
   ListboxButton,
   ListboxOption,
@@ -150,6 +155,16 @@ const cities = computed(() => {
     .sort((a, b) => a.name.localeCompare(b.name))
 })
 
+const query = ref('')
+
+const filteredCities = computed(() =>
+  query.value === ''
+    ? cities.value
+    : cities.value.filter((city) =>
+        city.name.toLowerCase().includes(query.value.toLowerCase())
+      )
+)
+
 const selectedCityProxy = computed({
   get: () => props.selectedCity,
   set: (val) => emit('update:selectedCity', val),
@@ -197,9 +212,9 @@ const activeFilterCount = computed(
       </label>
       <div class="flex items-center gap-3">
         <button
-          v-if="activeFilterCount > 0"
           @click="clearFilters"
           class="px-2 py-0.5 text-xs text-brand-orange font-bold rounded hover:bg-orange-50 transition-colors"
+          :class="{ invisible: activeFilterCount === 0 }"
         >
           Reset All
         </button>
@@ -208,34 +223,35 @@ const activeFilterCount = computed(
 
     <!-- City Selection -->
     <div class="space-y-2">
-      <Listbox v-model="selectedCityProxy">
+      <Combobox v-model="selectedCityProxy" nullable>
         <div class="flex items-center gap-2 mt-1">
           <div class="relative flex-grow">
-            <ListboxButton
-              class="relative w-full cursor-pointer bg-white border border-zinc-200 rounded-lg py-1.5 pl-3 pr-8 text-left focus:outline-none focus-visible:border-brand-orange focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 text-xs sm:text-sm hover:border-zinc-300 transition-colors"
-              :class="{ 'opacity-50': cities.length === 0 }"
-            >
-              <span class="block truncate text-sm text-zinc-800">
-                {{ selectedCity || 'All Cities' }}
-              </span>
-              <span
-                class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
+            <div class="relative w-full">
+              <ComboboxInput
+                class="w-full bg-white border border-zinc-200 rounded-lg py-1.5 pl-3 pr-8 text-left focus:outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange text-xs sm:text-sm hover:border-zinc-300 transition-colors text-zinc-800 placeholder-zinc-500"
+                :displayValue="(city: any) => city"
+                @change="query = $event.target.value"
+                placeholder="Type to filter cities..."
+              />
+              <ComboboxButton
+                class="absolute inset-y-0 right-0 flex items-center pr-2"
               >
                 <ChevronDown class="text-zinc-400" :size="16" />
-              </span>
-            </ListboxButton>
+              </ComboboxButton>
+            </div>
 
             <transition
               leave-active-class="transition duration-100 ease-in"
               leave-from-class="opacity-100"
               leave-to-class="opacity-0"
+              @after-leave="query = ''"
             >
-              <ListboxOptions
+              <ComboboxOptions
                 class="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm z-30 custom-scrollbar"
               >
-                <ListboxOption
+                <ComboboxOption
                   v-slot="{ active, selected }"
-                  v-for="city in cities"
+                  v-for="city in filteredCities"
                   :key="city.name"
                   :value="city.name"
                   as="template"
@@ -261,14 +277,14 @@ const activeFilterCount = computed(
                       <Check :size="16" />
                     </span>
                   </li>
-                </ListboxOption>
+                </ComboboxOption>
                 <li
-                  v-if="cities.length === 0"
+                  v-if="filteredCities.length === 0 && query !== ''"
                   class="relative cursor-default select-none py-2 pl-4 pr-4 text-zinc-500 italic text-sm"
                 >
-                  No cities match current filters
+                  No cities found
                 </li>
-              </ListboxOptions>
+              </ComboboxOptions>
             </transition>
           </div>
 
@@ -284,7 +300,7 @@ const activeFilterCount = computed(
             />
           </button>
         </div>
-      </Listbox>
+      </Combobox>
     </div>
 
     <!-- Filter Controls -->

@@ -103,6 +103,12 @@ const handleScroll = (e: Event) => {
   >
     <!-- Interactive Elements -->
     <div
+      v-if="audits && audits.length > 0"
+      class="bg-brand-orange text-white py-2 px-3 text-xs font-bold uppercase shrink-0"
+    >
+      Audits
+    </div>
+    <div
       ref="scrollContainer"
       class="flex-grow overflow-y-auto p-3 custom-scrollbar space-y-3"
       @scroll="handleScroll"
@@ -129,9 +135,6 @@ const handleScroll = (e: Event) => {
         <template v-else>
           <!-- Render list of audits -->
           <div class="mt-2">
-            <h4 class="text-xs font-bold text-zinc-700 uppercase mb-1.5">
-              Audits
-            </h4>
             <div class="space-y-4">
               <AuditCard
                 v-for="audit in displayedAudits"
