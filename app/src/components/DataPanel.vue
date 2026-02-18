@@ -17,32 +17,42 @@ const handleViewAudit = (audit: Audit) => {
   isAuditModalOpen.value = true
 }
 
+// Sort Logic
+const sortedAudits = computed(() => {
+  if (!props.audits) return []
+  return [...props.audits].sort((a, b) => {
+    const yearA = parseInt(a.year) || 0
+    const yearB = parseInt(b.year) || 0
+    return yearB - yearA
+  })
+})
+
 // Navigation Logic
 const selectedAuditIndex = computed(() => {
-  if (!selectedAudit.value || !props.audits) return -1
-  return props.audits.indexOf(selectedAudit.value)
+  if (!selectedAudit.value) return -1
+  return sortedAudits.value.indexOf(selectedAudit.value)
 })
 
 const hasPrevAudit = computed(() => selectedAuditIndex.value > 0)
 // Check if current index is valid and not the last one
 const hasNextAudit = computed(() => {
   return (
-    !!props.audits &&
+    sortedAudits.value.length > 0 &&
     selectedAuditIndex.value !== -1 &&
-    selectedAuditIndex.value < props.audits.length - 1
+    selectedAuditIndex.value < sortedAudits.value.length - 1
   )
 })
 
 const handlePrevAudit = () => {
-  if (hasPrevAudit.value && props.audits) {
-    const prev = props.audits[selectedAuditIndex.value - 1]
+  if (hasPrevAudit.value) {
+    const prev = sortedAudits.value[selectedAuditIndex.value - 1]
     if (prev) selectedAudit.value = prev
   }
 }
 
 const handleNextAudit = () => {
-  if (hasNextAudit.value && props.audits) {
-    const next = props.audits[selectedAuditIndex.value + 1]
+  if (hasNextAudit.value) {
+    const next = sortedAudits.value[selectedAuditIndex.value + 1]
     if (next) selectedAudit.value = next
   }
 }
@@ -52,8 +62,7 @@ const visibleLimit = ref(20)
 const loadingMore = ref(false)
 
 const displayedAudits = computed(() => {
-  if (!props.audits) return []
-  return props.audits.slice(0, visibleLimit.value)
+  return sortedAudits.value.slice(0, visibleLimit.value)
 })
 
 const scrollContainer = ref<HTMLElement | null>(null)
@@ -77,7 +86,7 @@ const handleScroll = (e: Event) => {
 
   // Check if scrolled near bottom (within 100px)
   if (target.scrollHeight - target.scrollTop - target.clientHeight < 100) {
-    if (visibleLimit.value < props.audits.length) {
+    if (visibleLimit.value < sortedAudits.value.length) {
       loadingMore.value = true
       // Small delay to show spinner/prevent hammering
       setTimeout(() => {
@@ -91,7 +100,7 @@ const handleScroll = (e: Event) => {
 
 <template>
   <aside
-    class="w-full flex flex-col bg-white rounded-xl shadow-xl border border-zinc-200 overflow-hidden flex-1 min-h-0 relative"
+    class="w-full flex flex-col bg-orange-50 rounded-xl shadow-xl border border-zinc-200 border-t-4 border-t-brand-orange overflow-hidden flex-1 min-h-0 relative"
   >
     <!-- Interactive Elements -->
     <div
