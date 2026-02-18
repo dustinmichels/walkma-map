@@ -179,6 +179,7 @@ onMounted(async () => {
     center: [initialState.lng, initialState.lat],
     zoom: initialState.zoom,
     minZoom: 7,
+    maxZoom: 14,
     maxBounds: [
       [-74.5, 41.0], // Southwest coordinates
       [-69.0, 43.5], // Northeast coordinates

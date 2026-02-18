@@ -5,7 +5,7 @@ import {
   ListboxOption,
   ListboxOptions,
 } from '@headlessui/vue'
-import { Check, ChevronDown, Tag, Users, X } from 'lucide-vue-next'
+import { Check, ChevronDown, ListFilter, Tag, Users, X } from 'lucide-vue-next'
 import { computed, ref, watch } from 'vue'
 import type { Audit, Audits } from '../types'
 import AuditCard from './AuditCard.vue'
@@ -272,6 +272,7 @@ const handleNextAudit = () => {
 }
 
 const clearFilters = () => {
+  selectedCityProxy.value = ''
   selectedTags.value = []
   selectedMaxYear.value = yearRange.value.max || null
   selectedOrganizer.value = ''
@@ -288,7 +289,8 @@ const activeFilterCount = computed(
   () =>
     selectedTags.value.length +
     (isYearFiltered.value ? 1 : 0) +
-    (selectedOrganizer.value ? 1 : 0)
+    (selectedOrganizer.value ? 1 : 0) +
+    (props.selectedCity ? 1 : 0)
 )
 </script>
 
@@ -305,23 +307,27 @@ const activeFilterCount = computed(
       <div
         class="space-y-4 relative z-20 border border-zinc-200 rounded-lg p-3 bg-zinc-50"
       >
-        <!-- City Selection -->
-        <div class="space-y-2">
-          <div class="flex items-center justify-between">
-            <label
-              class="block text-sm font-bold text-zinc-600 uppercase tracking-wider"
-            >
-              Select City
-            </label>
+        <!-- Header -->
+        <div class="flex items-center justify-between">
+          <label
+            class="flex items-center gap-2 text-sm font-bold text-zinc-600 uppercase tracking-wider"
+          >
+            <ListFilter :size="16" />
+            Filter
+          </label>
+          <div class="flex items-center gap-3">
             <button
-              v-if="selectedCity"
-              @click="selectedCityProxy = ''"
+              v-if="activeFilterCount > 0"
+              @click="clearFilters"
               class="text-xs text-brand-orange font-bold hover:underline flex items-center gap-1"
             >
-              <X :size="12" /> Deselect City
+              <X :size="12" /> Clear ({{ activeFilterCount }})
             </button>
           </div>
+        </div>
 
+        <!-- City Selection -->
+        <div class="space-y-2">
           <Listbox v-model="selectedCityProxy">
             <div class="relative mt-1">
               <ListboxButton
@@ -391,26 +397,7 @@ const activeFilterCount = computed(
 
         <!-- Filter Controls -->
         <div class="space-y-2">
-          <div class="flex items-center justify-between">
-            <label
-              class="block text-sm font-bold text-zinc-600 uppercase tracking-wider"
-            >
-              Filter
-              <span class="underline decoration-dotted decoration-zinc-400">{{
-                selectedCity || 'All'
-              }}</span>
-              Audits
-            </label>
-            <button
-              v-if="activeFilterCount > 0"
-              @click="clearFilters"
-              class="text-xs text-brand-orange font-bold hover:underline flex items-center gap-1"
-            >
-              <X :size="12" /> Clear ({{ activeFilterCount }})
-            </button>
-          </div>
-
-          <div class="grid grid-cols-2 gap-3">
+          <div class="flex flex-col gap-3">
             <!-- Tags Filter -->
             <Listbox v-model="selectedTags" multiple>
               <div class="relative">
@@ -420,12 +407,14 @@ const activeFilterCount = computed(
                   <span class="block truncate text-zinc-700">
                     <span
                       v-if="selectedTags.length > 0"
-                      class="flex items-center gap-1"
+                      class="flex items-center gap-1 overflow-hidden"
                     >
                       <span
-                        class="bg-orange-100 text-orange-800 px-1.5 rounded font-medium"
+                        v-for="tag in selectedTags"
+                        :key="tag"
+                        class="bg-orange-100 text-orange-800 px-1.5 rounded font-medium whitespace-nowrap"
                       >
-                        {{ selectedTags.length }} matches
+                        {{ tag }}
                       </span>
                     </span>
                     <span v-else class="text-zinc-500">All Tags</span>
