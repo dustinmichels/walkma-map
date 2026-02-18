@@ -42,6 +42,12 @@ const scrollContainer = ref<HTMLDivElement | null>(null)
 
 const totalAudits = computed(() => props.audits?.length || 0)
 
+const totalCities = computed(() => {
+  if (!props.audits) return 0
+  const cities = new Set(props.audits.map((a) => a.city))
+  return cities.size
+})
+
 const parseThemes = (themesStr: string | undefined): string[] => {
   if (!themesStr) return []
   return (
@@ -114,8 +120,11 @@ const updateChart = async () => {
 
   if (chartInstance.data.datasets[0]) {
     chartInstance.data.labels = labels
-    chartInstance.data.datasets[0].data = data
-    chartInstance.resize()
+    chartInstance.data.datasets[0].data = [...data]
+    if (chartInstance.data.datasets[1]) {
+      chartInstance.data.datasets[1].data = [...data]
+    }
+    // chartInstance.resize() - Removing to prevent interrupting animation
     chartInstance.update()
   }
 }
@@ -136,6 +145,18 @@ onMounted(() => {
               borderRadius: 4,
               barPercentage: 0.6,
               categoryPercentage: 0.9,
+              xAxisID: 'x',
+            },
+            {
+              label: 'Audits Top',
+              data: [],
+              xAxisID: 'x2',
+              backgroundColor: 'transparent',
+              borderColor: 'transparent',
+              barThickness: 0,
+              grouped: false,
+              hoverBackgroundColor: 'transparent',
+              hoverBorderColor: 'transparent',
             },
           ],
         },
@@ -170,6 +191,7 @@ onMounted(() => {
               borderWidth: 1,
               padding: 10,
               displayColors: false,
+              filter: (tooltipItem) => tooltipItem.datasetIndex === 0,
               callbacks: {
                 label: (context) => `${context.parsed.x} audits`,
               },
@@ -187,7 +209,30 @@ onMounted(() => {
                   size: 10,
                 },
                 color: '#3f3f46',
-                stepSize: 1,
+                maxTicksLimit: 6,
+                maxRotation: 0,
+                minRotation: 0,
+              },
+              border: {
+                display: false,
+              },
+            },
+            x2: {
+              position: 'top',
+              beginAtZero: true,
+              grid: {
+                display: true,
+                color: '#f4f4f5',
+                drawOnChartArea: false, // Prevent double grid lines
+              },
+              ticks: {
+                font: {
+                  size: 10,
+                },
+                color: '#3f3f46',
+                maxTicksLimit: 6,
+                maxRotation: 0,
+                minRotation: 0,
               },
               border: {
                 display: false,
@@ -241,32 +286,42 @@ onUnmounted(() => {
 
 <template>
   <div class="w-full h-full flex gap-4">
-    <!-- Total Count Panel -->
+    <!-- Combined Stats Panel -->
     <div
-      class="w-32 flex-shrink-0 bg-white rounded-xl border-2 border-zinc-200 shadow-sm flex flex-col justify-center items-center p-4"
+      class="flex-shrink-0 bg-white rounded-xl border-2 border-zinc-200 shadow-sm flex items-center justify-center p-4 gap-6"
     >
-      <span class="text-4xl font-black text-brand-orange leading-none mb-1">
-        {{ totalAudits }}
-      </span>
-      <span
-        class="text-xs font-bold text-zinc-500 uppercase tracking-wide text-center leading-tight"
-      >
-        Total<br />Audits
-      </span>
+      <!-- Audits -->
+      <div class="flex flex-col justify-center items-center">
+        <span class="text-4xl font-black text-brand-orange leading-none mb-1">
+          {{ totalAudits }}
+        </span>
+        <span
+          class="text-xs font-bold text-zinc-500 uppercase tracking-wide text-center leading-tight"
+        >
+          Total<br />Audits
+        </span>
+      </div>
+
+      <!-- Divider -->
+      <div class="h-8 w-0.5 bg-zinc-100 rounded-full"></div>
+
+      <!-- Cities -->
+      <div class="flex flex-col justify-center items-center">
+        <span class="text-4xl font-black text-brand-orange leading-none mb-1">
+          {{ totalCities }}
+        </span>
+        <span
+          class="text-xs font-bold text-zinc-500 uppercase tracking-wide text-center leading-tight"
+        >
+          Total<br />Cities
+        </span>
+      </div>
     </div>
 
     <!-- Chart Panel -->
     <div
       class="flex-grow min-w-0 bg-white rounded-xl border-2 border-zinc-200 shadow-sm flex flex-col overflow-hidden"
     >
-      <div
-        class="py-2 px-4 border-b border-zinc-100 bg-zinc-50/50 flex-shrink-0"
-      >
-        <h3 class="text-zinc-700 font-bold text-xs uppercase tracking-wide">
-          Themes Frequency
-        </h3>
-      </div>
-
       <!-- Scrollable Vertical Container -->
       <div
         class="flex-grow overflow-y-auto custom-scrollbar relative p-2"

@@ -283,9 +283,9 @@ const activeFilterCount = computed(
         <button
           v-if="activeFilterCount > 0"
           @click="clearFilters"
-          class="text-xs text-brand-orange font-bold hover:underline flex items-center gap-1"
+          class="px-2 py-0.5 text-xs text-brand-orange font-bold rounded hover:bg-orange-50 transition-colors"
         >
-          <X :size="12" /> Reset All
+          Reset All
         </button>
       </div>
     </div>

@@ -4,7 +4,7 @@
     @click="emit('view', audit)"
   >
     <div class="flex justify-between items-center mb-1">
-      <h3 class="text-lg font-bold text-zinc-900 font-display m-0">
+      <h3 class="text-base font-bold text-zinc-900 font-display m-0">
         {{ audit.city_town || audit.city }}
       </h3>
       <span
