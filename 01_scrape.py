@@ -277,9 +277,9 @@ def _placement_rotation(page, xref):
         return 0
     m = rects[0][1]
     a, b = m.a, m.b
-    if abs(b) < 1e-3:          # no off-diagonal → 0° or 180°
+    if abs(b) < 1e-3:  # no off-diagonal → 0° or 180°
         return 180 if a < 0 else 0
-    if abs(a) < 1e-3:          # off-diagonal dominant → 90° or 270°
+    if abs(a) < 1e-3:  # off-diagonal dominant → 90° or 270°
         return 90 if b > 0 else 270
     return 0
 
@@ -380,17 +380,36 @@ def fetch_and_extract(sheet_id, gid):
             wb = load_workbook(excel_path)
             ws = wb.active
 
-            view_col = next(
-                (c.column for c in ws[2] if c.value and "VIEW" in str(c.value).upper()),
-                None,
-            )
-            if not view_col:
+            # Locate columns by header name (Row 2)
+            headers = ws[2]
+
+            def find_col_index(substring):
+                for i, cell in enumerate(headers):
+                    if cell.value and substring in str(cell.value).upper():
+                        return i
+                return None
+
+            idx_city = find_col_index("CITY")
+            idx_year = find_col_index("YEAR")
+            idx_streets = find_col_index("STREETS")
+            idx_view = find_col_index("VIEW")
+
+            if None in (idx_city, idx_year, idx_streets, idx_view):
+                missing = []
+                if idx_city is None:
+                    missing.append("CITY")
+                if idx_year is None:
+                    missing.append("YEAR")
+                if idx_streets is None:
+                    missing.append("STREETS")
+                if idx_view is None:
+                    missing.append("VIEW")
                 console.print(
-                    "[red][Error][/red] Could not find VIEW column in spreadsheet."
+                    f"[red][Error][/red] Missing columns: {', '.join(missing)}"
                 )
                 return
 
-            rows = [row for row in ws.iter_rows(min_row=3) if row[0].value]
+            rows = [row for row in ws.iter_rows(min_row=3) if row[idx_city].value]
             if FIRST_N_ROWS:
                 rows = rows[:FIRST_N_ROWS]
 
@@ -403,11 +422,12 @@ def fetch_and_extract(sheet_id, gid):
                 task = progress.add_task("[cyan]Downloading audits...", total=len(rows))
                 for row in rows:
                     folder_name = get_audit_identifier(
-                        row[0].value, row[1].value, row[5].value
+                        row[idx_city].value, row[idx_year].value, row[idx_streets].value
                     )
+                    link_cell = row[idx_view]
                     link_url = (
-                        row[view_col - 1].hyperlink.target
-                        if row[view_col - 1].hyperlink
+                        link_cell.hyperlink.target
+                        if link_cell.hyperlink
                         else "No Link Found"
                     )
                     progress.update(task, description=f"[cyan]{folder_name}[/cyan]")
