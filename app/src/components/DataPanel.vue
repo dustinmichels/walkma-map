@@ -6,6 +6,7 @@ import AuditModal from './AuditModal.vue'
 
 const props = defineProps<{
   audits: Audits | null
+  selectedTags?: string[]
 }>()
 
 // Modal State
@@ -140,6 +141,7 @@ const handleScroll = (e: Event) => {
                 v-for="audit in displayedAudits"
                 :key="`${audit.city_town}-${audit.year}-${audit.facilitator_author}`"
                 :audit="audit"
+                :selected-tags="selectedTags"
                 @view="handleViewAudit"
               />
               <div v-if="loadingMore" class="py-4 text-center">

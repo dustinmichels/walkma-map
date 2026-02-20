@@ -21,7 +21,12 @@
       <span
         v-for="theme in parseThemes(audit.themes)"
         :key="theme"
-        class="bg-emerald-50 text-emerald-600 text-[10px] px-2 py-0.5 rounded-full font-medium uppercase border border-emerald-100/50"
+        class="text-[10px] px-2 py-0.5 rounded-full font-medium uppercase border"
+        :class="
+          selectedTags?.includes(theme)
+            ? 'bg-orange-50 text-brand-orange border-orange-200'
+            : 'bg-emerald-50 text-emerald-600 border-emerald-100/50'
+        "
       >
         {{ theme }}
       </span>
@@ -58,6 +63,7 @@ import { parseThemes } from '../utils'
 
 defineProps<{
   audit: Audit
+  selectedTags?: string[]
 }>()
 
 const emit = defineEmits<{

@@ -101,7 +101,7 @@ onMounted(async () => {
           v-model:selectedTags="selectedTags"
           @filter="handleFilter"
         />
-        <DataPanel :audits="relevantAudits" />
+        <DataPanel :audits="relevantAudits" :selected-tags="selectedTags" />
       </div>
     </main>
 
