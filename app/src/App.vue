@@ -85,6 +85,7 @@ onMounted(async () => {
           <ThemeChart
             :audits="relevantAudits"
             :all-audits="audits"
+            :selected-tags="selectedTags"
             @select="handleThemeClick"
           />
         </div>

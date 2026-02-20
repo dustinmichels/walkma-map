@@ -30,6 +30,7 @@ Chart.defaults.color = '#71717a'
 const props = defineProps<{
   audits: Audits | null
   allAudits?: Audits | null
+  selectedTags?: string[]
 }>()
 
 const emit = defineEmits<{
@@ -110,6 +111,17 @@ const updateChart = async () => {
   if (chartInstance.data.datasets[0]) {
     chartInstance.data.labels = labels
     chartInstance.data.datasets[0].data = [...data]
+
+    const activeTags = props.selectedTags || []
+    chartInstance.data.datasets[0].backgroundColor = labels.map((label) =>
+      activeTags.includes(label as string) ? '#dc2626' : '#ffa100'
+    )
+    chartInstance.data.datasets[0].hoverBackgroundColor = labels.map((label) =>
+      activeTags.includes(label as string) ? '#b91c1c' : '#cc8100'
+    )
+    chartInstance.data.datasets[0].borderColor = 'transparent'
+    chartInstance.data.datasets[0].borderWidth = 0
+
     if (chartInstance.data.datasets[1]) {
       chartInstance.data.datasets[1].data = [...data]
     }
@@ -131,11 +143,12 @@ onMounted(() => {
               label: 'Audits',
               data: [],
               backgroundColor: '#ffa100',
-              hoverBackgroundColor: '#ffa100',
+              hoverBackgroundColor: '#cc8100',
               borderRadius: 4,
               barPercentage: 0.6,
               categoryPercentage: 0.9,
               xAxisID: 'x',
+              borderSkipped: false,
             },
             {
               label: 'Audits Top',
@@ -161,6 +174,12 @@ onMounted(() => {
                   emit('select', label)
                 }
               }
+            }
+          },
+          onHover: (evt, elements) => {
+            if (chartCanvas.value) {
+              chartCanvas.value.style.cursor =
+                elements.length > 0 ? 'pointer' : 'default'
             }
           },
           indexAxis: 'y', // Horizontal bars
@@ -258,7 +277,7 @@ onMounted(() => {
 })
 
 watch(
-  () => [props.audits, props.allAudits],
+  () => [props.audits, props.allAudits, props.selectedTags],
   () => {
     updateChart()
   },
