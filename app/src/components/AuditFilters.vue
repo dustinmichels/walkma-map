@@ -57,7 +57,10 @@ const yearRange = computed(() => {
   if (!props.audits) return { min: 0, max: 0 }
   const years: number[] = []
   props.audits.forEach((audit) => {
-    if (audit.year) years.push(Number(audit.year))
+    if (audit.year) {
+      const y = parseInt(audit.year)
+      if (!isNaN(y)) years.push(y)
+    }
   })
   if (years.length === 0) return { min: 0, max: 0 }
   return { min: Math.min(...years), max: Math.max(...years) }
@@ -78,7 +81,8 @@ const filterByYear = (
 ) => {
   if (maxYear === null || yearRange.value.max === 0) return audits
   return audits.filter((a) => {
-    const y = Number(a.year)
+    const y = parseInt(a.year)
+    if (isNaN(y)) return false
     if (mode === 'in') return y === maxYear
     return y <= maxYear
   })
