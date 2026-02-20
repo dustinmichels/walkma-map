@@ -1,31 +1,31 @@
 package main
 
-import "testing"
+import (
+	"testing"
+
+	"hello/internal/audits"
+)
 
 func TestParseCity(t *testing.T) {
 	tests := []struct {
 		input        string
 		wantCityTown string
 		wantCity     string
-		wantNeigh    string
 	}{
-		{"Boston", "BOSTON", "BOSTON", ""},
-		{"Boston (Dorchester)", "BOSTON (DORCHESTER)", "BOSTON", "DORCHESTER"},
-		{" Somerville ", "SOMERVILLE", "SOMERVILLE", ""},
-		{"Cambridge(North)", "CAMBRIDGE(NORTH)", "CAMBRIDGE", "NORTH"},
-		{" Medford  ( Hillside ) ", "MEDFORD  ( HILLSIDE )", "MEDFORD", " HILLSIDE "},
+		{"Boston", "BOSTON", "BOSTON"},
+		{"Boston (Dorchester)", "BOSTON (DORCHESTER)", "BOSTON"},
+		{" Somerville ", "SOMERVILLE", "SOMERVILLE"},
+		{"Cambridge(North)", "CAMBRIDGE(NORTH)", "CAMBRIDGE"},
+		{" Medford  ( Hillside ) ", "MEDFORD  ( HILLSIDE )", "MEDFORD"},
 	}
 
 	for _, tt := range tests {
-		gotCityTown, gotCity, gotNeigh := parseCity(tt.input)
+		gotCityTown, gotCity := audits.ParseCity(tt.input)
 		if gotCityTown != tt.wantCityTown {
-			t.Errorf("parseCity(%q) cityTown = %q, want %q", tt.input, gotCityTown, tt.wantCityTown)
+			t.Errorf("ParseCity(%q) cityTown = %q, want %q", tt.input, gotCityTown, tt.wantCityTown)
 		}
 		if gotCity != tt.wantCity {
-			t.Errorf("parseCity(%q) city = %q, want %q", tt.input, gotCity, tt.wantCity)
-		}
-		if gotNeigh != tt.wantNeigh {
-			t.Errorf("parseCity(%q) neighborhood = %q, want %q", tt.input, gotNeigh, tt.wantNeigh)
+			t.Errorf("ParseCity(%q) city = %q, want %q", tt.input, gotCity, tt.wantCity)
 		}
 	}
 }

@@ -100,10 +100,10 @@ const updateChart = async () => {
 
   const { labels, data } = processData(props.audits, props.allAudits)
 
-  // Calculate dynamic height: 35px per bar
+  // Calculate dynamic height: 24px per bar
   // Minimum equal to container height, but usually content drives height here
   const minHeight = scrollContainer.value?.clientHeight || 200
-  chartHeight.value = Math.max(labels.length * 35, minHeight)
+  chartHeight.value = Math.max(labels.length * 24, minHeight)
 
   // Wait for DOM update
   await nextTick()

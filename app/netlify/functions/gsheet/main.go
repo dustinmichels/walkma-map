@@ -1,156 +1,43 @@
 package main
 
 import (
+	_ "embed"
 	"encoding/json"
-	"fmt"
+	"log"
 	"net/http"
-	"net/url"
-	"regexp"
+	"os"
 	"strings"
 
-	"github.com/PuerkitoBio/goquery"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
+	"hello/internal/audits"
 )
 
-var (
-	reRemoveParens  = regexp.MustCompile(`\s*\(.*?\)`)
-	reExtractParens = regexp.MustCompile(`\((.*?)\)`)
-)
+//go:embed data/audits.json
+var savedAuditsJSON []byte
 
-type WalkAudit struct {
-	CityTown                  string `json:"city_town"`
-	City                      string `json:"city"`
-	Neighborhood              string `json:"neighborhood"`
-	Year                      string `json:"year"`
-	Summary                   string `json:"summary"`
-	LongTermRecommendations   string `json:"long_term_recommendations"`
-	ShortTermRecommendations  string `json:"short_term_recommendations"`
-	StreetsIntersections      string `json:"streets_intersections"`
-	Themes                    string `json:"themes"`
-	View                      string `json:"view"`
-	FacilitatorAuthor         string `json:"facilitator_author"`
-	OrganizerLeadOrganization string `json:"organizer_lead_organization"`
-}
-
-// cleanGoogleSheetLink extracts the actual URL from a Google redirect link
-func cleanGoogleSheetLink(s string) string {
-	// If it's a google redirect link, extract the 'q' parameter
-	if strings.Contains(s, "google.com/url") {
-		u, err := url.Parse(s)
-		if err == nil {
-			q := u.Query().Get("q")
-			if q != "" {
-				return q
-			}
-		}
-	}
-	return s
-}
-
-// parseCity processes the raw city string to return cleaned CityTown, City, and Neighborhood
-func parseCity(raw string) (string, string, string) {
-	cityTown := strings.ToUpper(strings.TrimSpace(raw))
-
-	var neighborhood string
-	matches := reExtractParens.FindStringSubmatch(cityTown)
-	if len(matches) > 1 {
-		neighborhood = matches[1]
-	}
-
-	cityClean := reRemoveParens.ReplaceAllString(cityTown, "")
-	return cityTown, cityClean, neighborhood
-}
-
-// FetchWalkAudits retrieves and parses the walk audit data from the Google Sheet
-func FetchWalkAudits() ([]WalkAudit, error) {
-	// ... (rest of implementation remains, check next chunk)
-
-	// Use the published HTML version to get access to hyperlinks
-	url := "https://docs.google.com/spreadsheets/d/1-Vxf7AlXk_WJwwYSVy7F28qjxVXQOAmQ-NN0JImx95Y/pubhtml/sheet?headers=false&gid=379989993"
-
-	resp, err := http.Get(url)
-	if err != nil {
-		return nil, fmt.Errorf("failed to fetch spreadsheet: %w", err)
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("bad status: %s", resp.Status)
-	}
-
-	doc, err := goquery.NewDocumentFromReader(resp.Body)
-	if err != nil {
-		return nil, fmt.Errorf("failed to parse HTML: %w", err)
-	}
-
-	var audits []WalkAudit
-
-	// Iterate over table rows
-	doc.Find("tbody tr").Each(func(i int, s *goquery.Selection) {
-		// Get all cells in the row
-		cells := s.Find("td")
-		if cells.Length() < 12 {
-			return
-		}
-
-		// Helper to safely get text from a cell
-		getText := func(idx int) string {
-			return strings.TrimSpace(cells.Eq(idx).Text())
-		}
-
-		// Special handling for "View" column (index 8) to get the link
-		getViewLink := func(idx int) string {
-			cell := cells.Eq(idx)
-			// check for anchor tag
-			a := cell.Find("a")
-			if a.Length() > 0 {
-				href, exists := a.Attr("href")
-				if exists {
-					return cleanGoogleSheetLink(href)
-				}
-			}
-			return strings.TrimSpace(cell.Text())
-		}
-
-		// Parse CityTown and City using helper function
-		// Neighborhood now has its own dedicated column (index 1)
-		cityTown, cityClean, _ := parseCity(getText(0))
-		neighborhood := getText(3)
-
-		// Filter out Header rows or Title rows (using the cleaned value)
-		if cityTown == "CITY/TOWN" || strings.Contains(cityTown, "WALK AUDIT DATABASE") {
-			return
-		}
-
-		// If city is empty, check if it's just an empty row
-		if cityTown == "" && neighborhood == "" {
-			return
-		}
-
-		audit := WalkAudit{
-			CityTown:                  cityTown,
-			City:                      cityClean,
-			Neighborhood:              neighborhood,
-			Year:                      getText(2),
-			Summary:                   getText(4),
-			LongTermRecommendations:   getText(5),
-			ShortTermRecommendations:  getText(6),
-			StreetsIntersections:      getText(7),
-			Themes:                    getText(8),
-			View:                      getViewLink(9),
-			FacilitatorAuthor:         getText(10),
-			OrganizerLeadOrganization: getText(11),
-		}
-
-		audits = append(audits, audit)
-	})
-
-	return audits, nil
+func loadSavedAudits() ([]audits.WalkAudit, error) {
+	var result []audits.WalkAudit
+	err := json.Unmarshal(savedAuditsJSON, &result)
+	return result, err
 }
 
 func handler(request events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse, error) {
-	audits, err := FetchWalkAudits()
+	var auditData []audits.WalkAudit
+	var err error
+
+	disableLive := strings.TrimSpace(strings.ToLower(os.Getenv("DISABLE_LIVE_UPDATE")))
+	if disableLive == "true" || disableLive == "1" {
+		log.Println("DISABLE_LIVE_UPDATE is set — loading from embedded saved data")
+		auditData, err = loadSavedAudits()
+	} else {
+		auditData, err = audits.FetchWalkAudits()
+		if err != nil {
+			log.Printf("Warning: failed to fetch live data (%v); falling back to embedded saved data", err)
+			auditData, err = loadSavedAudits()
+		}
+	}
+
 	if err != nil {
 		return &events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,
@@ -158,7 +45,7 @@ func handler(request events.APIGatewayProxyRequest) (*events.APIGatewayProxyResp
 		}, nil
 	}
 
-	body, _ := json.Marshal(audits)
+	body, _ := json.Marshal(auditData)
 
 	return &events.APIGatewayProxyResponse{
 		StatusCode: http.StatusOK,

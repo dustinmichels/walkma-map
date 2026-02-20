@@ -3,25 +3,26 @@ package main
 import (
 	"strings"
 	"testing"
+
+	"hello/internal/audits"
 )
 
 func TestFetchWalkAudits(t *testing.T) {
-	audits, err := FetchWalkAudits()
+	data, err := audits.FetchWalkAudits()
 	if err != nil {
 		t.Fatalf("FetchWalkAudits failed: %v", err)
 	}
 
-	if len(audits) == 0 {
+	if len(data) == 0 {
 		t.Fatal("Expected at least one walk audit, got none")
 	}
 
-	// Optional: Print the first audit to see some data
-	t.Logf("Fetched %d audits", len(audits))
-	t.Logf("First audit: %+v", audits[0])
+	t.Logf("Fetched %d audits", len(data))
+	t.Logf("First audit: %+v", data[0])
 
-	if len(audits) > 0 {
-		if audits[0].View != "" && !strings.HasPrefix(audits[0].View, "http") {
-			t.Errorf("Expected View to be a link starting with http, got: %s", audits[0].View)
+	if len(data) > 0 {
+		if data[0].View != "" && !strings.HasPrefix(data[0].View, "http") {
+			t.Errorf("Expected View to be a link starting with http, got: %s", data[0].View)
 		}
 	}
 }
