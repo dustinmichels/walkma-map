@@ -100,7 +100,7 @@ const handleScroll = (e: Event) => {
 
 <template>
   <aside
-    class="w-full flex flex-col bg-orange-50 rounded-xl shadow-xl border border-zinc-200 border-t-4 border-t-brand-orange overflow-hidden flex-1 min-h-0 relative"
+    class="w-full h-full flex flex-col bg-orange-50 overflow-hidden relative"
   >
     <!-- Interactive Elements -->
     <div

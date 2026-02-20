@@ -294,10 +294,10 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="w-full h-full flex gap-4">
+  <div class="w-full h-full flex">
     <!-- Combined Stats Panel -->
     <div
-      class="flex-shrink-0 bg-white rounded-xl border-2 border-zinc-200 shadow-sm flex items-center justify-center p-4 gap-6 w-44"
+      class="flex-shrink-0 bg-white border-r border-zinc-200 flex items-center justify-center p-4 gap-6 w-44"
     >
       <!-- Audits -->
       <div class="flex flex-col justify-center items-center">
@@ -333,7 +333,7 @@ onUnmounted(() => {
 
     <!-- Chart Panel -->
     <div
-      class="flex-grow min-w-0 bg-white rounded-xl border-2 border-zinc-200 shadow-sm flex flex-col overflow-hidden"
+      class="flex-grow min-w-0 bg-white flex flex-col overflow-hidden"
     >
       <!-- Scrollable Vertical Container -->
       <div

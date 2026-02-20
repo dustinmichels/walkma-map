@@ -216,7 +216,7 @@ const activeFilterCount = computed(
 
 <template>
   <div
-    class="bg-white rounded-xl shadow-xl border border-zinc-200 p-2 bg-zinc-50 space-y-2"
+    class="bg-zinc-50 p-2 h-full overflow-y-auto space-y-2 custom-scrollbar"
   >
     <!-- Header -->
     <div class="flex items-center justify-between">

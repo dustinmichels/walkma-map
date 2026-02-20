@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Pane, Splitpanes } from 'splitpanes'
 import { computed, onMounted, ref } from 'vue'
 import AuditFilters from './components/AuditFilters.vue'
 import DataPanel from './components/DataPanel.vue'
@@ -52,7 +53,7 @@ onMounted(async () => {
   <div class="h-screen overflow-hidden flex flex-col font-sans text-slate-900">
     <!-- Header -->
     <header
-      class="bg-brand-orange shadow-lg py-2 px-4 flex justify-between items-center z-10"
+      class="bg-brand-orange shadow-lg py-2 px-4 flex justify-between items-center z-10 flex-shrink-0"
     >
       <div class="flex items-center gap-2">
         <div class="bg-black p-1.5 rounded-lg">
@@ -65,56 +66,50 @@ onMounted(async () => {
     </header>
 
     <!-- Main Content Area -->
-    <main
-      class="flex-grow flex flex-col md:flex-row p-2 md:p-4 gap-4 overflow-hidden"
-    >
-      <!-- Left Side: Map & Chart -->
-      <div class="flex-grow flex flex-col gap-4 overflow-hidden h-full min-w-0">
-        <!-- Map -->
-        <div
-          class="flex-grow relative rounded-xl overflow-hidden border-2 border-zinc-200 bg-white shadow-inner group min-h-0"
-        >
-          <Map
-            :audits="filteredAudits || audits"
-            v-model:selectedCity="selectedCity"
-          />
-        </div>
+    <main class="flex-grow overflow-hidden">
+      <Splitpanes class="h-full">
+        <!-- Left: Map + Chart -->
+        <Pane :size="65" :min-size="30">
+          <Splitpanes horizontal class="h-full">
+            <Pane :size="72" :min-size="20">
+              <div class="h-full w-full relative">
+                <Map
+                  :audits="filteredAudits || audits"
+                  v-model:selectedCity="selectedCity"
+                />
+              </div>
+            </Pane>
+            <Pane :size="28" :min-size="10">
+              <div class="h-full w-full">
+                <ThemeChart
+                  :audits="relevantAudits"
+                  :all-audits="audits"
+                  :selected-tags="selectedTags"
+                  @select="handleThemeClick"
+                />
+              </div>
+            </Pane>
+          </Splitpanes>
+        </Pane>
 
-        <!-- Chart -->
-        <div class="h-48 flex-shrink-0">
-          <ThemeChart
-            :audits="relevantAudits"
-            :all-audits="audits"
-            :selected-tags="selectedTags"
-            @select="handleThemeClick"
-          />
-        </div>
-      </div>
-
-      <!-- Right Side: Data Panel & Filters -->
-      <div
-        class="flex-shrink-0 w-full md:w-[420px] flex flex-col gap-2 h-full min-w-0"
-      >
-        <AuditFilters
-          :audits="audits"
-          v-model:selectedCity="selectedCity"
-          v-model:selectedTags="selectedTags"
-          @filter="handleFilter"
-        />
-        <DataPanel :audits="relevantAudits" :selected-tags="selectedTags" />
-      </div>
+        <!-- Right: Filters + DataPanel -->
+        <Pane :size="35" :min-size="20">
+          <Splitpanes horizontal class="h-full">
+            <Pane :size="22" :min-size="10">
+              <AuditFilters
+                :audits="audits"
+                v-model:selectedCity="selectedCity"
+                v-model:selectedTags="selectedTags"
+                @filter="handleFilter"
+              />
+            </Pane>
+            <Pane :min-size="20">
+              <DataPanel :audits="relevantAudits" :selected-tags="selectedTags" />
+            </Pane>
+          </Splitpanes>
+        </Pane>
+      </Splitpanes>
     </main>
-
-    <!-- Footer -->
-    <footer
-      class="bg-zinc-900 text-zinc-500 py-3 px-6 text-xs flex justify-between"
-    >
-      <p>&copy; 2026 WalkMA</p>
-      <div class="flex gap-4">
-        <a href="#" class="hover:text-white">Privacy Policy</a>
-        <a href="#" class="hover:text-white">Data Sources</a>
-      </div>
-    </footer>
   </div>
 </template>
 

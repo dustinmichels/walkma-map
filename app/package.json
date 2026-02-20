@@ -23,6 +23,7 @@
     "lucide": "^0.562.0",
     "lucide-vue-next": "^0.562.0",
     "maplibre-gl": "^5.16.0",
+    "splitpanes": "^4.0.4",
     "tailwindcss": "^4.1.18",
     "vue": "^3.5.26"
   },
