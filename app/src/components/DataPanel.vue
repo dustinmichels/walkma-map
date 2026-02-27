@@ -102,16 +102,17 @@ const handleScroll = (e: Event) => {
   <aside
     class="w-full h-full flex flex-col bg-orange-50 overflow-hidden relative"
   >
+    <!-- Header -->
+    <div class="px-3 pt-3 flex-shrink-0">
+      <h2 class="text-[11px] font-bold text-zinc-500 uppercase tracking-wider">
+        Audits
+      </h2>
+    </div>
+
     <!-- Interactive Elements -->
     <div
-      v-if="audits && audits.length > 0"
-      class="bg-brand-orange text-white py-2 px-3 text-xs font-bold uppercase shrink-0"
-    >
-      Audits
-    </div>
-    <div
       ref="scrollContainer"
-      class="flex-grow overflow-y-auto p-3 custom-scrollbar space-y-3"
+      class="flex-grow overflow-y-auto px-3 pb-3 pt-2 custom-scrollbar space-y-3"
       @scroll="handleScroll"
     >
       <div

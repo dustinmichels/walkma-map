@@ -383,7 +383,7 @@ onUnmounted(() => {
 
     <!-- Custom Map Controls -->
     <div
-      class="absolute top-5 left-5 z-10 flex flex-col bg-white rounded-lg shadow-lg overflow-hidden border border-zinc-200"
+      class="absolute top-5 right-5 z-10 flex flex-col bg-white rounded-lg shadow-lg overflow-hidden border border-zinc-200"
     >
       <button
         class="flex items-center justify-center w-9 h-9 bg-white border-0 cursor-pointer text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-black active:bg-zinc-200"

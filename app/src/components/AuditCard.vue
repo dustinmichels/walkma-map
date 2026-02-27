@@ -1,6 +1,6 @@
 <template>
   <div
-    class="group relative overflow-hidden bg-white rounded-xl p-4 mb-2 shadow-sm border-2 border-dotted border-zinc-300 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg cursor-pointer hover:bg-zinc-100 hover:border-zinc-400"
+    class="group relative overflow-hidden bg-white rounded-xl p-4 mb-2 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg cursor-pointer hover:bg-zinc-100"
     @click="emit('view', audit)"
   >
     <div

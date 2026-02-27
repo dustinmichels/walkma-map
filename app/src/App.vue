@@ -68,7 +68,24 @@ onMounted(async () => {
     <!-- Main Content Area -->
     <main class="flex-grow overflow-hidden">
       <Splitpanes class="h-full">
-        <!-- Left: Map + Chart -->
+        <!-- Left: Filters + DataPanel -->
+        <Pane :size="35" :min-size="20">
+          <div class="h-full flex flex-col shadow-sm">
+            <div class="flex-none z-10 w-full">
+              <AuditFilters
+                :audits="audits"
+                v-model:selectedCity="selectedCity"
+                v-model:selectedTags="selectedTags"
+                @filter="handleFilter"
+              />
+            </div>
+            <div class="flex-grow flex flex-col min-h-0 relative z-0">
+              <DataPanel :audits="relevantAudits" :selected-tags="selectedTags" />
+            </div>
+          </div>
+        </Pane>
+
+        <!-- Right: Map + Chart -->
         <Pane :size="65" :min-size="30">
           <Splitpanes horizontal class="h-full">
             <Pane :size="72" :min-size="20">
@@ -88,23 +105,6 @@ onMounted(async () => {
                   @select="handleThemeClick"
                 />
               </div>
-            </Pane>
-          </Splitpanes>
-        </Pane>
-
-        <!-- Right: Filters + DataPanel -->
-        <Pane :size="35" :min-size="20">
-          <Splitpanes horizontal class="h-full">
-            <Pane :size="22" :min-size="10">
-              <AuditFilters
-                :audits="audits"
-                v-model:selectedCity="selectedCity"
-                v-model:selectedTags="selectedTags"
-                @filter="handleFilter"
-              />
-            </Pane>
-            <Pane :min-size="20">
-              <DataPanel :audits="relevantAudits" :selected-tags="selectedTags" />
             </Pane>
           </Splitpanes>
         </Pane>

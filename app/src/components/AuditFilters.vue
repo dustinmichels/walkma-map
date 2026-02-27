@@ -212,29 +212,33 @@ const activeFilterCount = computed(
     (selectedOrganizer.value ? 1 : 0) +
     (props.selectedCity ? 1 : 0)
 )
+
+const showMoreFilters = ref(false)
 </script>
 
 <template>
-  <div
-    class="bg-zinc-50 p-2 h-full overflow-y-auto space-y-2 custom-scrollbar"
-  >
-    <!-- Header -->
+  <div class="bg-zinc-50 p-3 flex flex-col gap-3 w-full border-b border-zinc-200">
+    <!-- Header / City Search Bar Header -->
     <div class="flex items-center justify-between">
-      <label
-        class="flex items-center gap-1.5 text-xs font-bold text-zinc-600 uppercase tracking-wider"
-      >
-        <ListFilter :size="16" />
-        Filter
-      </label>
       <div class="flex items-center gap-3">
+        <label class="text-[11px] font-bold text-zinc-500 uppercase tracking-wider">
+          Search City
+        </label>
         <button
-          @click="clearFilters"
-          class="px-2 py-0.5 text-xs text-brand-orange font-bold rounded hover:bg-orange-50 transition-colors"
-          :class="{ invisible: activeFilterCount === 0 }"
+          @click="showMoreFilters = !showMoreFilters"
+          class="flex items-center gap-1 text-[11px] font-bold text-zinc-500 hover:text-brand-orange transition-colors uppercase tracking-wider"
         >
-          Reset All
+          <ListFilter :size="14" />
+          {{ showMoreFilters ? 'Hide filters' : 'More filters' }}
         </button>
       </div>
+      <button
+        @click="clearFilters"
+        class="px-2 py-0.5 text-[11px] text-brand-orange font-bold rounded hover:bg-orange-50 transition-colors"
+        :class="{ invisible: activeFilterCount === 0 }"
+      >
+        Reset All
+      </button>
     </div>
 
     <!-- City Selection -->
@@ -320,7 +324,7 @@ const activeFilterCount = computed(
     </div>
 
     <!-- Filter Controls -->
-    <div class="space-y-2">
+    <div v-show="showMoreFilters" class="space-y-3 pt-2 border-t border-zinc-200/60 mt-1">
       <div class="flex flex-col gap-3">
         <!-- Tags Filter -->
         <Listbox v-model="proxySelectedTags" multiple>
