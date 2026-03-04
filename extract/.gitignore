@@ -1,4 +1,4 @@
-data/download
+data/
 
 .ruff_cache/
 .venv
