@@ -182,6 +182,14 @@ const filteredCities = computed(() =>
       )
 )
 
+const filteredCitiesWithAudits = computed(() =>
+  filteredCities.value.filter((c) => c.count > 0).sort((a, b) => a.name.localeCompare(b.name))
+)
+
+const filteredCitiesWithoutAudits = computed(() =>
+  filteredCities.value.filter((c) => c.count === 0).sort((a, b) => a.name.localeCompare(b.name))
+)
+
 const selectedCityProxy = computed({
   get: () => props.selectedCity,
   set: (val) => emit('update:selectedCity', val),
@@ -270,9 +278,10 @@ const showMoreFilters = ref(false)
               <ComboboxOptions
                 class="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm z-30 custom-scrollbar"
               >
+                <!-- Cities with audits -->
                 <ComboboxOption
                   v-slot="{ active, selected }"
-                  v-for="city in filteredCities"
+                  v-for="city in filteredCitiesWithAudits"
                   :key="city.name"
                   :value="city.name"
                   as="template"
@@ -290,7 +299,7 @@ const showMoreFilters = ref(false)
                       ]"
                     >
                       {{ city.name }}
-                      <span v-if="city.count > 0" class="text-zinc-400">({{ city.count }})</span>
+                      <span class="text-zinc-400">({{ city.count }})</span>
                     </span>
                     <span
                       v-if="selected"
@@ -300,6 +309,45 @@ const showMoreFilters = ref(false)
                     </span>
                   </li>
                 </ComboboxOption>
+
+                <!-- Separator -->
+                <li
+                  v-if="filteredCitiesWithAudits.length > 0 && filteredCitiesWithoutAudits.length > 0"
+                  class="border-t border-zinc-200 my-1"
+                  role="separator"
+                />
+
+                <!-- Cities without audits -->
+                <ComboboxOption
+                  v-slot="{ active, selected }"
+                  v-for="city in filteredCitiesWithoutAudits"
+                  :key="city.name"
+                  :value="city.name"
+                  as="template"
+                >
+                  <li
+                    :class="[
+                      active ? 'bg-orange-50 text-orange-900' : 'text-zinc-400',
+                      'relative cursor-default select-none py-2 pl-10 pr-4',
+                    ]"
+                  >
+                    <span
+                      :class="[
+                        selected ? 'font-medium' : 'font-normal',
+                        'block truncate',
+                      ]"
+                    >
+                      {{ city.name }}
+                    </span>
+                    <span
+                      v-if="selected"
+                      class="absolute inset-y-0 left-0 flex items-center pl-3 text-brand-orange"
+                    >
+                      <Check :size="16" />
+                    </span>
+                  </li>
+                </ComboboxOption>
+
                 <li
                   v-if="filteredCities.length === 0 && query !== ''"
                   class="relative cursor-default select-none py-2 pl-4 pr-4 text-zinc-500 italic text-sm"
