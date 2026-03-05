@@ -18,6 +18,7 @@ import { parseOrgs, parseThemes } from '../utils'
 const props = defineProps<{
   audits: Audits | null
   selectedCity: string
+  allTownNames: string[]
 }>()
 
 const emit = defineEmits<{
@@ -152,23 +153,23 @@ watch(
   { immediate: true }
 )
 
-// For the City Listbox: compute cities from contentFilteredAudits
-// (This matches lines 137-155 in DataPanel)
-const cities = computed(() => {
-  if (!contentFilteredAudits.value) return []
-
-  const cityCounts = new Map<string, number>()
-
+// Build audit count map from filtered audits
+const auditCityCounts = computed(() => {
+  const counts = new Map<string, number>()
   contentFilteredAudits.value.forEach((audit) => {
     const city = audit.city
-    if (city) {
-      cityCounts.set(city, (cityCounts.get(city) || 0) + 1)
-    }
+    if (city) counts.set(city, (counts.get(city) || 0) + 1)
   })
+  return counts
+})
 
-  return Array.from(cityCounts.entries())
-    .map(([name, count]) => ({ name, count }))
-    .sort((a, b) => a.name.localeCompare(b.name))
+// All towns from the map, with audit counts merged in
+const cities = computed(() => {
+  const base = props.allTownNames.length > 0 ? props.allTownNames : []
+  return base.map((name) => ({
+    name,
+    count: auditCityCounts.value.get(name) ?? 0,
+  }))
 })
 
 const query = ref('')
@@ -288,7 +289,8 @@ const showMoreFilters = ref(false)
                         'block truncate',
                       ]"
                     >
-                      {{ city.name }} ({{ city.count }})
+                      {{ city.name }}
+                      <span v-if="city.count > 0" class="text-zinc-400">({{ city.count }})</span>
                     </span>
                     <span
                       v-if="selected"

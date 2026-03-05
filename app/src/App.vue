@@ -5,12 +5,13 @@ import AuditFilters from './components/AuditFilters.vue'
 import DataPanel from './components/DataPanel.vue'
 import Map from './components/Map.vue'
 import ThemeChart from './components/ThemeChart.vue'
-import type { Audits } from './types'
+import type { Audits, Towns } from './types'
 
 const selectedCity = ref('')
 const audits = ref<Audits | null>(null)
 const filteredAudits = ref<Audits | null>(null)
 const selectedTags = ref<string[]>([])
+const allTownNames = ref<string[]>([])
 
 const handleFilter = (filtered: Audits) => {
   filteredAudits.value = filtered
@@ -36,15 +37,27 @@ const relevantAudits = computed(() => {
 
 onMounted(async () => {
   try {
-    const response = await fetch('/.netlify/functions/gsheet')
-    if (!response.ok) {
-      const text = await response.text()
-      console.error(`gsheet function returned ${response.status}:`, text)
-      return
+    const [auditsRes, townsRes] = await Promise.all([
+      fetch('/.netlify/functions/gsheet'),
+      fetch('/data/towns.geojson'),
+    ])
+
+    if (!auditsRes.ok) {
+      const text = await auditsRes.text()
+      console.error(`gsheet function returned ${auditsRes.status}:`, text)
+    } else {
+      audits.value = await auditsRes.json()
     }
-    audits.value = await response.json()
+
+    if (townsRes.ok) {
+      const townsData: Towns = await townsRes.json()
+      allTownNames.value = (townsData.features ?? [])
+        .map((f) => f.properties.CITY || (f.properties as any).TOWN)
+        .filter(Boolean)
+        .sort()
+    }
   } catch (error) {
-    console.error('Failed to load audits data:', error)
+    console.error('Failed to load data:', error)
   }
 })
 </script>
@@ -74,6 +87,7 @@ onMounted(async () => {
             <div class="flex-none z-10 w-full">
               <AuditFilters
                 :audits="audits"
+                :all-town-names="allTownNames"
                 v-model:selectedCity="selectedCity"
                 v-model:selectedTags="selectedTags"
                 @filter="handleFilter"

@@ -24,7 +24,8 @@ const sortedAudits = computed(() => {
   return [...props.audits].sort((a, b) => {
     const yearA = parseInt(a.year) || 0
     const yearB = parseInt(b.year) || 0
-    return yearB - yearA
+    if (yearB !== yearA) return yearB - yearA
+    return (a.city || '').localeCompare(b.city || '')
   })
 })
 
