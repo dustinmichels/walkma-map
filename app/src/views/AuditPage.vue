@@ -15,7 +15,12 @@ const imageSrc = ref<string | null>(null)
 
 const parseList = (text: string | undefined): string[] => {
   if (!text) return []
-  return text
+  // Strip zero-width spaces, then normalize inline list separators like "sentence.- Next"
+  const normalized = text
+    .replace(/[\u200b\u200c\u200d\ufeff]/g, '')
+    .replace(/\.\s*-\s+/g, '.\n- ')
+    .replace(/([^\s\n])-\s+([A-Z])/g, '$1\n$2')
+  return normalized
     .split('\n')
     .map((line) => line.trim())
     .map((line) => line.replace(/^[-*•]\s*|^(\d+)[\.)]\s*/, ''))

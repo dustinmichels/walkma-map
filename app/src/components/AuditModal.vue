@@ -345,14 +345,17 @@ const hasPdf = computed(() => {
 
 const parseList = (text: string | undefined): string[] => {
   if (!text) return []
-  return (
-    text
-      .split('\n')
-      .map((line) => line.trim())
-      // Remove leading dashes, asterisks, or numbers followed by dot/paren
-      .map((line) => line.replace(/^[-*•]\s*|^(\d+)[\.)]\s*/, ''))
-      .filter((line) => line.length > 0)
-  )
+  // Strip zero-width spaces, then normalize inline list separators like "sentence.- Next"
+  const normalized = text
+    .replace(/[\u200b\u200c\u200d\ufeff]/g, '')
+    .replace(/\.\s*-\s+/g, '.\n- ')
+    .replace(/([^\s\n])-\s+([A-Z])/g, '$1\n$2')
+  return normalized
+    .split('\n')
+    .map((line) => line.trim())
+    // Remove leading dashes, asterisks, or numbers followed by dot/paren
+    .map((line) => line.replace(/^[-*•]\s*|^(\d+)[\.)]\s*/, ''))
+    .filter((line) => line.length > 0)
 }
 
 const openReport = () => {
