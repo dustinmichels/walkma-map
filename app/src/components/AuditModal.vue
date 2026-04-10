@@ -58,13 +58,22 @@
                       {{ audit.city_town || audit.city }}
                     </DialogTitle>
                   </div>
-                  <button
-                    class="bg-transparent border-none text-xl text-zinc-400 cursor-pointer p-2 rounded-full transition-all w-10 h-10 flex items-center justify-center hover:bg-zinc-100 hover:text-zinc-800 focus:outline-none"
-                    @click="$emit('close')"
-                    aria-label="Close modal"
-                  >
-                    <X :size="24" />
-                  </button>
+                  <div class="flex items-center gap-1">
+                    <button
+                      class="bg-transparent border-none text-zinc-400 cursor-pointer p-2 rounded-full transition-all w-10 h-10 flex items-center justify-center hover:bg-zinc-100 hover:text-zinc-800 focus:outline-none"
+                      @click="openFullPage"
+                      aria-label="Open full page"
+                    >
+                      <Expand :size="20" />
+                    </button>
+                    <button
+                      class="bg-transparent border-none text-xl text-zinc-400 cursor-pointer p-2 rounded-full transition-all w-10 h-10 flex items-center justify-center hover:bg-zinc-100 hover:text-zinc-800 focus:outline-none"
+                      @click="$emit('close')"
+                      aria-label="Close modal"
+                    >
+                      <X :size="24" />
+                    </button>
+                  </div>
                 </header>
 
                 <!-- Scrollable Content -->
@@ -238,10 +247,11 @@ import {
   TransitionChild,
   TransitionRoot,
 } from '@headlessui/vue'
-import { ChevronLeft, ChevronRight, FileText, X } from 'lucide-vue-next'
+import { ChevronLeft, ChevronRight, Expand, FileText, X } from 'lucide-vue-next'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import type { Audit } from '../types'
-import { parseThemes } from '../utils'
+import { generateAuditSlug, parseThemes } from '../utils'
 
 const props = defineProps<{
   audit: Audit | null
@@ -349,5 +359,10 @@ const openReport = () => {
   if (props.audit?.view) {
     window.open(props.audit.view, '_blank')
   }
+}
+
+const router = useRouter()
+const openFullPage = () => {
+  if (props.audit) router.push(`/audit/${generateAuditSlug(props.audit)}`)
 }
 </script>

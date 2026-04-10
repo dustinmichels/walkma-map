@@ -1,0 +1,1 @@
+- Use bun for installing packages and running code.
