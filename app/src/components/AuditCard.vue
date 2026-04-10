@@ -25,7 +25,7 @@
         :class="
           selectedTags?.includes(theme)
             ? 'bg-orange-50 text-brand-orange border-orange-200'
-            : 'bg-emerald-50 text-emerald-600 border-emerald-100/50'
+            : 'bg-emerald-50 text-emerald-600 border-zinc-200'
         "
       >
         {{ theme }}

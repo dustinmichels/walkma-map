@@ -93,7 +93,7 @@
                       <span
                         v-for="theme in parseThemes(audit.themes)"
                         :key="theme"
-                        class="bg-emerald-50 text-emerald-600 text-xs px-3 py-1.5 rounded-md font-semibold uppercase tracking-wide"
+                        class="bg-emerald-50 text-emerald-600 text-xs px-3 py-1.5 rounded-md font-semibold uppercase tracking-wide border border-zinc-200"
                       >
                         {{ theme }}
                       </span>
@@ -210,8 +210,14 @@
 
                 <!-- Footer -->
                 <footer
-                  class="p-5 border-t border-zinc-100 bg-white flex justify-end shrink-0"
+                  class="p-5 border-t border-zinc-100 bg-white flex justify-end gap-2 shrink-0"
                 >
+                  <button
+                    class="bg-white text-zinc-600 border border-zinc-200 py-3 px-5 rounded-xl text-sm font-semibold cursor-pointer flex items-center gap-2 transition-all shadow-sm hover:bg-zinc-50 hover:-translate-y-px hover:shadow-md"
+                    @click="openFullPage"
+                  >
+                    <SquareArrowOutUpRight :size="16" /> View Audit Page
+                  </button>
                   <button
                     class="bg-zinc-900 text-white border-none py-3 px-6 rounded-xl text-sm font-semibold cursor-pointer flex items-center gap-2 transition-all shadow-md hover:bg-black hover:-translate-y-px hover:shadow-lg disabled:bg-zinc-400 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
                     @click="openReport"
@@ -247,7 +253,7 @@ import {
   TransitionChild,
   TransitionRoot,
 } from '@headlessui/vue'
-import { ChevronLeft, ChevronRight, Expand, FileText, X } from 'lucide-vue-next'
+import { ChevronLeft, ChevronRight, Expand, FileText, SquareArrowOutUpRight, X } from 'lucide-vue-next'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import type { Audit } from '../types'
