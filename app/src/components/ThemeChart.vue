@@ -326,7 +326,7 @@ onUnmounted(() => {
         <span
           class="text-xs font-bold text-zinc-500 uppercase tracking-wide text-center leading-tight"
         >
-          Total<br />Cities
+          Cities & Towns
         </span>
       </div>
     </div>

@@ -150,7 +150,7 @@ watch(
   (newVal) => {
     emit('filter', newVal)
   },
-  { immediate: true }
+  { immediate: true, flush: 'sync' }
 )
 
 // Build audit count map from filtered audits
@@ -223,6 +223,12 @@ const activeFilterCount = computed(
 )
 
 const showMoreFilters = ref(false)
+
+watch(selectedTags, (tags) => {
+  if (tags.length > 0) {
+    showMoreFilters.value = true
+  }
+})
 </script>
 
 <template>
@@ -235,7 +241,7 @@ const showMoreFilters = ref(false)
         </label>
         <button
           @click="showMoreFilters = !showMoreFilters"
-          class="flex items-center gap-1 text-[11px] font-bold text-zinc-500 hover:text-brand-orange transition-colors uppercase tracking-wider"
+          class="flex items-center gap-1 text-[11px] font-bold text-zinc-500 hover:text-brand-orange hover:border-brand-orange transition-colors uppercase tracking-wider border border-zinc-300 rounded px-1.5 py-0.5"
         >
           <ListFilter :size="14" />
           {{ showMoreFilters ? 'Hide filters' : 'More filters' }}
