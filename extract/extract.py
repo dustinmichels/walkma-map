@@ -3,11 +3,11 @@ Download sheet:
     https://docs.google.com/spreadsheets/d/1cpaNsvsAcysRYKPDxvYKT5CuSNm6XGK2FZhqVWPWgsk/edit?gid=379989993#gid=379989993
 """
 
-
-import requests
-import openpyxl
-import os
 import json
+import os
+
+import openpyxl
+import requests
 from models import WalkAuditDownload
 
 # --- CONFIGURATION ---
@@ -33,7 +33,7 @@ def download_and_process_gsheet():
         try:
             response = requests.get(export_url)
             response.raise_for_status()
-            with open(SAVE_PATH, 'wb') as f:
+            with open(SAVE_PATH, "wb") as f:
                 f.write(response.content)
         except Exception as e:
             print(f"Download failed: {e}")
@@ -52,14 +52,17 @@ def download_and_process_gsheet():
         print("Sheet is empty.")
         return
 
-    headers = [str(cell.value).strip() if cell.value else f"Col_{i}" for i, cell in enumerate(rows[0])]
+    headers = [
+        str(cell.value).strip() if cell.value else f"Col_{i}"
+        for i, cell in enumerate(rows[0])
+    ]
 
     view_col_idx = -1
     if "VIEW" in headers:
         view_col_idx = headers.index("VIEW")
 
     final_data = []
-    print(f"--- Processing {len(rows)-1} potential records ---\n")
+    print(f"--- Processing {len(rows) - 1} potential records ---\n")
 
     for row_idx, row in enumerate(rows[1:], start=2):
         if all(cell.value is None for cell in row):
@@ -76,14 +79,14 @@ def download_and_process_gsheet():
                 link = None
                 if cell.hyperlink:
                     link = cell.hyperlink.target
-                elif isinstance(cell.value, str) and cell.value.startswith('http'):
+                elif isinstance(cell.value, str) and cell.value.startswith("http"):
                     link = cell.value
 
                 raw_row_data["VIEW"] = str(cell.value) if cell.value else None
                 raw_row_data["view_link"] = link
             else:
                 val = cell.value
-                if hasattr(val, 'isoformat'):
+                if hasattr(val, "isoformat"):
                     val = val.isoformat()
                 raw_row_data[header_name] = val
 
@@ -94,7 +97,7 @@ def download_and_process_gsheet():
         except Exception as e:
             print(f"Row {row_idx}: Validation Error -> {e}")
 
-    with open(JSON_OUTPUT_PATH, 'w', encoding='utf-8') as f:
+    with open(JSON_OUTPUT_PATH, "w", encoding="utf-8") as f:
         json.dump(final_data, f, indent=2, ensure_ascii=False)
 
     print(f"\nSaved {len(final_data)} records to {JSON_OUTPUT_PATH}")

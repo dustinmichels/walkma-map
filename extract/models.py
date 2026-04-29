@@ -1,5 +1,6 @@
-from pydantic import BaseModel, Field, ConfigDict, model_validator
-from typing import Optional, Any
+from typing import Any, Optional
+
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 
 class Theme(BaseModel):
@@ -55,6 +56,7 @@ class WalkAuditExport(BaseModel):
 
 class WalkAuditDownload(BaseModel):
     """Represents a single walk audit record from the new spreadsheet structure."""
+
     model_config = ConfigDict(populate_by_name=True, extra="ignore")
 
     audit_id: Optional[Any] = Field(None, alias="audit_id")
@@ -62,9 +64,15 @@ class WalkAuditDownload(BaseModel):
     year: Optional[Any] = Field(None, alias="YEAR")
     neighborhood: Optional[str] = Field(None, alias="NEIGHBORHOOD")
     summary: Optional[str] = Field(None, alias="SUMMARY")
-    long_term_recommendations: Optional[str] = Field(None, alias="LONG TERM RECOMMENDATIONS")
-    short_term_recommendations: Optional[str] = Field(None, alias="SHORT TERM RECOMMENDATIONS")
-    streets_area_covered: Optional[str] = Field(None, alias="STREETS, INNTERSECTIONS + AREA COVERED")
+    long_term_recommendations: Optional[str] = Field(
+        None, alias="LONG TERM RECOMMENDATIONS"
+    )
+    short_term_recommendations: Optional[str] = Field(
+        None, alias="SHORT TERM RECOMMENDATIONS"
+    )
+    streets_area_covered: Optional[str] = Field(
+        None, alias="STREETS, INNTERSECTIONS + AREA COVERED"
+    )
     themes: Optional[str] = Field(None, alias="THEMES")
 
     # View fields (Custom logic for links)

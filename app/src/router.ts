@@ -11,6 +11,10 @@ const router = createRouter({
       path: '/audit/:slug',
       component: () => import('./views/AuditPage.vue'),
     },
+    {
+      path: '/about',
+      component: () => import('./views/AboutView.vue'),
+    },
   ],
 })
 

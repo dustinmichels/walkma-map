@@ -33,7 +33,7 @@ Iterate over every row. Get the link pdf.
 
 Create a new folder.
 
-Inside my "output" folder: https://drive.google.com/drive/folders/1P1WA-XSYyN0t1trstik1AiCWX9M8sAs_
+Inside my "output" folder: <https://drive.google.com/drive/folders/1P1WA-XSYyN0t1trstik1AiCWX9M8sAs>_
 
 Create or use the folder CITY/TOWN + "/" + YEAR + "/" + audit_id.
 

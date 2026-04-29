@@ -1,5 +1,5 @@
-from extract import download_and_process_gsheet
 from export import run
+from extract import download_and_process_gsheet
 
 if __name__ == "__main__":
     # extract
@@ -7,5 +7,3 @@ if __name__ == "__main__":
 
     # export
     run()
-
-

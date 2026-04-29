@@ -1,10 +1,11 @@
-import json
 import csv
+import json
 import os
-import re
 import random
+import re
 import string
-from models import WalkAuditDownload, WalkAuditExport, Facilitator, Organization, Theme
+
+from models import Facilitator, Organization, Theme, WalkAuditDownload, WalkAuditExport
 
 JSON_INPUT_PATH = "data/download/sheet.json"
 TSV_OUTPUT_PATH = "data/output/audits.tsv"
@@ -14,7 +15,11 @@ THEMES_OUTPUT_PATH = "data/output/themes.tsv"
 
 
 def split_list(value: str) -> list[str]:
-    return [p.strip().strip('"').strip() for p in re.split(r'\s*[&,]\s*', value) if p.strip().strip('"').strip()]
+    return [
+        p.strip().strip('"').strip()
+        for p in re.split(r"\s*[&,]\s*", value)
+        if p.strip().strip('"').strip()
+    ]
 
 
 def normalize_list(value: str | None) -> str | None:
@@ -88,7 +93,10 @@ def to_export(record: WalkAuditDownload) -> WalkAuditExport:
         lat_lon=None,
         themes=normalize_list(record.themes),
         organizations=normalize_list(record.organizations),
-        facilitators=normalize_list(record.facilitator_author and re.sub(r'\bWalkMass\b', 'WalkMassachusetts', record.facilitator_author)),
+        facilitators=normalize_list(
+            record.facilitator_author
+            and re.sub(r"\bWalkMass\b", "WalkMassachusetts", record.facilitator_author)
+        ),
     )
 
 

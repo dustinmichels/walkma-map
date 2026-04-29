@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { isMenuOpen } from '../state'
-import { Home, ExternalLink, X } from 'lucide-vue-next'
+import { Home, ExternalLink, Info, X } from 'lucide-vue-next'
 </script>
 
 <template>
@@ -38,6 +38,16 @@ import { Home, ExternalLink, X } from 'lucide-vue-next'
             >
               <Home :size="18" class="text-slate-500" />
               Home Dashboard
+            </router-link>
+          </li>
+          <li>
+            <router-link
+              to="/about"
+              class="flex items-center gap-3 p-3 hover:bg-zinc-100 rounded-lg transition-colors"
+              @click="isMenuOpen = false"
+            >
+              <Info :size="18" class="text-slate-500" />
+              About
             </router-link>
           </li>
           <li>
