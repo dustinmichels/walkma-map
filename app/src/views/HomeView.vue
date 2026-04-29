@@ -14,6 +14,7 @@ const audits = ref<Audits | null>(null)
 const filteredAudits = ref<Audits | null>(null)
 const selectedTags = ref<string[]>([])
 const allTownNames = ref<string[]>([])
+const fallbackDate = ref<string | null>(null)
 
 const handleFilter = (filtered: Audits) => {
   filteredAudits.value = filtered
@@ -36,30 +37,38 @@ const relevantAudits = computed(() => {
   return base
 })
 
-onMounted(async () => {
+async function loadAudits() {
   try {
-    const [auditsRes, townsRes] = await Promise.all([
-      fetch('/.netlify/functions/gsheet'),
-      fetch('/data/towns.geojson'),
-    ])
-
-    if (!auditsRes.ok) {
-      const text = await auditsRes.text()
-      console.error(`gsheet function returned ${auditsRes.status}:`, text)
-    } else {
-      audits.value = await auditsRes.json()
+    const res = await fetch('/.netlify/functions/gsheet')
+    if (!res.ok) throw new Error(`gsheet returned ${res.status}`)
+    audits.value = await res.json()
+  } catch (err) {
+    console.warn('Live fetch failed, falling back to last_run.json:', err)
+    try {
+      const fallbackRes = await fetch('/data/last_run.json')
+      if (!fallbackRes.ok) throw new Error(`last_run.json returned ${fallbackRes.status}`)
+      const fallback = await fallbackRes.json()
+      audits.value = fallback.data
+      fallbackDate.value = fallback.date
+    } catch (fallbackErr) {
+      console.error('Fallback also failed:', fallbackErr)
     }
-
-    if (townsRes.ok) {
-      const townsData: Towns = await townsRes.json()
-      allTownNames.value = (townsData.features ?? [])
-        .map((f) => f.properties.CITY || (f.properties as any).TOWN)
-        .filter(Boolean)
-        .sort()
-    }
-  } catch (error) {
-    console.error('Failed to load data:', error)
   }
+}
+
+onMounted(async () => {
+  await Promise.all([
+    loadAudits(),
+    fetch('/data/towns.geojson')
+      .then((res) => (res.ok ? res.json() : Promise.reject(res.status)))
+      .then((townsData: Towns) => {
+        allTownNames.value = (townsData.features ?? [])
+          .map((f) => f.properties.CITY || (f.properties as any).TOWN)
+          .filter(Boolean)
+          .sort()
+      })
+      .catch((err) => console.error('Failed to load towns:', err)),
+  ])
 })
 </script>
 
@@ -132,5 +141,12 @@ onMounted(async () => {
         </Pane>
       </Splitpanes>
     </main>
+
+    <div
+      v-if="fallbackDate"
+      class="fixed bottom-3 right-3 z-50 bg-red-600 text-white text-xs px-3 py-1.5 rounded shadow-lg"
+    >
+      data last refreshed: {{ new Date(fallbackDate).toLocaleString() }}
+    </div>
   </div>
 </template>
