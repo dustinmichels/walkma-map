@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ArrowLeft, Check, FileText, Share2 } from 'lucide-vue-next'
+import { ArrowLeft, Check, FileText, Share2, Menu } from 'lucide-vue-next'
 import { computed, onMounted, ref, watch } from 'vue'
+import { isMenuOpen } from '../state'
 import { useRoute, useRouter } from 'vue-router'
 import type { Audit, Audits } from '../types'
 import { generateAuditSlug, parseThemes } from '../utils'
@@ -116,9 +117,16 @@ watch(slug, loadAudit)
         <ArrowLeft :size="18" />
         Back to Map
       </button>
-      <h1 class="text-white text-sm font-bold tracking-tight truncate px-4">
+      <h1 class="text-white text-sm font-bold tracking-tight truncate px-4 flex-grow">
         Walk MA - Walk Audit Dashboard
       </h1>
+      <button
+        @click="isMenuOpen = true"
+        class="text-white hover:bg-black/20 p-2 rounded-lg transition-colors ml-auto mr-4"
+        aria-label="Open menu"
+      >
+        <Menu :size="24" />
+      </button>
     </header>
 
     <!-- Loading -->

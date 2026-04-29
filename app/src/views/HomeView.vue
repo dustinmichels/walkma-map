@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { Pane, Splitpanes } from 'splitpanes'
 import { computed, onMounted, ref } from 'vue'
+import { Menu } from 'lucide-vue-next'
+import { isMenuOpen } from '../state'
 import AuditFilters from '../components/AuditFilters.vue'
 import DataPanel from '../components/DataPanel.vue'
 import Map from '../components/Map.vue'
@@ -75,6 +77,13 @@ onMounted(async () => {
           Walk MA - Walk Audit Dashboard
         </h1>
       </div>
+      <button
+        @click="isMenuOpen = true"
+        class="text-white hover:bg-black/20 p-2 rounded-lg transition-colors ml-4"
+        aria-label="Open menu"
+      >
+        <Menu :size="24" />
+      </button>
     </header>
 
     <!-- Main Content Area -->
