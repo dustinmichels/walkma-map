@@ -9,6 +9,12 @@ directory = "netlify/functions"
 [build.environment]
 NODE_VERSION = "22.12.0"
 
+# Old audit links that broke after sheet edits changed their slug
+[[redirects]]
+from = "/audit/brockton_2026_main-street-north-main"
+to = "/audit/brockton_2026_downtown-campello-montello_main-street-north-main"
+status = 301
+
 # Redirect rules for SPA
 [[redirects]]
 from = "/*"
