@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-11-12
+
+- Add a SLUG column (L) to the sheet, filled once per row by `apps-script/Slugs.gs`, so editing audit details no longer breaks shared `/audit/` links
+
 ## 2026-02-09
 
 - Add netlify functions to fetch live data from Google Sheet

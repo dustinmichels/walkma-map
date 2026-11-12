@@ -9,6 +9,7 @@ Interactive dashboard for the [WalkMA Walk Audit Database](https://docs.google.c
 - `app/`: The dashboard (Vue + Vite + MapLibre) and its Netlify function. See `app/README.md`.
 - `netlify.toml`: Build, functions, and redirect config (builds from `app/`).
 - `refresh_data.sh`: Refreshes the fallback data files (requires Go).
+- `apps-script/`: Google Apps Script that keeps the sheet's SLUG column (permanent audit page URLs) filled. See `apps-script/README.md`.
 - `archive/`: Not deployed: notebooks, unused DB pipeline, and the image-ingestion experiment (PDF scrape + YOLO) that produced the existing photos in `app/public/data/images/`. See `archive/README.md`.
 
 ## Development
@@ -21,6 +22,8 @@ mise run dev        # Vite only: no function, so the app falls back to stale las
 ## Data
 
 The Netlify function fetches live audit data from the published Google Sheet. If that fetch fails, it serves its embedded fallback. If the function itself is unreachable, the website loads its own fallback snapshot.
+
+Each audit page URL (`/audit/<slug>`) comes from the sheet's SLUG column (L), which [`apps-script/Slugs.gs`](apps-script/README.md) fills once per row so edits to other cells don't break shared links. Rows without a slug fall back to one generated from city, year, neighborhood and streets.
 
 ### Refreshing the saved data
 

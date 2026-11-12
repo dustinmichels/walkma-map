@@ -25,6 +25,7 @@ type WalkAudit struct {
 	View                      string `json:"view"`
 	FacilitatorAuthor         string `json:"facilitator_author"`
 	OrganizerLeadOrganization string `json:"organizer_lead_organization"`
+	Slug                      string `json:"slug"` // sheet column L (published cell 12); empty until the sheet's slug script fills it
 }
 
 // cleanGoogleSheetLink extracts the actual URL from a Google redirect link.
@@ -115,6 +116,7 @@ func FetchWalkAudits() ([]WalkAudit, error) {
 			View:                      getViewLink(9),
 			FacilitatorAuthor:         getText(10),
 			OrganizerLeadOrganization: getText(11),
+			Slug:                      getText(12),
 		})
 	})
 

@@ -28,8 +28,11 @@ const toSlug = (s: string): string =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '')
 
-// Page URL slug: /audit/<slug>. Changing this breaks shared links.
+// Page URL slug: /audit/<slug>. Uses the sheet's frozen SLUG column (apps-script/Slugs.gs).
+// Rows without one fall back to the generated slug, which the sheet script reproduces
+// exactly when it fills them: changing the generator breaks shared links.
 export function generateAuditSlug(audit: Audit): string {
+  if (audit.slug) return audit.slug
   const city = toSlug(audit.city)
   const year = audit.year ? String(parseInt(audit.year)) : 'unknown'
   const neighborhood = audit.neighborhood ? toSlug(audit.neighborhood) : null

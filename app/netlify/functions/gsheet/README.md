@@ -7,7 +7,7 @@ A Go-based serverless function that fetches walk audit data from a published Goo
 1. Checks the `DISABLE_LIVE_UPDATE` environment variable. If set, skips the live fetch and returns the embedded saved data immediately.
 2. Otherwise, fetches the Google Sheet as published HTML (using the `pubhtml` URL).
 3. Parses the HTML table rows using [goquery](https://github.com/PuerkitoBio/goquery).
-4. Extracts 12 columns per row, skipping header/title rows and empty rows.
+4. Extracts sheet columns A–L per row (L, the slug, is optional), skipping header/title rows and empty rows. Cells are read by position in the published HTML, where cell 1 is the divider Google inserts after the frozen column A, so cell N (N ≥ 2) is sheet column N−1.
 5. For the "View" column, extracts the `href` from anchor tags and unwraps Google redirect URLs.
 6. Uppercases the city/town column and strips any parenthetical suffix to produce the clean `city` value (e.g., `"BOSTON (DORCHESTER)"` → `city: "BOSTON"`). Neighborhood comes from its own dedicated column (index 3).
 7. If the live fetch fails for any reason, falls back to the embedded saved data and logs a warning.
@@ -85,6 +85,7 @@ The function returns an array of walk audit objects:
 | `view`                        | string | URL to the full audit report (PDF or Google Doc)                                                         |
 | `facilitator_author`          | string | Name(s) of the audit facilitator or author                                                               |
 | `organizer_lead_organization` | string | Organization that led or organized the audit                                                             |
+| `slug`                        | string | Permanent `/audit/<slug>` page slug from the SLUG column; empty if not filled yet (see `apps-script/`)  |
 
 ## Data Source
 
@@ -99,7 +100,7 @@ The sheet columns map to response fields as follows:
 | Column Index | Field                                        |
 | ------------ | -------------------------------------------- |
 | 0            | `city_town` / `city` (parsed from raw value) |
-| 1            | _(unused)_                                   |
+| 1            | _(frozen-column divider, not a sheet column)_ |
 | 2            | `year`                                       |
 | 3            | `neighborhood`                               |
 | 4            | `summary`                                    |
@@ -110,6 +111,7 @@ The sheet columns map to response fields as follows:
 | 9            | `view` (link extracted from anchor tag)      |
 | 10           | `facilitator_author`                         |
 | 11           | `organizer_lead_organization`                |
+| 12           | `slug`                                       |
 
 ## Project Structure
 

@@ -35,4 +35,6 @@ export interface Audit {
   view: string
   facilitator_author: string
   organizer_lead_organization: string
+  // Sheet column L (apps-script/Slugs.gs); absent in older snapshots, empty until filled
+  slug?: string
 }

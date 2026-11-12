@@ -1,5 +1,5 @@
 {
-  "date": "2026-11-12T15:58:21Z",
+  "date": "2026-11-12T16:42:54Z",
   "data": [
     {
       "city_town": "BARNSTABLE",
@@ -13,7 +13,8 @@
       "themes": "Connectivity, \"Traffic Calming, Speed, Safety \", Economic Development , Accessibility, Comfort \u0026 Safety, Climate - Heat",
       "view": "https://walkmass.org/wp-content/uploads/2018/09/WalkBoston-WalkAudit-Route132-Final.pdf",
       "facilitator_author": "Stacey Beuttell \u0026 Brendan Kearney",
-      "organizer_lead_organization": "Massachusetts Executive Office of Public Safety and Security (EOPSS) , WalkMassachusetts"
+      "organizer_lead_organization": "Massachusetts Executive Office of Public Safety and Security (EOPSS) , WalkMassachusetts",
+      "slug": "barnstable_2018_hyannis_route-132-route-28"
     },
     {
       "city_town": "BELCHERTOWN",
@@ -27,7 +28,8 @@
       "themes": "Comfort \u0026 Safety, \"Traffic Calming, Speed, Safety \", Bike or Bus, Connectivity",
       "view": "https://drive.google.com/file/d/1HhXErq2HADD1XPiCXjo2tl-bo6_Ad8Z3/view?usp=drive_link",
       "facilitator_author": "Stacey Beuttell",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "belchertown_2015_route-202-state-st"
     },
     {
       "city_town": "BLANDFORD",
@@ -41,7 +43,8 @@
       "themes": "Comfort , \"Traffic Calming, Speed, Safety \", Connectivity, Accessibility, Comfort \u0026 Safety",
       "view": "https://walkmass.org/wp-content/uploads/2021/08/Blandford-Walk-Audit.pdf?70fb4f\u002670fb4f",
       "facilitator_author": "Stacey Beuttell \u0026 Brendan Kearney",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "blandford_2021_russel-stage-rd-main"
     },
     {
       "city_town": "BOSTON",
@@ -55,7 +58,8 @@
       "themes": "Schools, \"Traffic Calming, Speed, Safety \", Comfort \u0026 Safety",
       "view": "https://drive.google.com/file/d/117NygPbCjUA5CxONL9ZLKbwgRe-zM1d5/view?usp=sharing",
       "facilitator_author": "WalkMassachusetts",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "boston_2015_epping-st-norfolk-st"
     },
     {
       "city_town": "BOSTON",
@@ -69,7 +73,8 @@
       "themes": "Accessibility, Age Friendly , Comfort \u0026 Safety, Policy",
       "view": "https://drive.google.com/file/d/10aHpooj1pKtEB9g1bvoec_xROlfNJ4vE/view?usp=sharing",
       "facilitator_author": "Dorothea Hass, Adi Nochur",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "boston_2016_columbus-ave-dixwell-st"
     },
     {
       "city_town": "BOSTON",
@@ -83,7 +88,8 @@
       "themes": "Accessibility, Bike or Bus, Comfort \u0026 Safety",
       "view": "https://drive.google.com/file/d/1bHxct_DzAB-fE6QQsEeNcLX5_ZhfBZ82/view?usp=sharing",
       "facilitator_author": "WalkMassachusetts",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "boston_2025_tremont-st-massachusetts-ave"
     },
     {
       "city_town": "BOSTON",
@@ -97,7 +103,8 @@
       "themes": "\"Traffic Calming, Speed, Safety \", Bike or Bus",
       "view": "https://drive.google.com/file/d/1LaoxyUJlZMLYMkdjANhiUHIs9C-yV9Us/view?usp=sharing",
       "facilitator_author": "Wendy Landman",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "boston_2018_charlestown_intersections-medford-st-decatur"
     },
     {
       "city_town": "BOSTON",
@@ -111,7 +118,8 @@
       "themes": "Connectivity, \"Traffic Calming, Speed, Safety \"",
       "view": "https://drive.google.com/file/d/1CrIrcRyZ62VbaljTbQzKMFdyRm2nk7ES/view?usp=drive_link",
       "facilitator_author": "Dorothea Hass",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "boston_2015_dorchester_harrow-st-east-cottage"
     },
     {
       "city_town": "BOSTON",
@@ -125,7 +133,8 @@
       "themes": "Accessibility, Comfort \u0026 Safety, Connectivity, \"Traffic Calming, Speed, Safety \"",
       "view": "https://drive.google.com/file/d/1IkIH1b4GYPn-qMr6kwinIG3G4gcVJzT8/view?usp=drive_link",
       "facilitator_author": "Dorothea Hass \u0026 Adi Nochur",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "boston_2016_east-boston_mavericlk-sq-meridian-st"
     },
     {
       "city_town": "BOSTON",
@@ -139,7 +148,8 @@
       "themes": "Age Friendly , Accessibility, Equity , Racial Equity , Public Health , Economic Development , Climate - Air Quality, \"Traffic Calming, Speed, Safety \", Comfort \u0026 Safety, Connectivity, MBTA, Transit",
       "view": "https://docs.google.com/document/d/1z2yZPvkAcD_Qsnu2AQCg8E-k9r_bYQilEwmhR_0EgPA/edit?usp=sharing",
       "facilitator_author": "Christine Park, Iolando Spinola, \u0026 Jonathan Gomez‑Pereira",
-      "organizer_lead_organization": "Boston Public Health Commission (REACH), East Boston Healthy Families Collaborative/NeighborHealth, WalkMassachusetts"
+      "organizer_lead_organization": "Boston Public Health Commission (REACH), East Boston Healthy Families Collaborative/NeighborHealth, WalkMassachusetts",
+      "slug": "boston_2025_east-boston_maverick-square-bus-island"
     },
     {
       "city_town": "BOSTON",
@@ -153,7 +163,8 @@
       "themes": "Accessibility, Racial Equity , Equity , \"Traffic Calming, Speed, Safety \", Comfort \u0026 Safety, Bike or Bus, Connectivity, Public Health , Climate - Heat , Youth, Policy, MBTA, Transit",
       "view": "https://walkmass.org/wp-content/uploads/2026/02/Hyde-Park-Ave-Site-Visit-November-3-2025.pdf",
       "facilitator_author": "Shared Spaces coalition (including BCIL, RTAG, T4MA, WalkMass, BCU, MassBike)",
-      "organizer_lead_organization": "Shared Spaces"
+      "organizer_lead_organization": "Shared Spaces",
+      "slug": "boston_2025_hyde-park-ave_hyde-park-avenue-walk"
     },
     {
       "city_town": "BOSTON",
@@ -167,7 +178,8 @@
       "themes": "Comfort \u0026 Safety, Policy, Age Friendly",
       "view": "https://drive.google.com/file/d/1pMjAewjvROQmf_UhvqM-YQsIj-UkS78l/view?usp=drive_link",
       "facilitator_author": "WalkMassachusetts",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "boston_2016_mattapan_blue-hill-ave-river"
     },
     {
       "city_town": "BOSTON",
@@ -181,7 +193,8 @@
       "themes": "\"Traffic Calming, Speed, Safety \", Bike or Bus",
       "view": "https://walkuproslindale.org/pdf/2016-01-29%20Roslindale%20WalkBoston%20Walk%20Audit.pdf",
       "facilitator_author": "Dorothea Hass \u0026 Adi Nochur",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "boston_2015_roslindale-village_south-st-washington-st"
     },
     {
       "city_town": "BOSTON",
@@ -195,7 +208,8 @@
       "themes": "Schools, \"Traffic Calming, Speed, Safety \", Comfort \u0026 Safety, Youth",
       "view": "https://drive.google.com/file/d/1h-wdpI-jDhSn8A7KithlodmCBGxXvTzw/view?usp=sharing",
       "facilitator_author": "Dorothea Hass, Brendan Kearney",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "boston_2017_roxbury_ruthven-st-westminster-st"
     },
     {
       "city_town": "BOSTON",
@@ -209,7 +223,8 @@
       "themes": "Age Friendly , \"Traffic Calming, Speed, Safety \", Bike or Bus, Comfort \u0026 Safety",
       "view": "https://drive.google.com/file/d/160XoVfZDf1oQ-3mxKGOzZc0lqt2gXpzl/view?usp=sharing",
       "facilitator_author": "Brendan Kearney, Wendy Landman",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "boston_2018_south_dorchester-st"
     },
     {
       "city_town": "BOSTON",
@@ -223,7 +238,8 @@
       "themes": "Accessibility, \"Traffic Calming, Speed, Safety \", Climate - Heat, Climate - Shade/ Tree, Transit, MBTA, Equity , Racial Equity",
       "view": "https://docs.google.com/presentation/d/1jUp1EVUrsfKr71IJ4mu6uxUB1ZpNAePW2eP4nImBJ_U/edit?usp=sharing",
       "facilitator_author": "Iolando Spinola, Jonny Gomez-Pereira, and Marc Armeña",
-      "organizer_lead_organization": "WalkMassachusetts, Mattapan Food \u0026 Fitness, Vigorous Youth"
+      "organizer_lead_organization": "WalkMassachusetts, Mattapan Food \u0026 Fitness, Vigorous Youth",
+      "slug": "boston_2026_mattapan_blue-hill-ave-river"
     },
     {
       "city_town": "BROCKTON",
@@ -237,7 +253,8 @@
       "themes": "Comfort \u0026 Safety, \"Traffic Calming, Speed, Safety \", Accessibility",
       "view": "https://drive.google.com/file/d/1plzxTt5Zu2AMtd6_ExyHeYq6P4e5Ghp3/view?usp=drive_link",
       "facilitator_author": "Stacey Beuttell",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "brockton_2014_legion-parkway_school-st-main-st"
     },
     {
       "city_town": "BROCKTON",
@@ -251,7 +268,8 @@
       "themes": "Equity , Racial Equity , Connectivity, Economic Development",
       "view": "https://docs.google.com/document/d/10YbBu6ntac2lQaunasSa5mPnXTp8Ap2WyejmBcmnrS8/edit?tab=t.0",
       "facilitator_author": "Iolando Spinola, Brendan Kearney, \u0026 Christine Park",
-      "organizer_lead_organization": "WalkMassachusetts, The Old Colony planning Council"
+      "organizer_lead_organization": "WalkMassachusetts, The Old Colony planning Council",
+      "slug": "brockton_2025_campello_main-street-nilsson-street"
     },
     {
       "city_town": "BROCKTON",
@@ -265,7 +283,8 @@
       "themes": "Bike or Bus, Comfort \u0026 Safety, Accessibility",
       "view": "https://walkmass.org/wp-content/uploads/2023/10/DW-Fields-Park_-Brockton-Walk-Audit-Report.pdf?70fb4f\u002670fb4f",
       "facilitator_author": "Iolando Spinola \u0026 Chiara Palagi",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "brockton_2023_d-w-field-park_field-east-west-pkwy"
     },
     {
       "city_town": "BROCKTON",
@@ -279,7 +298,8 @@
       "themes": "Equity , Comfort \u0026 Safety, Public Health",
       "view": "https://walkmass.org/wp-content/uploads/2021/08/Downtown-Brockton-Walk-Audit_-Recommendations-Memo.pdf?8621dc\u00268621dc\u002670fb4f\u002670fb4f",
       "facilitator_author": "Ayesha Mehrotra \u0026 Brendan Kearney",
-      "organizer_lead_organization": "WalkMassachusetts, The Old Colony Planning Council"
+      "organizer_lead_organization": "WalkMassachusetts, The Old Colony Planning Council",
+      "slug": "brockton_2021_downtown_school-st-montello-st"
     },
     {
       "city_town": "BROCKTON",
@@ -293,7 +313,8 @@
       "themes": "Age Friendly , Accessibility, Equity , Racial Equity , Economic Development , Climate Change - Heat , Transit, Bike or Bus",
       "view": "https://docs.google.com/document/d/1qXP93QoH8q9IyHt3zxMJY5sAZleh8M8aQGrZ6Xoqgjo/edit?usp=sharing",
       "facilitator_author": "Iolando Spinola, Brendan Kearney, Jonathan Gomez-Pereira, \u0026 Christine Park",
-      "organizer_lead_organization": "WalkMassachusetts, The Old Colony Planning Council"
+      "organizer_lead_organization": "WalkMassachusetts, The Old Colony Planning Council",
+      "slug": "brockton_2025_east-side_center-street-galen-street"
     },
     {
       "city_town": "BROCKTON",
@@ -307,7 +328,8 @@
       "themes": "MBTA, Transit, Climate Change - Heat , Bike or Bus, Schools, Racial Equity , Equity , Policy",
       "view": "https://docs.google.com/document/d/1HEm5Ih6uuH-_XU1eylvg8bFMa8CeKK1yCYHzPX14uAY/edit?tab=t.0",
       "facilitator_author": "Iolando Spinola, Brendan Kearney, Jonathan Gomez-Pereira, Emma Itri, \u0026 Christine Park",
-      "organizer_lead_organization": "WalkMassachusetts, The Old Colony Planning Council"
+      "organizer_lead_organization": "WalkMassachusetts, The Old Colony Planning Council",
+      "slug": "brockton_2025_montello_montello-mbta-station-wilmington"
     },
     {
       "city_town": "BROCKTON",
@@ -321,7 +343,8 @@
       "themes": "Schools, Racial Equity , Equity , Youth, Policy, Bike or Bus",
       "view": "https://docs.google.com/document/d/158M7zfwB4RB6WXL-B5Hh7clYeQ-xfxN2S8LMYtaWmCk/edit?tab=t.0",
       "facilitator_author": "Iolando Spinola, Brendan Kearney, Jonathan Gomez-Pereira, \u0026 Christine Park",
-      "organizer_lead_organization": "WalkMassachusetts, The Old Colony Planning Council"
+      "organizer_lead_organization": "WalkMassachusetts, The Old Colony Planning Council",
+      "slug": "brockton_2025_west-side_west-street-west-elm"
     },
     {
       "city_town": "BROCKTON",
@@ -335,7 +358,8 @@
       "themes": "Accessibility, Equity , Racial Equity , Climate - Heat , Comfort \u0026 Safety, Transit, MBTA, Economic Development",
       "view": "https://docs.google.com/document/d/1oxpWtWwKGPEBQCIh7rSngFcnaLEe4H6K12zUqy6U7jE/edit?usp=sharing",
       "facilitator_author": "Brockton Transportation Safety Coalition, a partnership of Brockton Workers Alliance, Brockton Bikes, and WalkMassachusetts.",
-      "organizer_lead_organization": "Brockton Transportation Safety Coalition, WalkMassachusetts"
+      "organizer_lead_organization": "Brockton Transportation Safety Coalition, WalkMassachusetts",
+      "slug": "brockton_2026_downtown-campello-montello_main-street-north-main"
     },
     {
       "city_town": "BROCKTON",
@@ -349,7 +373,8 @@
       "themes": "Accessibility, \"Traffic Calming, Speed, Safety \", Comfort \u0026 Safety, Climate - Shade/ Tree, MBTA, Transit, Equity , Economic Development",
       "view": "https://docs.google.com/document/d/1MIhg3mBDlQsmd8KGLbE-ltBBNgDhDTcsEhSaqwrg7qU/edit?usp=sharing",
       "facilitator_author": "Marc Armeña (drafting report) , Iolando Spinola, Emma Itri, \u0026 Christine Park",
-      "organizer_lead_organization": "The Old Colony Planning Council, Brockton Transportation Safety Coalition"
+      "organizer_lead_organization": "The Old Colony Planning Council, Brockton Transportation Safety Coalition",
+      "slug": "brockton_2026_campello_plain-street-montello-street"
     },
     {
       "city_town": "BROOKLINE",
@@ -363,7 +388,8 @@
       "themes": "Comfort \u0026 Safety, Bike or Bus, \"Traffic Calming, Speed, Safety \", Accessibility",
       "view": "https://drive.google.com/file/d/1bjGgq_0_nZnM1iAIdtNNpfgfbEt5uZoi/view?usp=sharing",
       "facilitator_author": "Stacey Beuttell, Dorothy Hass",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "brookline_2016_harvard-st-babcock-st"
     },
     {
       "city_town": "CAMBRIDGE",
@@ -377,7 +403,8 @@
       "themes": "Economic Development , Connectivity, Comfort \u0026 Safety, Bike or Bus",
       "view": "https://walkmass.org/wp-content/uploads/2018/01/WalkBoston-InmanSquareWalkandBikeAssessment-Cambridge.pdf?70fb4f\u002670fb4f",
       "facilitator_author": "Wendy Landman, Stacey Beuttell, \u0026 Kasia Hart",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "cambridge_2014_inman-square"
     },
     {
       "city_town": "CHELSEA",
@@ -391,7 +418,8 @@
       "themes": "\"Traffic Calming, Speed, Safety \", Public Health, Accessibility, Connectivity, Age Friendly",
       "view": "https://walkmass.org/wp-content/uploads/2018/01/WalkBoston-WalkAudit-Chelsea.pdf?70fb4f\u002670fb4f",
       "facilitator_author": "Wendy Landman \u0026 Dorothea Hass",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "chelsea_2013_bellingham-st-broadway-central"
     },
     {
       "city_town": "CHELSEA",
@@ -405,7 +433,8 @@
       "themes": "\"Traffic Calming, Speed, Safety \", Comfort \u0026 Safety, Connectivity",
       "view": "https://drive.google.com/file/d/19QSFUdhKmMZL4tDekAS6y-U2nKe6Bu3s/view?usp=sharing",
       "facilitator_author": "WalkMassachusetts",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "chelsea_2017_park-square-park-st"
     },
     {
       "city_town": "CHELSEA",
@@ -419,7 +448,8 @@
       "themes": "\"Traffic Calming, Speed, Safety \", Comfort \u0026 Safety",
       "view": "https://drive.google.com/file/d/13o6Awb31hE1C42jxv4gKP7YIOjNnYZbW/view?usp=sharing",
       "facilitator_author": "Wendy Landman, Adi Nochur",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "chelsea_2017_park-square-park-st-2"
     },
     {
       "city_town": "CHESTERFIELD",
@@ -433,7 +463,8 @@
       "themes": "Age Friendly, Connectivity, Comfort",
       "view": "https://walkmass.org/wp-content/uploads/2021/11/Chesterfield-Walk-Audit-FINAL-compressed.pdf",
       "facilitator_author": "Stacey Beuttell \u0026 Miranda Briseño",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "chesterfield_2021_main-rd-intersection-main"
     },
     {
       "city_town": "CUMMINGTON",
@@ -447,7 +478,8 @@
       "themes": "Age Friendly , \"Traffic Calming, Speed, Safety \", Connectivity",
       "view": "https://walkmass.org/wp-content/uploads/2021/12/Cummington-Walk-Audit-FINAL.pdf?70fb4f\u002670fb4f",
       "facilitator_author": "Stacey Beuttell \u0026 Miranda Briseño",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "cummington_2021_berkshire-trail-main-st"
     },
     {
       "city_town": "FALL RIVER",
@@ -461,7 +493,8 @@
       "themes": "Accessibility, \"Traffic Calming, Speed, Safety \", Comfort \u0026 Safety, Connectivity",
       "view": "https://drive.google.com/file/d/1bE5DCDsALC2Gnv-wTZJUG59tvKkHCFvj/view?usp=sharing",
       "facilitator_author": "Stacey Beuttell, Kasia Hart, Brendan Kearney",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "fall-river_2014_robeson-st-pine-st"
     },
     {
       "city_town": "DANVERS",
@@ -475,7 +508,8 @@
       "themes": "Accessibility, Climate - Air Quality, Climate - Shade/ Tree, Comfort \u0026 Safety, Bike or Bus, Transit, Age Friendly , Youth, Policy, Weather Control",
       "view": "https://docs.google.com/document/d/15QAmssbvFsPfKPAY24zvDS7VWhhMtwiwVpHel1IiQ-8/edit?usp=sharing",
       "facilitator_author": "Brendan Kearney, Iolando Spinola, Jonny Gomez-Pereira, and Emma Itri (WalkMassachusetts)",
-      "organizer_lead_organization": "WalkMassachusetts, Resilient Danvers, Metropolitan Area Planning Council"
+      "organizer_lead_organization": "WalkMassachusetts, Resilient Danvers, Metropolitan Area Planning Council",
+      "slug": "danvers_2026_high-street-route-62"
     },
     {
       "city_town": "FALL RIVER",
@@ -489,7 +523,8 @@
       "themes": "Schools, \"Traffic Calming, Speed, Safety \", Comfort \u0026 Safety",
       "view": "https://drive.google.com/file/d/1CTmmQcloT5lMbstsPsJSbPhyIN-cLD8P/view?usp=sharing",
       "facilitator_author": "Dorothea Hass, Adi Nochur",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "fall-river_2017_warren-st-brayton-ave"
     },
     {
       "city_town": "FALL RIVER",
@@ -503,7 +538,8 @@
       "themes": "Age Friendly , \"Traffic Calming, Speed, Safety \"",
       "view": "https://drive.google.com/file/d/1IdXgwtpfYkivEYXJopGe41IfLVrtpesX/view",
       "facilitator_author": "Wendy Landman \u0026 LeighAnne Taylor",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "fall-river_2020_south-main-st-pocasset"
     },
     {
       "city_town": "FALL RIVER",
@@ -517,7 +553,8 @@
       "themes": "Age Friendly , Accessibility, \"Traffic Calming, Speed, Safety \"",
       "view": "https://walkmass.org/wp-content/uploads/2018/01/WalkBoston-WalkAudit-FallRiver.pdf?70fb4f\u002670fb4f",
       "facilitator_author": "WalkMassachusetts",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "fall-river_2014_tucker-st-canning-blvd"
     },
     {
       "city_town": "FITCHBURG",
@@ -531,7 +568,8 @@
       "themes": "Comfort \u0026 Safety, Bike or Bus, Youth, \"Traffic Calming, Speed, Safety \"",
       "view": "https://drive.google.com/file/d/1rs7wgU4wgzMPvD8tc3Jp0aejUzT3YJdn/view?usp=sharing",
       "facilitator_author": "Dorothea Hass, Adi Nochur",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "fitchburg_2016_main-st-boulder-dr"
     },
     {
       "city_town": "FITCHBURG",
@@ -545,7 +583,8 @@
       "themes": "Comfort \u0026 Safety, Bike or Bus",
       "view": "https://walkmass.org/wp-content/uploads/2021/08/Fitchburg-Intermodal-Center-Walk-Audit_-Recommendations-Memo.pdf?8621dc\u00268621dc\u002670fb4f\u002670fb4f",
       "facilitator_author": "WalkMassachusetts",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "fitchburg_2020_section-north-st-intersection"
     },
     {
       "city_town": "FRAMINGHAM",
@@ -559,7 +598,8 @@
       "themes": "Connectivity, Comfort \u0026 Safety, Accessibility",
       "view": "https://drive.google.com/file/d/1YGFrGT4kzNvU0JpJ3_iP2xqS7bsrI5l3/view?usp=sharing",
       "facilitator_author": "Stacey Beuttell, Brendan Kearney",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "framingham_2018_dennison-crossing-concord-st"
     },
     {
       "city_town": "FRANKLIN",
@@ -573,7 +613,8 @@
       "themes": "Accessibility, Schools, \"Traffic Calming, Speed, Safety \"",
       "view": "https://walkmass.org/wp-content/uploads/2018/11/Franklin-Davis-Thayer-Walking-Audit-Summary.pdf?70fb4f\u002670fb4f",
       "facilitator_author": "WalkMassachusetts",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "franklin_2011_davis-thayer-elementary-school"
     },
     {
       "city_town": "FRANKLIN",
@@ -587,7 +628,8 @@
       "themes": "Schools, \"Traffic Calming, Speed, Safety \"",
       "view": "https://walkmass.org/wp-content/uploads/2018/11/Franklin-Keller-Walking-Audit-Summary.pdf?70fb4f\u002670fb4f",
       "facilitator_author": "WalkMassachusetts",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "franklin_2011_helen-keller-elementary-school"
     },
     {
       "city_town": "GARDNER",
@@ -601,7 +643,8 @@
       "themes": "Accessibility, \"Traffic Calming, Speed, Safety \"",
       "view": "https://walkmass.org/wp-content/uploads/2018/01/WalkBoston-WalkAudit-Gardner.pdf?70fb4f\u002670fb4f",
       "facilitator_author": "WalkMassachusetts",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "gardner_2013_pleasant-st-baker-st"
     },
     {
       "city_town": "GLOUCESTER",
@@ -615,7 +658,8 @@
       "themes": "\"Traffic Calming, Speed, Safety \", Connectivity, Weather Control",
       "view": "https://dev.walkboston.org/wp-content/uploads/2018/01/WalkBoston-WalkAudit-SafeRoutesForSeniors-Gloucester.pdf?8621dc\u00268621dc",
       "facilitator_author": "WalkMassachusetts",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "gloucester_2014_washington-st-prospectst-school"
     },
     {
       "city_town": "GOSHEN",
@@ -629,7 +673,8 @@
       "themes": "Age Friendly , Rural Communities, \"Traffic Calming, Speed, Safety \", Comfort \u0026 Safety, Connectivity",
       "view": "https://walkmass.org/wp-content/uploads/2019/02/WB-Goshen-final-report.pdf?70fb4f\u002670fb4f",
       "facilitator_author": "Stacey Beuttell \u0026 Brendan Kearney",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "goshen_2017_route-east-st"
     },
     {
       "city_town": "HAVERHILL",
@@ -643,7 +688,8 @@
       "themes": "\"Traffic Calming, Speed, Safety \", Comfort \u0026 Safety",
       "view": "https://walkmass.org/wp-content/uploads/2018/01/WalkBoston-WalkAssessment-Haverhill.pdf?70fb4f\u002670fb4f",
       "facilitator_author": "Stacey Beuttell, Kasia Hart, \u0026 Brendan Kearney",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "haverhill_2014_winter-st-washington-square"
     },
     {
       "city_town": "HAVERHILL",
@@ -657,7 +703,8 @@
       "themes": "Youth, Comfort \u0026 Safety",
       "view": "https://walkmass.org/wp-content/uploads/2021/08/Downtown-Haverhill-Walk-Audit_-Recommendations-Memo.pdf?8621dc\u00268621dc\u002670fb4f\u002670fb4f",
       "facilitator_author": "WalkMassachusetts",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "haverhill_2021_section-intersection-washington-ave"
     },
     {
       "city_town": "HOLLISTON",
@@ -671,7 +718,8 @@
       "themes": "Accessibility, Schools, \"Traffic Calming, Speed, Safety \", Comfort \u0026 Safety, Youth, Bike or Bus",
       "view": "https://docs.google.com/document/d/1nKIHXyZ7VWqQiPDDsir2Wr85uQkclnhLrHcHXhFLtCo/edit?usp=sharing",
       "facilitator_author": "WalkMassachusetts",
-      "organizer_lead_organization": "WalkMassachusetts, Boston Metropolitan Planning Organization, Town of Holliston"
+      "organizer_lead_organization": "WalkMassachusetts, Boston Metropolitan Planning Organization, Town of Holliston",
+      "slug": "holliston_2026_washington-st-fairlane-way"
     },
     {
       "city_town": "HUNTINGTON",
@@ -685,7 +733,8 @@
       "themes": "\"Traffic Calming, Speed, Safety \", Comfort \u0026 Safety, Connectivity",
       "view": "https://drive.google.com/file/d/1a7DJrRMvMcB07ePOPcIM730glrAwaL5j/view?usp=sharing",
       "facilitator_author": "Stacy Beuttell",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "huntington_2017_main-st-basket-st"
     },
     {
       "city_town": "HYANNIS",
@@ -699,7 +748,8 @@
       "themes": "Connectivity, \"Traffic Calming, Speed, Safety \", Economic Development",
       "view": "https://dev.walkboston.org/wp-content/uploads/2018/09/WalkBoston-WalkAudit-Route132-Final.pdf?8621dc\u00268621dc",
       "facilitator_author": "Stacey Beuttell \u0026 Brendan Kearney",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "hyannis_2018_route-132-iyannough-road"
     },
     {
       "city_town": "LENOX",
@@ -713,7 +763,8 @@
       "themes": "Accessibility, Comfort \u0026 Safety, \"Traffic Calming, Speed, Safety \"",
       "view": "https://drive.google.com/file/d/1kTZwI52sBq8JMGOCCTxvIcUdZQdLPh3r/view?usp=sharing",
       "facilitator_author": "Stacey Beuttell, Julia Wu",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "lenox_2017_elm-st-crystal-st"
     },
     {
       "city_town": "LENOX",
@@ -727,7 +778,8 @@
       "themes": "Age Friendly , Connectivity, Rural Communities, Accessibility, Schools, Policy",
       "view": "https://drive.google.com/file/d/1HOwb-p8fB_XQIxsuDbhf-oaN6ou7CfBx/view?usp=sharing",
       "facilitator_author": "Stacey Beuttell, Brendan Kearney",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "lenox_2016_walker-st-route-183"
     },
     {
       "city_town": "LOWELL",
@@ -741,7 +793,8 @@
       "themes": "\"Traffic Calming, Speed, Safety \", Comfort \u0026 Safety, Connectivity",
       "view": "https://drive.google.com/file/d/1HBGJf6vbrOLi18vZ5t9gWmbOpLmdgWHe/view?usp=sharing",
       "facilitator_author": "Stacey Beuttell, Dorothea Hass",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "lowell_2017_andover-st-high-st"
     },
     {
       "city_town": "LOWELL  , CHELMSFORD",
@@ -755,7 +808,8 @@
       "themes": "\"Traffic Calming, Speed, Safety \", Connectivity",
       "view": "https://walkmass.org/wp-content/uploads/2019/08/WalkBoston-DrumHillWalkAuditReport-Lowell.pdf?70fb4f\u002670fb4f",
       "facilitator_author": "Stacey Beuttell, LeighAnne Taylor, \u0026 Ayesha Mehrotra",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "lowell-chelmsford_2019_technology-dr-drum-hill"
     },
     {
       "city_town": "LYNN",
@@ -769,7 +823,8 @@
       "themes": "\"Traffic Calming, Speed, Safety \", Comfort \u0026 Safety, Connectivity, Bike or Bus, Accessibility",
       "view": "https://drive.google.com/file/d/13VB06bjsLlGYS3lTDIToZSK4tNRrwU0v/view?usp=drive_link",
       "facilitator_author": "Stacey Beuttell, Brendan Kearney, Laura O'Rourke",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "lynn_2014_central-avenue-essex-st"
     },
     {
       "city_town": "MALDEN",
@@ -783,7 +838,8 @@
       "themes": "Accessibility, Bike or Bus, Connectivity, Economic Development , Schools, \"Traffic Calming, Speed, Safety \"",
       "view": "https://docs.google.com/spreadsheets/d/1EjPD6bRHK-pQDxF0R7HlcAQNv8iKAR0Y2yMfrsLqCOs/edit?usp=sharing",
       "facilitator_author": "Noah Tuke",
-      "organizer_lead_organization": "Malden Safe Streets"
+      "organizer_lead_organization": "Malden Safe Streets",
+      "slug": "malden_2026_route-60-also-know"
     },
     {
       "city_town": "MANCHESTER-BY-THE-SEA",
@@ -797,7 +853,8 @@
       "themes": "Age Friendly , \"Traffic Calming, Speed, Safety \", Comfort \u0026 Safety",
       "view": "https://drive.google.com/file/d/17lT2_m_8hed2nmxYhKsmy9xSrdhh1KfX/view?usp=sharing",
       "facilitator_author": "Mass in Motion",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "manchester-by-the-sea_2015_school-st-route-128"
     },
     {
       "city_town": "MANCHESTER-BY-THE-SEA",
@@ -811,7 +868,8 @@
       "themes": "Schools, Youth, Comfort \u0026 Safety, \"Traffic Calming, Speed, Safety \"",
       "view": "https://walkmass.org/wp-content/uploads/2019/07/WalkBoston-MBTSVillageWalkAudit.pdf?70fb4f\u002670fb4f",
       "facilitator_author": "Stacey Beuttell \u0026 Ayesha Mehrotra",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "manchester-by-the-sea_2019_vine-st-norwood-ave"
     },
     {
       "city_town": "MEDFORD",
@@ -825,7 +883,8 @@
       "themes": "Connectivity, Schools, \"Traffic Calming, Speed, Safety \", Age Friendly , Accessibility, Comfort \u0026 Safety",
       "view": "https://drive.google.com/file/d/13vq4e7lV2QR9Rb6M8NL7Wbxrc1o8iFEX/view?usp=sharing",
       "facilitator_author": "Wendy Landman",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "medford_2018_salem-st-haines-square"
     },
     {
       "city_town": "MELROSE",
@@ -839,7 +898,8 @@
       "themes": "Youth, Schools, \"Traffic Calming, Speed, Safety \"",
       "view": "https://dev.walkboston.org/wp-content/uploads/2018/01/WalkBoston-LincolnElementarySchoolWalkabilityAssessment1-Melrose.pdf?8621dc\u00268621dc",
       "facilitator_author": "WalkMassachusetts",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "melrose_2012_lincoln-elementary-school"
     },
     {
       "city_town": "MELROSE",
@@ -853,7 +913,8 @@
       "themes": "Accessibility, Schools, \"Traffic Calming, Speed, Safety \", Bike or Bus, Connectivity, Youth",
       "view": "https://drive.google.com/file/d/1s09hVmntaJOlOwbAlt8__M06UGS2f-XI/view?usp=sharing",
       "facilitator_author": "Stacey Beuttell",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "melrose_2017_melrose-st-tremont-st"
     },
     {
       "city_town": "NEW BEDFORD",
@@ -867,7 +928,8 @@
       "themes": "Age Friendly , Accessibility, Schools, \"Traffic Calming, Speed, Safety \", Comfort \u0026 Safety, Youth",
       "view": "https://drive.google.com/file/d/1buLcSldfP8mPeyzgiD9rzx_LBbn8UaqQ/view?usp=sharing",
       "facilitator_author": "Stacey Beuttell",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "new-bedford_2016_grinnell-st-south-2nd"
     },
     {
       "city_town": "NEW BEDFORD",
@@ -881,7 +943,8 @@
       "themes": "\"Traffic Calming, Speed, Safety \", Comfort \u0026 Safety, Bike or Bus",
       "view": "https://drive.google.com/file/d/1BHM0KnM4JwBDeG-ulgir7FzIULlaaOH0/view?usp=sharing",
       "facilitator_author": "Stacey Beuttell, Brendan Kearney",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "new-bedford_2016_acushnet-ave-sawyer-st"
     },
     {
       "city_town": "NEW BEDFORD",
@@ -895,7 +958,8 @@
       "themes": "Age Friendly , Comfort \u0026 Safety, Schools, Connectivity",
       "view": "https://walkmass.org/wp-content/uploads/2018/01/WalkBoston-AshleyParkWalkAudit-NewBedford.pdf?70fb4f\u002670fb4f",
       "facilitator_author": "Stacey Beuttell \u0026 Dorothea Hass",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "new-bedford_2017_ashley-park"
     },
     {
       "city_town": "NEW BEDFORD",
@@ -909,7 +973,8 @@
       "themes": "Accessibility, \"Traffic Calming, Speed, Safety \"",
       "view": "https://walkmass.org/wp-content/uploads/2018/01/WalkBoston-WalkAssesment-NewBedford.pdf?70fb4f\u002670fb4f",
       "facilitator_author": "Stacey Beuttell \u0026 Bob Sloane",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "new-bedford_2014_county-st-elm-st"
     },
     {
       "city_town": "NEWTON",
@@ -923,7 +988,8 @@
       "themes": "Accessibility, Comfort \u0026 Safety, Bike or Bus",
       "view": "https://drive.google.com/file/d/1Usyd7B7YBDuSLE4MuMb43eAWv2BSZ2PF/view?usp=sharing",
       "facilitator_author": "Stacey Beuttell, Bob Sloane",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "newton_2015_washington-st-walker-st"
     },
     {
       "city_town": "NEWTON",
@@ -937,7 +1003,8 @@
       "themes": "\"Traffic Calming, Speed, Safety \", Comfort \u0026 Safety, Bike or Bus",
       "view": "https://drive.google.com/file/d/1af78zsT6q4llLuHcRbTfPkdsbwx3DH-T/view?usp=drive_link",
       "facilitator_author": "WalkMassachusetts",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "newton_2018_washington-st"
     },
     {
       "city_town": "NORTH ANDOVER",
@@ -951,7 +1018,8 @@
       "themes": "Bike or Bus, Comfort \u0026 Safety, Accessibility, Connectivity, Equity, Schools, \"Traffic Calming, Speed, Safety \"",
       "view": "PDF",
       "facilitator_author": "Elizabeth Maldari",
-      "organizer_lead_organization": "Merrimack Valley Planning Commission"
+      "organizer_lead_organization": "Merrimack Valley Planning Commission",
+      "slug": "north-andover_2024_middlesex-street-marblehead-street"
     },
     {
       "city_town": "PLAINFIELD",
@@ -965,7 +1033,8 @@
       "themes": "Age Friendly , \"Traffic Calming, Speed, Safety \", Accessibility",
       "view": "https://dev.walkboston.org/wp-content/uploads/2022/08/FINAL-Plainfield-Walk-Audit.pdf?8621dc\u00268621dc",
       "facilitator_author": "Keili Tucker \u0026 Miranda Briseño",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "plainfield_2022_intersection-central-main-st"
     },
     {
       "city_town": "QUINCY",
@@ -979,7 +1048,8 @@
       "themes": "Accessibility, Economic Development , \"Traffic Calming, Speed, Safety \", Bike or Bus, Connectivity, Comfort \u0026 Safety",
       "view": "https://dev.walkboston.org/wp-content/uploads/2018/01/WalkBoston-WollastonWalkAssessment-Quincy.pdf?8621dc\u00268621dc",
       "facilitator_author": "Stacey Beuttell \u0026 Wendy Landman",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "quincy_2014_woodbine-st-greenwood-ave"
     },
     {
       "city_town": "RANDOLPH",
@@ -993,7 +1063,8 @@
       "themes": "Schools, \"Traffic Calming, Speed, Safety \", Comfort \u0026 Safety, Bike or Bus, Youth, Transit, MBTA",
       "view": "https://docs.google.com/document/d/1HXub7HGieWyg0jn5xLrfxildTRzwwRhNibwfQs3FGwU/edit?usp=sharing",
       "facilitator_author": "WalkMassachusetts",
-      "organizer_lead_organization": "WalkMassachusetts, Boston Metropolitan Planning Organization, City of Randolph, Randolph Mass in Motion"
+      "organizer_lead_organization": "WalkMassachusetts, Boston Metropolitan Planning Organization, City of Randolph, Randolph Mass in Motion",
+      "slug": "randolph_2026_main-st-main-st"
     },
     {
       "city_town": "REVERE",
@@ -1007,7 +1078,8 @@
       "themes": "\"Traffic Calming, Speed, Safety \", Comfort \u0026 Safety",
       "view": "https://drive.google.com/file/d/1SelwSohq-dnnIIDyHCtQ-3rDMnDaGYjf/view?usp=sharing",
       "facilitator_author": "WalkMassachusetts",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "revere_2017_state-rd-bennington-st"
     },
     {
       "city_town": "REVERE",
@@ -1021,7 +1093,8 @@
       "themes": "Accessibility, Connectivity, Comfort \u0026 Safety",
       "view": "https://drive.google.com/file/d/1NjDIFzvU7FwMAairWKBmqd_nlRHYszl7/view?usp=sharing",
       "facilitator_author": "Stacey Beuttell, Dorothea Hass",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "revere_2019_atlantic-ave-endicott-ave"
     },
     {
       "city_town": "REVERE",
@@ -1035,7 +1108,8 @@
       "themes": "Accessibility, Schools, Comfort \u0026 Safety, Connectivity, Youth, \"Traffic Calming, Speed, Safety \"",
       "view": "https://drive.google.com/file/d/1in07ksa8sXRRULP196pWKdx-oSXT3Svs/view?usp=sharing",
       "facilitator_author": "Adi Nochur, Stacey Beuttell",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "revere_2019_cummings-square-crescent-ave"
     },
     {
       "city_town": "SALEM",
@@ -1049,7 +1123,8 @@
       "themes": "Age Friendly , Comfort \u0026 Safety, \"Traffic Calming, Speed, Safety \", Youth",
       "view": "https://walkmass.org/wp-content/uploads/2018/01/WalkBoston-DowntownWalkAssessment-Salem.pdf?70fb4f\u002670fb4f",
       "facilitator_author": "Stacey Beuttell, Kasia Hart, \u0026 Dorothea Hass",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "salem_2014_intersections-washington-street-bridge"
     },
     {
       "city_town": "SALEM",
@@ -1063,7 +1138,8 @@
       "themes": "Connectivity, Comfort \u0026 Safety, \"Traffic Calming, Speed, Safety \", Accessibility",
       "view": "https://drive.google.com/file/d/1KUD482idEu2ZNMtzjVBEUkpc58CWAkpk/view?usp=sharing",
       "facilitator_author": "Stacey Beuttell",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "salem_2015_atlantic-st-loring-ave"
     },
     {
       "city_town": "SALEM",
@@ -1077,7 +1153,8 @@
       "themes": "Connectivity, \"Traffic Calming, Speed, Safety \"",
       "view": "https://walkmass.org/wp-content/uploads/2020/01/WB-NorthSalemWalkAuditReportFINAL.pdf?70fb4f\u002670fb4f",
       "facilitator_author": "Stacey Beuttell \u0026 LeighAnne Taylor",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "salem_2019_north-st-mason-st"
     },
     {
       "city_town": "SALEM",
@@ -1091,7 +1168,8 @@
       "themes": "Connectivity, Comfort \u0026 Safety, \"Traffic Calming, Speed, Safety \"",
       "view": "https://walkmass.org/wp-content/uploads/2018/07/WalkBoston-The-Point-walk-audit-report-FINAL.pdf?70fb4f\u002670fb4f",
       "facilitator_author": "WalkMassachusetts",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "salem_2018_lafayette-st-peabody-st"
     },
     {
       "city_town": "SOMERVILLE",
@@ -1105,7 +1183,8 @@
       "themes": "Schools, \"Traffic Calming, Speed, Safety \", Bike or Bus, Youth",
       "view": "https://walkmass.org/wp-content/uploads/2018/01/WalkBoston-PearlStreetWalkAssessment-Somerville.pdf?70fb4f\u002670fb4",
       "facilitator_author": "Stacey Beuttell, Kasia Hart, \u0026Brendan Kearney",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "somerville_2014_pearl-st"
     },
     {
       "city_town": "SOMERVILLE",
@@ -1119,7 +1198,8 @@
       "themes": "Accessibility, Bike or Bus, Climate - Air Quality, Climate - Heat , Comfort \u0026 Safety, Connectivity, Public Health , Schools, \"Traffic Calming, Speed, Safety \", Youth",
       "view": "https://docs.google.com/document/d/163XvrEGuE-KiSHIHODb4LYwDHam_5TWU3ECviPuDYHQ/edit?usp=sharing",
       "facilitator_author": "Alessandra Seiter",
-      "organizer_lead_organization": "Somerville Pedestrian \u0026 Transit Advisory Committee (PTAC)"
+      "organizer_lead_organization": "Somerville Pedestrian \u0026 Transit Advisory Committee (PTAC)",
+      "slug": "somerville_2025_union-square-somerville-including"
     },
     {
       "city_town": "SPRINGFIELD",
@@ -1133,7 +1213,8 @@
       "themes": "Schools, Accessibility, \"Traffic Calming, Speed, Safety \", Comfort \u0026 Safety, Youth",
       "view": "https://drive.google.com/file/d/19CMDNrSrqfoI-fQ48QcmLv3Emn8s-dZ3/view?usp=sharing",
       "facilitator_author": "Dorothea Hass, Stacey Beuttell",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "springfield_2013_birnie-ave-huntington-st"
     },
     {
       "city_town": "SPRINGFIELD",
@@ -1147,7 +1228,8 @@
       "themes": "Schools, Youth, \"Traffic Calming, Speed, Safety \"",
       "view": "https://walkmass.org/wp-content/uploads/2018/01/WalkBoston-EliasBrookingsElementarySchoolWalkAudit-Springfield.pdf",
       "facilitator_author": "Dorothea Hass \u0026 Stacey Beuttell",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "springfield_2013_marshall-st-eastern-ave"
     },
     {
       "city_town": "SPRINGFIELD",
@@ -1161,7 +1243,8 @@
       "themes": "Schools, \"Traffic Calming, Speed, Safety \", Comfort \u0026 Safety, Bike or Bus, Youth, Connectivity",
       "view": "https://drive.google.com/file/d/1qowLb7r6H6x_Oe3C08Ps8QnLM9eGn-gX/view?usp=sharing",
       "facilitator_author": "Stacey Beuttell, Dorothea Hass",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "springfield_2013_armory-st-carew-st"
     },
     {
       "city_town": "SPRINGFIELD",
@@ -1175,7 +1258,8 @@
       "themes": "Schools, \"Traffic Calming, Speed, Safety \", Youth",
       "view": "https://drive.google.com/file/d/1Vns6tkHhT0tbRdZJrXFW8GAO1DJcLhPi/view?usp=sharing",
       "facilitator_author": "Dorothea Hass, Stacey Beuttell, Sam Sklar",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "springfield_2014_berkshire-ave-bay-st"
     },
     {
       "city_town": "SPRINGFIELD",
@@ -1189,7 +1273,8 @@
       "themes": "Accessibility, \"Traffic Calming, Speed, Safety \", Youth, Schools",
       "view": "https://drive.google.com/file/d/1zaIE6QM7dJjh8et5juD7CNyisoL0wRZI/view?usp=sharing",
       "facilitator_author": "Stacey Beuttell, Kasia Hart",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "springfield_2014_union-st-school-st"
     },
     {
       "city_town": "SPRINGFIELD",
@@ -1203,7 +1288,8 @@
       "themes": "Schools, \"Traffic Calming, Speed, Safety \", Comfort \u0026 Safety, Bike or Bus, Youth",
       "view": "https://drive.google.com/file/d/1K_l8S-qUbbfiV3lYY5bl-xmZo1YnL_Ac/view?usp=sharing",
       "facilitator_author": "Stacey Beuttell, Betsy Johnson, Adi Nochur",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "springfield_2015_cumberland-st-chestnut-st"
     },
     {
       "city_town": "SPRINGFIELD",
@@ -1217,7 +1303,8 @@
       "themes": "Connectivity, Comfort \u0026 Safety, \"Traffic Calming, Speed, Safety \", Economic Development",
       "view": "https://drive.google.com/file/d/1NUSYksDOzNLkxjBnFok6r9WMnf0LxUxp/view?usp=sharing",
       "facilitator_author": "WalkMassachusetts",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "springfield_2015_dwight-st-chestnut-st"
     },
     {
       "city_town": "SPRINGFIELD",
@@ -1231,7 +1318,8 @@
       "themes": "Accessibility, \"Traffic Calming, Speed, Safety \", Comfort \u0026 Safety",
       "view": "https://drive.google.com/file/d/1Z0mqx29sB_4AHXoDeGG-CQcjqAIdCLFf/view?usp=sharing",
       "facilitator_author": "Stacey Beuttell, Adi Nochur",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "springfield_2016_main-st-locust-st"
     },
     {
       "city_town": "SPRINGFIELD",
@@ -1245,7 +1333,8 @@
       "themes": "Accessibility, Comfort \u0026 Safety, Connectivity",
       "view": "https://drive.google.com/file/d/1aiC5heBNWlEtk1xlOTvgAIT9hhHx_zuR/view?usp=drive_link",
       "facilitator_author": "Stacey Beuttell, Dorothea Hass",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "springfield_2017_carew-st-liberty-st"
     },
     {
       "city_town": "SPRINGFIELD",
@@ -1259,7 +1348,8 @@
       "themes": "Accessibility, Comfort \u0026 Safety, Connectivity, Policy",
       "view": "https://drive.google.com/file/d/1xyHhZ1ZYWJyPAT1xfd74qDGXA-Y58Lkr/view?usp=sharing",
       "facilitator_author": "Stacey Beuttell, Dorothea Hass",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "springfield_2017_union-st-eastern-ave"
     },
     {
       "city_town": "SPRINGFIELD",
@@ -1273,7 +1363,8 @@
       "themes": "Connectivity, Bike or Bus, \"Traffic Calming, Speed, Safety \", Economic Development",
       "view": "https://walkmass.org/wp-content/uploads/2021/08/Springfield-Union-Station-Walk-Audit_-Recommendations-Memo.pdf?8621dc\u00268621dc\u002670fb4f\u002670fb4f",
       "facilitator_author": "WalkMassachusetts",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "springfield_2020_section-dwight-st-bridge"
     },
     {
       "city_town": "SPRINGFIELD",
@@ -1287,7 +1378,8 @@
       "themes": "Accessibility, Bike or Bus, Comfort \u0026 Safety, Traffic Calming, Speed, Safety",
       "view": "VIEW",
       "facilitator_author": "Michael Stevens",
-      "organizer_lead_organization": "WalkBike Springfield"
+      "organizer_lead_organization": "WalkBike Springfield",
+      "slug": "springfield_2023_worthington-st-armory-st"
     },
     {
       "city_town": "SPRINGFIELD",
@@ -1301,7 +1393,8 @@
       "themes": "Bike or Bus, Connectivity",
       "view": "https://walkmass.org/wp-content/uploads/2018/01/WalkBoston-BrightwoodNeighborhoodWalkAssessment-Springfield.pdf?70fb4f\u002670fb4f",
       "facilitator_author": "Stacey Beuttell \u0026 Adi Nochur",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "springfield_2015_plainfield-st-birnie-ave"
     },
     {
       "city_town": "SPRINGFIELD",
@@ -1315,7 +1408,8 @@
       "themes": "Comfort \u0026 Safety, \"Traffic Calming, Speed, Safety \", Age Friendly",
       "view": "https://walkmass.org/wp-content/uploads/2021/08/WalkBoston-Upper-Hill-Springfield-Walk-Audit.pdf?70fb4f\u002670fb4f",
       "facilitator_author": "Stacey Beuttell \u0026 Perri Sheinbaum",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "springfield_2021_suffolk-st-wilbraham-rd"
     },
     {
       "city_town": "SPRINGFIELD",
@@ -1329,7 +1423,8 @@
       "themes": "Climate - Heat , Climate - Shade/ Tree, Accessibility, Transit, Comfort \u0026 Safety, Schools",
       "view": "https://docs.google.com/document/d/1v9qn9L3va0CP38iG2gwzwwlXLMiLMdLc0qaeFgB9qhQ/edit?tab=t.0",
       "facilitator_author": "Brendan Kearney, Iolando Spinola, Jonathan Gomez-Pereira",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "springfield_2023_roosevelt-avenue-gaucher-street"
     },
     {
       "city_town": "TAUNTON",
@@ -1343,7 +1438,8 @@
       "themes": "\"Traffic Calming, Speed, Safety \", Schools, Public Health",
       "view": "https://dev.walkboston.org/wp-content/uploads/2018/01/WalkBoston-WalkAssessement-Taunton.pdf?8621dc\u00268621dc",
       "facilitator_author": "Kasia Hart \u0026 Dorothea Hass",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "taunton_2015_adams-st-broadway-pleasant"
     },
     {
       "city_town": "WAKEFIELD",
@@ -1357,7 +1453,8 @@
       "themes": "\"Traffic Calming, Speed, Safety \", Schools, Youth",
       "view": "https://dev.walkboston.org/wp-content/uploads/2012/06/WalkBoston-GalvinMiddleSchoolWalkabilityAssessment-Wakefield.pdf?8621dc\u00268621dc",
       "facilitator_author": "WalkMassachusetts",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "wakefield_2012_galvin-middle-school"
     },
     {
       "city_town": "WAKEFIELD",
@@ -1371,7 +1468,8 @@
       "themes": "Schools, Economic Development , Comfort \u0026 Safety, Youth",
       "view": "https://dev.walkboston.org/wp-content/uploads/2018/01/WalkBoston-Greenwood-SquareGreenwood-SchoolAreaAssessment-Wakefield.pdf?8621dc\u00268621dc",
       "facilitator_author": "Dorothea Hass",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "wakefield_2013_greenwood-square-greenwood-school"
     },
     {
       "city_town": "WALTHAM",
@@ -1385,7 +1483,8 @@
       "themes": "\"Traffic Calming, Speed, Safety \", Comfort \u0026 Safety, Accessibility",
       "view": "https://walkmass.org/wp-content/uploads/2016/05/WalkBoston-MoodyStreetWalkAudit-Waltham.pdf",
       "facilitator_author": "Stacey Beuttell, Dorothea Hass, Brendan Kearney, Lisa Schletzbaum",
-      "organizer_lead_organization": "WalkMassachusetts, MassDOT"
+      "organizer_lead_organization": "WalkMassachusetts, MassDOT",
+      "slug": "waltham_2016_moody-st-moody-st"
     },
     {
       "city_town": "WARE",
@@ -1399,7 +1498,8 @@
       "themes": "Comfort \u0026 Safety, \"Traffic Calming, Speed, Safety \", Age Friendly",
       "view": "https://walkmass.org/wp-content/uploads/2019/12/WalkBoston-WARE-walk-audit-report-FINAL.pdf?70fb4f\u002670fb4f",
       "facilitator_author": "Stacey Beuttell, Liz Rickley, \u0026 LeighAnne Taylor",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "ware_2019_north-st-pleasant-st"
     },
     {
       "city_town": "WATERTOWN",
@@ -1413,7 +1513,8 @@
       "themes": "Comfort \u0026 Safety, Accessibility",
       "view": "https://walkmass.org/wp-content/uploads/2018/01/WalkBoston-WalkAssessmentFinal-Watertown.pdf?70fb4f\u002670fb4f",
       "facilitator_author": "Stacey Beuttell \u0026 Brendan Kearney",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "watertown_2015_riverside-street-irving-street"
     },
     {
       "city_town": "WEST SPRINGFIELD",
@@ -1427,7 +1528,8 @@
       "themes": "\"Traffic Calming, Speed, Safety \", Comfort \u0026 Safety",
       "view": "https://drive.google.com/file/d/1tZ9sto-veV1UZgDUvKlguZkzBySYtpyV/view?usp=sharing",
       "facilitator_author": "Stacey Beuttell",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "west-springfield_2016_elm-st-main-st"
     },
     {
       "city_town": "WEST SPRINGFIELD",
@@ -1441,7 +1543,8 @@
       "themes": "Schools, Comfort \u0026 Safety, Weather Control",
       "view": "https://drive.google.com/file/d/1eFRKHWl8Q-2qpFADL4vV0lXDlDPSKcvj/view?usp=sharing",
       "facilitator_author": "Stacey Beuttell",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "west-springfield_2017_cold-spring-ave-baldwin"
     },
     {
       "city_town": "WEST SPRINGFIELD",
@@ -1455,7 +1558,8 @@
       "themes": "\"Traffic Calming, Speed, Safety \", Comfort \u0026 Safety, Bike or Bus",
       "view": "https://walkmass.org/wp-content/uploads/2022/01/West-Springfield-Walk-Audit-Report-FINAL-compressed.pdf?70fb4f\u002670fb4f",
       "facilitator_author": "Miranda Briseño \u0026 Stacey Beuttell",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "west-springfield_2021_main-st-union-st"
     },
     {
       "city_town": "WESTHAMPTON",
@@ -1469,7 +1573,8 @@
       "themes": "Schools, \"Traffic Calming, Speed, Safety \", Youth, Comfort \u0026 Safety, Connectivity, Policy",
       "view": "https://walkmass.org/wp-content/uploads/2022/08/FINAL-Westhampton-Walk-Audit-Report.pdf",
       "facilitator_author": "Zac Churchill, Miranda Briseño, \u0026 Stacey Beuttell",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "westhampton_2022_north-south-rd-intersection"
     },
     {
       "city_town": "WEYMOUTH",
@@ -1483,7 +1588,8 @@
       "themes": "Comfort \u0026 Safety, \"Traffic Calming, Speed, Safety \", Bike or Bus",
       "view": "https://walkmass.org/wp-content/uploads/2018/01/WalkBoston-WalkAudit-Weymouth.pdf?70fb4f\u002670fb4f",
       "facilitator_author": "WalkMassachusetts",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "weymouth_2014_bridge-st-sea-st"
     },
     {
       "city_town": "WILLIAMSBURG",
@@ -1497,7 +1603,8 @@
       "themes": "\"Traffic Calming, Speed, Safety \", Comfort \u0026 Safety, Bike or Bus, Connectivity, Policy",
       "view": "https://drive.google.com/file/d/1Z-UdaL1D6vbwI0wCtcdVyQnFAGesbpQO/view?usp=sharing",
       "facilitator_author": "Stacey Beuttell, Adi Nochur",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "williamsburg_2016_route-north-st-petticoat"
     },
     {
       "city_town": "WILLIAMSTOWN",
@@ -1511,7 +1618,8 @@
       "themes": "Schools, \"Traffic Calming, Speed, Safety \", Comfort \u0026 Safety, Age Friendly",
       "view": "https://drive.google.com/file/d/1rCPiq9TFW6N4hvpfBsOClNCU-a2jfkZW/view?usp=drive_link",
       "facilitator_author": "Stacey Beuttell \u0026 LeighAnne Taylor",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "williamstown_2019_park-st-sr-intersection"
     },
     {
       "city_town": "WOBURN",
@@ -1525,7 +1633,8 @@
       "themes": "Accessibility, \"Traffic Calming, Speed, Safety \", Connectivity, Youth, Schools",
       "view": "https://walkmass.org/wp-content/uploads/2018/10/WalkBoston-SchoolWalkabilityAssessment-Woburn-Summer-2012.pdf?70fb4f\u002670fb4f",
       "facilitator_author": "WalkMassachusetts",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "woburn_2012_white-elementary-school-woburn"
     },
     {
       "city_town": "WOBURN",
@@ -1539,7 +1648,8 @@
       "themes": "Comfort \u0026 Safety, Connectivity, Accessibility, Schools, Youth",
       "view": "https://walkmass.org/wp-content/uploads/2018/10/WalkBoston-SchoolWalkabilityAssessment-Woburn-Summer-2012.pdf?70fb4f\u002670fb4f",
       "facilitator_author": "WalkMassachusetts",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "woburn_2012_kennedy-middle-school"
     },
     {
       "city_town": "WOBURN",
@@ -1553,7 +1663,8 @@
       "themes": "Age Friendly , Accessibility, Youth, Schools",
       "view": "https://walkmass.org/wp-content/uploads/2018/10/WalkBoston-SchoolWalkabilityAssessment-Woburn-Summer-2012.pdf?70fb4f\u002670fb4f",
       "facilitator_author": "WalkMassachusetts",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "woburn_2012_shamrock-elementary-school"
     },
     {
       "city_town": "WOBURN",
@@ -1567,7 +1678,8 @@
       "themes": "Schools, Accessibility, \"Traffic Calming, Speed, Safety \", Youth",
       "view": "https://walkmass.org/wp-content/uploads/2018/10/WalkBoston-SchoolWalkabilityAssessment-Woburn-Summer-2012.pdf?70fb4f\u002670fb4f",
       "facilitator_author": "WalkMassachusetts",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "woburn_2012_wyman-elementary-school"
     },
     {
       "city_town": "WOBURN",
@@ -1581,7 +1693,8 @@
       "themes": "\"Traffic Calming, Speed, Safety \", Youth, Schools, Connectivity",
       "view": "https://walkmass.org/wp-content/uploads/2018/10/WalkBoston-SchoolWalkabilityAssessment-Woburn-Summer-2012.pdf?70fb4f\u002670fb4f",
       "facilitator_author": "WalkMassachusetts",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "woburn_2012_hurld-elementary-school"
     },
     {
       "city_town": "WOBURN",
@@ -1595,7 +1708,8 @@
       "themes": "Accessibility, Schools, \"Traffic Calming, Speed, Safety \", Connectivity, Youth",
       "view": "https://walkmass.org/wp-content/uploads/2013/09/WalkBoston-SchoolWalkabilityAssessments-Woburn-Summer2013.pdf?70fb4f\u002670fb4f",
       "facilitator_author": "WalkMassachusetts",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "woburn_2013_reeves-elementary-school"
     },
     {
       "city_town": "WOBURN",
@@ -1609,7 +1723,8 @@
       "themes": "Schools, Youth, \"Traffic Calming, Speed, Safety \"",
       "view": "https://walkmass.org/wp-content/uploads/2013/09/WalkBoston-SchoolWalkabilityAssessments-Woburn-Summer2013.pdf?70fb4f\u002670fb4f",
       "facilitator_author": "WalkMassachusetts",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "woburn_2013_goodyear-elementary-school"
     },
     {
       "city_town": "WOBURN",
@@ -1623,7 +1738,8 @@
       "themes": "Schools, \"Traffic Calming, Speed, Safety \", Bike or Bus, Youth, Accessibility",
       "view": "https://walkmass.org/wp-content/uploads/2013/09/WalkBoston-SchoolWalkabilityAssessments-Woburn-Summer2013.pdf?70fb4f\u002670fb4f",
       "facilitator_author": "WalkMassachusetts",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "woburn_2013_altavesta-elementary-school"
     },
     {
       "city_town": "WOBURN",
@@ -1637,7 +1753,8 @@
       "themes": "Accessibility, Schools, \"Traffic Calming, Speed, Safety \", Youth",
       "view": "https://walkmass.org/wp-content/uploads/2013/09/WalkBoston-SchoolWalkabilityAssessments-Woburn-Summer2013.pdf?70fb4f\u002670fb4f",
       "facilitator_author": "WalkMassachusetts",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "woburn_2013_linscott-elementary-school"
     },
     {
       "city_town": "WOBURN",
@@ -1651,7 +1768,8 @@
       "themes": "Accessibility, Schools, Connectivity, Youth, Comfort \u0026 Safety",
       "view": "https://walkmass.org/wp-content/uploads/2013/09/WalkBoston-SchoolWalkabilityAssessments-Woburn-Summer2013.pdf?70fb4f\u002670fb4f",
       "facilitator_author": "WalkMassachusetts",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "woburn_2013_joyce-middle-school"
     },
     {
       "city_town": "WORCESTER",
@@ -1665,7 +1783,8 @@
       "themes": "Age Friendly , Accessibility, Schools, \"Traffic Calming, Speed, Safety \", Bike or Bus, Youth",
       "view": "https://walkmass.org/wp-content/uploads/2016/08/WalkBoston-BicycleandPedestrianInfrastructureAssessment-Worcester.pdf",
       "facilitator_author": "Adi Nochur, Stacey Beuttell",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "worcester_2016_chandler-st-bellevue-st"
     },
     {
       "city_town": "WORCESTER",
@@ -1679,7 +1798,8 @@
       "themes": "\"Traffic Calming, Speed, Safety \", Comfort \u0026 Safety, Connectivity",
       "view": "https://walkmass.org/wp-content/uploads/2019/11/WalkBoston-Worcester-Green-Hill-walk-audit-report-FINAL.pdf?70fb4f\u002670fb4f",
       "facilitator_author": "Brendan Kearney \u0026 LeighAnne Taylor",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "worcester_2019_lincoln-st-intersection-lincoln"
     },
     {
       "city_town": "WORCESTER",
@@ -1693,7 +1813,8 @@
       "themes": "Age Friendly , Accessibility, Connectivity, Economic Development , Comfort \u0026 Safety, Public Health",
       "view": "https://dev.walkboston.org/wp-content/uploads/2021/08/Worcester-Indian-Lake-Walk-Audit_-Recommendations-Memo-public.pdf?8621dc\u00268621dc\u00268621dc\u00268621dc",
       "facilitator_author": "Leighanne Taylor",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "worcester_2020_section-boylston-dr-norton"
     },
     {
       "city_town": "WORCESTER",
@@ -1707,7 +1828,8 @@
       "themes": "Age Friendly , Comfort \u0026 Safety, \"Traffic Calming, Speed, Safety \", Public Health, Climate - Shade/ Tree",
       "view": "https://drive.google.com/file/d/1gA1ocLlio9gYE2p8fE7O9V1tmxM69wbk/view?usp=drive_link",
       "facilitator_author": "Brendan Kearney, Iolando Spinola,  \u0026 Jonathan Gomez-Pereira",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "worcester_2023_main-st-mill-st"
     },
     {
       "city_town": "WORCESTER",
@@ -1721,7 +1843,8 @@
       "themes": "Schools, \"Traffic Calming, Speed, Safety \", Youth",
       "view": "https://drive.google.com/file/d/1-ghT2OD5Y0OC2e4han_b3SbH2RHf4sfd/view?usp=drive_link",
       "facilitator_author": "WalkMassachusetts",
-      "organizer_lead_organization": "WalkMassachusetts"
+      "organizer_lead_organization": "WalkMassachusetts",
+      "slug": "worcester_2023_woodland-academy-claremont-academy"
     },
     {
       "city_town": "BROCKTON",
@@ -1735,7 +1858,8 @@
       "themes": "Youth, Accessibility, Equity , Schools, \"Traffic Calming, Speed, Safety \", Comfort \u0026 Safety, Bike or Bus, Connectivity, Climate - Heat , Climate - Shade/ Tree, Weather Control",
       "view": "https://docs.google.com/presentation/d/14-Dq-aNU608CJwVjbsrG33Rr4K00mo6ZMlONLk3wRAE/edit?usp=sharing",
       "facilitator_author": "WalkMassachusetts",
-      "organizer_lead_organization": "WalkMassachusetts, Brockton Workers Alliance"
+      "organizer_lead_organization": "WalkMassachusetts, Brockton Workers Alliance",
+      "slug": "brockton_2026_belmont-street-area_belmont-street-memorial-drive"
     },
     {
       "city_town": "BROCKTON",
@@ -1749,7 +1873,8 @@
       "themes": "Youth, Schools, Accessibility, Age Friendly , Equity , \"Traffic Calming, Speed, Safety \", Comfort \u0026 Safety, Connectivity, Noise",
       "view": "https://docs.google.com/document/d/1a0oicGX6DW5P5kTJH2YizlVgIRPMFs7Gmm5IluRBEGo/edit?usp=sharing",
       "facilitator_author": "WalkMassachusetts",
-      "organizer_lead_organization": "WalkMassachusetts, The Old Colony Planning Council, Brockton Workers Alliance"
+      "organizer_lead_organization": "WalkMassachusetts, The Old Colony Planning Council, Brockton Workers Alliance",
+      "slug": "brockton_2026_west-chestnut-street-area_kennedy-elementary-school-surrounding"
     },
     {
       "city_town": "SALEM",
@@ -1763,7 +1888,8 @@
       "themes": "Accessibility, \"Traffic Calming, Speed, Safety \", Comfort \u0026 Safety, Climate - Heat , Climate - Shade/ Tree, Bike or Bus, MBTA, Transit, Youth, Schools, Equity , Public Health",
       "view": "https://docs.google.com/document/d/19an109IMtlndZM2J5MO2BsHOBzJSGHHnZVnNyqFX2Vo/edit?usp=sharing",
       "facilitator_author": "WalkMassachusetts",
-      "organizer_lead_organization": "Salem Transportation Department, Metropolitan Area Planning Council, WalkMassachusetts"
+      "organizer_lead_organization": "Salem Transportation Department, Metropolitan Area Planning Council, WalkMassachusetts",
+      "slug": "salem_2026_gallows-hill-park-mansell"
     },
     {
       "city_town": "MELROSE",
@@ -1777,7 +1903,8 @@
       "themes": "Age Friendly , Accessibility, Equity , Economic Development , Public Health , Climate - Heat , \"Traffic Calming, Speed, Safety \", Comfort \u0026 Safety, Bike or Bus, Connectivity, Policy, MBTA, Transit, Climate - Shade/ Tree",
       "view": "https://docs.google.com/document/d/1nH-8T9jOlmRaSlcURqkaJo0k8Kcug8EhVUS8AIoeaRw/edit?usp=sharing",
       "facilitator_author": "WalkMassachusetts",
-      "organizer_lead_organization": "Metropolitan Area Planning Council, WalkMassachusetts"
+      "organizer_lead_organization": "Metropolitan Area Planning Council, WalkMassachusetts",
+      "slug": "melrose_2026_wyoming-hill-mbta-commuter"
     },
     {
       "city_town": "WAKEFIELD",
@@ -1791,7 +1918,8 @@
       "themes": "​",
       "view": "VIEW",
       "facilitator_author": "WalkMassachusetts",
-      "organizer_lead_organization": "Metropolitan Area Planning Council, WalkMassachusetts"
+      "organizer_lead_organization": "Metropolitan Area Planning Council, WalkMassachusetts",
+      "slug": "wakefield_2026_tbd"
     },
     {
       "city_town": "STONEHAM",
@@ -1805,7 +1933,8 @@
       "themes": "Accessibility, Age Friendly , Equity , Schools, \"Traffic Calming, Speed, Safety \", Comfort \u0026 Safety, Bike or Bus, Connectivity, Climate - Air Quality",
       "view": "https://docs.google.com/document/d/1KbJolxs7Hews-GHeDaH0rZVrVm6bdPpifspFCfm6znU/edit?usp=sharing",
       "facilitator_author": "WalkMassachusetts",
-      "organizer_lead_organization": "WalkMassachusetts,  Stoneham Community Action Network, Stoneham Transportation Advisory Committee’s Bike Pedestrian Subcommittee, Metropolitan Area Planning Council"
+      "organizer_lead_organization": "WalkMassachusetts,  Stoneham Community Action Network, Stoneham Transportation Advisory Committee’s Bike Pedestrian Subcommittee, Metropolitan Area Planning Council",
+      "slug": "stoneham_2026_central-st-pleasant-st"
     }
   ]
 }
