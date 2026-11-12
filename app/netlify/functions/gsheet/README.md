@@ -53,12 +53,18 @@ This writes:
 - `data/audits.json`: embedded into the Lambda binary at build time; served when the live fetch fails.
 - `../../../public/data/last_run.json` (`app/public/data/last_run.json`): `{date, data}` snapshot the frontend loads when the function itself is unreachable.
 
-Commit both after running to keep the fallbacks current. `./refresh_data.sh` at the repo root runs the same command.
+Refreshes stop before changing files or backups if the download fails or contains zero audits. When the audit data matches the existing snapshot, its timestamp and backups stay unchanged; an out-of-sync embedded copy is still repaired.
 
-The output paths can be overridden with flags (`--snapshot ""` skips the snapshot):
+For changed data, both replacements are first written to temporary files beside their destinations. The previous `last_run.json` is then copied to `data/backups/last_run_<UTC time>.json`, and the replacements are renamed into place. Only after both replacements succeed are older backups deleted, keeping the newest 5. Each replacement is atomic, but the pair is not a transaction: an interruption between renames can leave the copies out of sync. Rerun the refresh before committing in that case.
+
+To restore a backup, copy it over `app/public/data/last_run.json` and its `data` array into `data/audits.json`.
+
+Commit both files and `data/backups/` (including deletions) after running to keep the fallbacks current. The printed `git -C ... add -- ...` command works from any directory and stages backup deletions too. `./refresh_data.sh` at the repo root runs the same command.
+
+The paths can be overridden with flags (`--snapshot ""` skips the snapshot and the backup):
 
 ```bash
-go run ./cmd/refresh --out path/to/audits.json --snapshot path/to/last_run.json
+go run ./cmd/refresh --out path/to/audits.json --snapshot path/to/last_run.json --backup-dir path/to/backups
 ```
 
 ## Response Fields

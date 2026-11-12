@@ -6,12 +6,18 @@
 #   app/public/data/last_run.json                  {date, data} snapshot the frontend
 #                                                  loads if the function is unreachable
 #
+# Failed downloads and empty results leave files and backups untouched.
+# Unchanged audit data preserves the snapshot timestamp and backup history.
+# Changed data is staged, then the previous last_run.json is copied to
+# app/netlify/functions/gsheet/data/backups/ before replacement. The newest 5
+# backups are retained after both replacements succeed.
+#
 # Usage:
 #   ./refresh_data.sh
 #
 # Requirements: Go
 #
-# Commit both files afterwards to keep the fallbacks current.
+# Use the printed git command to stage both fallbacks and backups, then commit.
 
 set -euo pipefail
 

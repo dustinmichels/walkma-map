@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Menu } from 'lucide-vue-next'
 import { Pane, Splitpanes } from 'splitpanes'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import AuditFilters from '../components/AuditFilters.vue'
 import DataPanel from '../components/DataPanel.vue'
 import Map from '../components/Map.vue'
@@ -38,7 +38,17 @@ const relevantAudits = computed(() => {
   return base
 })
 
+// Esc clears the selected town, unless an open dialog/dropdown handled it
+const handleKeydown = (e: KeyboardEvent) => {
+  if (e.key !== 'Escape' || e.defaultPrevented || !selectedCity.value) return
+  if (document.querySelector('[role="dialog"]')) return
+  selectedCity.value = ''
+}
+
+onUnmounted(() => window.removeEventListener('keydown', handleKeydown))
+
 onMounted(async () => {
+  window.addEventListener('keydown', handleKeydown)
   await Promise.all([
     loadAudits()
       .then((result) => {

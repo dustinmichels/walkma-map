@@ -1,6 +1,6 @@
 <template>
   <div
-    class="group relative overflow-hidden bg-white rounded-xl p-4 mb-2 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg cursor-pointer hover:bg-zinc-100"
+    class="relative overflow-hidden bg-white rounded-xl p-4 mb-2 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg cursor-pointer hover:bg-zinc-100"
     @click="emit('view', audit)"
   >
     <div
@@ -42,22 +42,11 @@
         <span class="font-semibold text-zinc-700">Facilitator:</span>
         {{ audit.facilitator_author }}
       </div>
-
-      <div
-        class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-      >
-        <span
-          class="bg-zinc-100 text-zinc-600 p-1.5 rounded-md inline-flex items-center justify-center"
-        >
-          <Eye class="w-4 h-4" />
-        </span>
-      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Eye } from 'lucide-vue-next'
 import type { Audit } from '../types'
 import { parseThemes } from '../utils'
 

@@ -297,12 +297,12 @@ onUnmounted(() => {
   <div class="w-full h-full flex">
     <!-- Combined Stats Panel -->
     <div
-      class="flex-shrink-0 bg-white border-r border-zinc-200 flex items-center justify-center p-4 gap-6 w-44"
+      class="flex-shrink-0 bg-white border-r border-zinc-200 flex items-center justify-center px-5 py-4 gap-4 w-60"
     >
       <!-- Audits -->
-      <div class="flex flex-col justify-center items-center">
+      <div class="flex-1 min-w-0 flex flex-col justify-center items-center">
         <span
-          class="text-4xl font-black text-brand-orange leading-none mb-1 w-16 text-center"
+          class="text-4xl font-black text-brand-orange leading-none mb-1.5 tabular-nums text-center"
         >
           {{ totalAudits }}
         </span>
@@ -314,19 +314,19 @@ onUnmounted(() => {
       </div>
 
       <!-- Divider -->
-      <div class="h-8 w-0.5 bg-zinc-100 rounded-full"></div>
+      <div class="h-12 w-0.5 flex-shrink-0 bg-zinc-100 rounded-full"></div>
 
       <!-- Cities -->
-      <div class="flex flex-col justify-center items-center">
+      <div class="flex-1 min-w-0 flex flex-col justify-center items-center">
         <span
-          class="text-4xl font-black text-brand-orange leading-none mb-1 w-16 text-center"
+          class="text-4xl font-black text-brand-orange leading-none mb-1.5 tabular-nums text-center"
         >
           {{ totalCities }}
         </span>
         <span
           class="text-xs font-bold text-zinc-500 uppercase tracking-wide text-center leading-tight"
         >
-          Cities & Towns
+          Cities &amp;<br />Towns
         </span>
       </div>
     </div>

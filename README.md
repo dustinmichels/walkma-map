@@ -20,8 +20,44 @@ mise run dev        # Vite only: no function, so the app falls back to stale las
 
 ## Data
 
-A Netlify function fetches live data from the sheet when the page loads. If that fails, the app (map and audit pages) falls back on `app/public/data/last_run.json` and shows when it was last refreshed. Refresh it, and the function's embedded copy, with:
+The Netlify function fetches live audit data from the published Google Sheet. If that fetch fails, it serves its embedded fallback. If the function itself is unreachable, the website loads its own fallback snapshot.
+
+### Refreshing the saved data
+
+From the repository root, run (requires Go):
 
 ```sh
 ./refresh_data.sh
 ```
+
+The refresh maintains two fallback files:
+
+| File                                            | Purpose                                                                       |
+| ----------------------------------------------- | ----------------------------------------------------------------------------- |
+| `app/netlify/functions/gsheet/data/audits.json` | Audit array embedded in the Netlify function at build time.                   |
+| `app/public/data/last_run.json`                 | `{date, data}` snapshot used by the website when the function is unreachable. |
+
+The script:
+
+1. **Downloads and checks the sheet data.** Download errors or zero parsed audits stop the refresh without changing either fallback or the backups.
+2. **Checks for changes.** If the audit data matches the current website snapshot, its timestamp and backups stay untouched. An out-of-sync function fallback is still repaired.
+3. **Prepares changed data.** Writes replacement JSON to temporary files beside their destinations before changing either fallback.
+4. **Backs up the previous snapshot.** If one exists, copies it to `app/netlify/functions/gsheet/data/backups/last_run_<UTC time>.json`.
+5. **Replaces the fallbacks, then prunes backups.** Renames the prepared files into place. Only after both replacements succeed does it delete older backups, keeping the newest 5.
+6. **Prints a staging command.** The shell-quoted `git -C ... add -- ...` command works from any directory and stages both fallbacks plus backup additions and deletions.
+
+### Committing and deploying
+
+Review the refresh output and changed data, then run the printed staging command, commit, push, and deploy as usual. Refreshing alone does not update the deployed fallback files.
+
+Backups are committed to Git. Deleted backups remain available in Git history if they were previously committed; the five-file limit applies to the current backup directory, not repository history.
+
+### Recovery and limits
+
+Each file replacement is atomic, but the two-file update is **not a transaction**. An interruption between replacements can leave the fallbacks out of sync. Rerun the refresh successfully before committing.
+
+To restore a backup, copy its entire contents over `app/public/data/last_run.json` and write its `data` array to `app/netlify/functions/gsheet/data/audits.json`. Commit and deploy both restored files.
+
+An empty result is rejected, but a nonempty result is not proof that every sheet row was parsed correctly. Check the printed audit count and data changes before committing.
+
+See the [function README](app/netlify/functions/gsheet/README.md#refreshing-saved-data) for direct CLI usage and custom output paths.

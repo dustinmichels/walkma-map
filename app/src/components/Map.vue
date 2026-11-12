@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Home, Loader2, Minus, Plus } from 'lucide-vue-next'
+import { Home, Layers, Loader2, Minus, Plus } from 'lucide-vue-next'
 import maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { computed, onMounted, onUnmounted, ref, shallowRef, watch } from 'vue'
@@ -41,6 +41,72 @@ const resetMap = () => {
     bearing: 0,
   })
 }
+
+// Town styling per mode: opaque on plain white, translucent over the basemap
+const townPaint = {
+  off: {
+    noAuditColor: '#cccccc',
+    noAuditOpacity: 0.8,
+    auditedOpacity: 0.8,
+    lineColor: '#ffffff',
+    lineWidth: 1,
+    lineOpacity: 0.5,
+  },
+  on: {
+    noAuditColor: '#a1a1aa',
+    noAuditOpacity: 0.15,
+    auditedOpacity: 0.75,
+    lineColor: '#52525b',
+    lineWidth: 0.5,
+    lineOpacity: 0.35,
+  },
+}
+
+const showBasemap = ref(false)
+let basemapLayerIds: string[] = []
+const noAuditSwatch = computed(() =>
+  showBasemap.value ? 'rgba(161, 161, 170, 0.15)' : townPaint.off.noAuditColor
+)
+
+const applyBasemap = () => {
+  const m = map.value
+  if (!m?.getLayer('towns-fill')) return
+
+  const visibility = showBasemap.value ? 'visible' : 'none'
+  for (const id of basemapLayerIds) {
+    m.setLayoutProperty(id, 'visibility', visibility)
+  }
+
+  const p = showBasemap.value ? townPaint.on : townPaint.off
+  const hasAudits = ['>', ['feature-state', 'auditCount'], 0]
+  m.setPaintProperty('towns-fill', 'fill-color', [
+    'case',
+    hasAudits,
+    [
+      'interpolate',
+      ['linear'],
+      ['feature-state', 'auditCount'],
+      1,
+      '#ff9800', // Orange for 1
+      5,
+      '#e65100', // Darker Orange for 5+
+      10,
+      '#b71c1c', // Deep red/orange for many
+    ],
+    p.noAuditColor,
+  ])
+  m.setPaintProperty('towns-fill', 'fill-opacity', [
+    'case',
+    hasAudits,
+    p.auditedOpacity,
+    p.noAuditOpacity,
+  ])
+  m.setPaintProperty('towns-line', 'line-color', p.lineColor)
+  m.setPaintProperty('towns-line', 'line-width', p.lineWidth)
+  m.setPaintProperty('towns-line', 'line-opacity', p.lineOpacity)
+}
+
+watch(showBasemap, applyBasemap)
 
 const updateMapData = (audits: Audits | null) => {
   if (!map.value || !audits) {
@@ -163,19 +229,8 @@ onMounted(async () => {
 
   map.value = new maplibregl.Map({
     container: mapContainer.value,
-    style: {
-      version: 8,
-      sources: {},
-      layers: [
-        {
-          id: 'background',
-          type: 'background',
-          paint: {
-            'background-color': '#ffffff',
-          },
-        },
-      ],
-    },
+    // Free, keyless vector basemap (OpenMapTiles schema); hidden unless toggled on
+    style: 'https://tiles.openfreemap.org/styles/positron',
     center: [initialState.lng, initialState.lat],
     zoom: initialState.zoom,
     minZoom: 7,
@@ -192,49 +247,39 @@ onMounted(async () => {
     console.log('Map loaded')
     if (!map.value || !townsData) return
 
+    // Everything in the loaded style belongs to the basemap; capture before adding ours
+    basemapLayerIds = map.value.getStyle().layers.map((l) => l.id)
+
+    // Plain white backdrop shown when the basemap is hidden
+    map.value.addLayer(
+      {
+        id: 'blank-background',
+        type: 'background',
+        paint: { 'background-color': '#ffffff' },
+      },
+      basemapLayerIds[0]
+    )
+
     map.value.addSource('towns', {
       type: 'geojson',
       data: townsData as any,
-      // promoteId: 'TOWN_ID', // Removing promoteId, we manually set id on features
     })
 
-    // Fill Layer
-    map.value.addLayer({
-      id: 'towns-fill',
-      type: 'fill',
-      source: 'towns',
-      paint: {
-        'fill-color': [
-          'case',
-          ['>', ['feature-state', 'auditCount'], 0],
-          [
-            'interpolate',
-            ['linear'],
-            ['feature-state', 'auditCount'],
-            1,
-            '#ff9800', // Orange for 1
-            5,
-            '#e65100', // Darker Orange for 5+
-            10,
-            '#b71c1c', // Deep red/orange for many
-          ],
-          '#cccccc', // Grey for no audits
-        ],
-        'fill-opacity': 0.8,
-      },
-    })
+    // Insert town layers beneath the basemap's labels so place names stay readable
+    const firstLabelLayer = map.value
+      .getStyle()
+      .layers.find((l) => l.type === 'symbol')?.id
 
-    // Standard Border Layer
-    map.value.addLayer({
-      id: 'towns-line',
-      type: 'line',
-      source: 'towns',
-      paint: {
-        'line-color': '#fff',
-        'line-width': 1,
-        'line-opacity': 0.5,
-      },
-    })
+    // Paint for both town layers is set by applyBasemap()
+    map.value.addLayer(
+      { id: 'towns-fill', type: 'fill', source: 'towns' },
+      firstLabelLayer
+    )
+    map.value.addLayer(
+      { id: 'towns-line', type: 'line', source: 'towns' },
+      firstLabelLayer
+    )
+    applyBasemap()
 
     // Selected Town Highlight Layer - Fill
     map.value.addLayer({
@@ -353,7 +398,7 @@ onUnmounted(() => {
         <div class="flex items-center gap-2">
           <span
             class="w-5 h-5 rounded border border-zinc-200"
-            style="background: #cccccc"
+            :style="{ background: noAuditSwatch }"
           ></span>
           <span class="text-xs text-zinc-600 font-medium">0</span>
         </div>
@@ -382,31 +427,48 @@ onUnmounted(() => {
     </div>
 
     <!-- Custom Map Controls -->
-    <div
-      class="absolute top-5 right-5 z-10 flex flex-col bg-white rounded-lg shadow-lg overflow-hidden border border-zinc-200"
-    >
-      <button
-        class="flex items-center justify-center w-9 h-9 bg-white border-0 cursor-pointer text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-black active:bg-zinc-200"
-        @click="zoomIn"
-        title="Zoom In"
+    <div class="absolute top-5 right-5 z-10 flex flex-col gap-3">
+      <div
+        class="flex flex-col bg-white rounded-lg shadow-lg overflow-hidden border border-zinc-200"
       >
-        <Plus class="w-5 h-5" />
-      </button>
-      <div class="h-px bg-zinc-100 w-full"></div>
+        <button
+          class="flex items-center justify-center w-9 h-9 bg-white border-0 cursor-pointer text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-black active:bg-zinc-200"
+          @click="zoomIn"
+          title="Zoom In"
+        >
+          <Plus class="w-5 h-5" />
+        </button>
+        <div class="h-px bg-zinc-100 w-full"></div>
+        <button
+          class="flex items-center justify-center w-9 h-9 bg-white border-0 cursor-pointer text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-black active:bg-zinc-200"
+          @click="zoomOut"
+          title="Zoom Out"
+        >
+          <Minus class="w-5 h-5" />
+        </button>
+        <div class="h-px bg-zinc-100 w-full"></div>
+        <button
+          class="flex items-center justify-center w-9 h-9 bg-white border-0 cursor-pointer text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-black active:bg-zinc-200"
+          @click="resetMap"
+          title="Reset View"
+        >
+          <Home class="w-5 h-5" />
+        </button>
+      </div>
+
+      <!-- Basemap Toggle -->
       <button
-        class="flex items-center justify-center w-9 h-9 bg-white border-0 cursor-pointer text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-black active:bg-zinc-200"
-        @click="zoomOut"
-        title="Zoom Out"
+        class="flex items-center justify-center w-9 h-9 rounded-lg shadow-lg border cursor-pointer transition-colors"
+        :class="
+          showBasemap
+            ? 'bg-orange-50 border-orange-200 text-brand-orange hover:bg-orange-100'
+            : 'bg-white border-zinc-200 text-zinc-600 hover:bg-zinc-100 hover:text-black'
+        "
+        @click="showBasemap = !showBasemap"
+        :title="showBasemap ? 'Hide Basemap' : 'Show Basemap'"
+        :aria-pressed="showBasemap"
       >
-        <Minus class="w-5 h-5" />
-      </button>
-      <div class="h-px bg-zinc-100 w-full"></div>
-      <button
-        class="flex items-center justify-center w-9 h-9 bg-white border-0 cursor-pointer text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-black active:bg-zinc-200"
-        @click="resetMap"
-        title="Reset View"
-      >
-        <Home class="w-5 h-5" />
+        <Layers class="w-5 h-5" />
       </button>
     </div>
   </div>
