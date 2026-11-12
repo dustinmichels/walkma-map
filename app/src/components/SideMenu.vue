@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { isMenuOpen } from '../state'
 import { Home, ExternalLink, Info, X } from 'lucide-vue-next'
+import { isMenuOpen } from '../state'
 </script>
 
 <template>
@@ -17,7 +17,9 @@ import { Home, ExternalLink, Info, X } from 'lucide-vue-next'
       class="absolute top-0 right-0 h-full w-64 bg-white shadow-2xl transform transition-transform duration-300 ease-in-out flex flex-col pointer-events-auto"
       :class="isMenuOpen ? 'translate-x-0' : 'translate-x-full'"
     >
-      <div class="p-4 border-b flex justify-between items-center bg-brand-orange text-white">
+      <div
+        class="p-4 border-b flex justify-between items-center bg-brand-orange text-white"
+      >
         <h2 class="text-lg font-bold tracking-tight">Menu</h2>
         <button
           @click="isMenuOpen = false"
@@ -62,7 +64,7 @@ import { Home, ExternalLink, Info, X } from 'lucide-vue-next'
           </li>
         </ul>
       </nav>
-      
+
       <div class="p-4 border-t text-sm text-zinc-500 text-center">
         Walk MA Audit Dashboard
       </div>

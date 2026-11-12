@@ -183,11 +183,15 @@ const filteredCities = computed(() =>
 )
 
 const filteredCitiesWithAudits = computed(() =>
-  filteredCities.value.filter((c) => c.count > 0).sort((a, b) => a.name.localeCompare(b.name))
+  filteredCities.value
+    .filter((c) => c.count > 0)
+    .sort((a, b) => a.name.localeCompare(b.name))
 )
 
 const filteredCitiesWithoutAudits = computed(() =>
-  filteredCities.value.filter((c) => c.count === 0).sort((a, b) => a.name.localeCompare(b.name))
+  filteredCities.value
+    .filter((c) => c.count === 0)
+    .sort((a, b) => a.name.localeCompare(b.name))
 )
 
 const selectedCityProxy = computed({
@@ -232,11 +236,15 @@ watch(selectedTags, (tags) => {
 </script>
 
 <template>
-  <div class="bg-zinc-50 p-3 flex flex-col gap-3 w-full border-b border-zinc-200">
+  <div
+    class="bg-zinc-50 p-3 flex flex-col gap-3 w-full border-b border-zinc-200"
+  >
     <!-- Header / City Search Bar Header -->
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <label class="text-[11px] font-bold text-zinc-500 uppercase tracking-wider">
+        <label
+          class="text-[11px] font-bold text-zinc-500 uppercase tracking-wider"
+        >
           Search City
         </label>
         <button
@@ -318,7 +326,10 @@ watch(selectedTags, (tags) => {
 
                 <!-- Separator -->
                 <li
-                  v-if="filteredCitiesWithAudits.length > 0 && filteredCitiesWithoutAudits.length > 0"
+                  v-if="
+                    filteredCitiesWithAudits.length > 0 &&
+                    filteredCitiesWithoutAudits.length > 0
+                  "
                   class="border-t border-zinc-200 my-1"
                   role="separator"
                 />
@@ -380,7 +391,10 @@ watch(selectedTags, (tags) => {
     </div>
 
     <!-- Filter Controls -->
-    <div v-show="showMoreFilters" class="space-y-3 pt-2 border-t border-zinc-200/60 mt-1">
+    <div
+      v-show="showMoreFilters"
+      class="space-y-3 pt-2 border-t border-zinc-200/60 mt-1"
+    >
       <div class="flex flex-col gap-3">
         <!-- Tags Filter -->
         <Listbox v-model="proxySelectedTags" multiple>

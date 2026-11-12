@@ -332,9 +332,7 @@ onUnmounted(() => {
     </div>
 
     <!-- Chart Panel -->
-    <div
-      class="flex-grow min-w-0 bg-white flex flex-col overflow-hidden"
-    >
+    <div class="flex-grow min-w-0 bg-white flex flex-col overflow-hidden">
       <!-- Scrollable Vertical Container -->
       <div
         class="flex-grow overflow-y-auto custom-scrollbar-subtle relative p-2"

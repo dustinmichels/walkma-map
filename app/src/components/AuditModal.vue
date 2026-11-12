@@ -115,10 +115,7 @@
                   </div>
 
                   <!-- Streets / Area -->
-                  <div
-                    v-if="audit.streets_intersections"
-                    class="mb-6"
-                  >
+                  <div v-if="audit.streets_intersections" class="mb-6">
                     <h3
                       class="text-sm font-bold uppercase text-zinc-500 mb-2 tracking-wide"
                     >
@@ -253,11 +250,23 @@ import {
   TransitionChild,
   TransitionRoot,
 } from '@headlessui/vue'
-import { ChevronLeft, ChevronRight, Expand, FileText, SquareArrowOutUpRight, X } from 'lucide-vue-next'
+import {
+  ChevronLeft,
+  ChevronRight,
+  Expand,
+  FileText,
+  SquareArrowOutUpRight,
+  X,
+} from 'lucide-vue-next'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import type { Audit } from '../types'
-import { generateAuditSlug, parseThemes } from '../utils'
+import {
+  generateAuditSlug,
+  loadAuditImage,
+  parseList,
+  parseThemes,
+} from '../utils'
 
 const props = defineProps<{
   audit: Audit | null
@@ -290,79 +299,22 @@ onUnmounted(() => {
   window.removeEventListener('keydown', handleKeydown)
 })
 
-// Mirrors Python's _slug(): lowercase, non-alphanumeric runs → hyphens, trim hyphens
-const slug = (text: string): string =>
-  text.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
-
-// Mirrors Python's get_audit_identifier():
-//   - structural parts separated by underscores
-//   - within-part words separated by hyphens
-//   - neighborhood extracted from parentheses in city name (e.g. "Boston (East)")
-//   - only first 4 words of street used
-const getAuditIdentifier = (cityRaw: string, yearRaw: string | number, streetRaw: string): string | null => {
-  const raw = String(cityRaw ?? '').trim()
-  const match = raw.match(/^(.*?)\s*\(([^)]+)\)\s*$/)
-
-  let city: string
-  let neighborhood: string | null
-
-  if (match) {
-    city = slug(match[1]!)
-    neighborhood = slug(match[2]!)
-  } else {
-    city = slug(raw)
-    neighborhood = null
-  }
-
-  if (!city) return null
-
-  const year = yearRaw != null ? String(parseInt(String(yearRaw))) : 'unknown'
-  const street = slug(streetRaw).split('-').slice(0, 4).join('-')
-
-  const parts = [city, year]
-  if (neighborhood) parts.push(neighborhood)
-  if (street) parts.push(street)
-  return parts.join('_')
-}
-
 const imageSrc = ref<string | null>(null)
 
-watch(() => props.audit, (audit) => {
-  imageSrc.value = null
-  if (!audit) return
-
-  const identifier = getAuditIdentifier(
-    audit.city_town || audit.city,
-    audit.year,
-    audit.streets_intersections ?? '',
-  )
-  if (!identifier) return
-
-  const src = `/data/images/${identifier}.jpeg`
-  const img = new Image()
-  img.onload = () => { imageSrc.value = src }
-  img.onerror = () => { imageSrc.value = null }
-  img.src = src
-}, { immediate: true })
+watch(
+  () => props.audit,
+  async (audit) => {
+    imageSrc.value = null
+    if (!audit) return
+    const src = await loadAuditImage(audit)
+    if (props.audit === audit) imageSrc.value = src
+  },
+  { immediate: true }
+)
 
 const hasPdf = computed(() => {
   return !!props.audit?.view
 })
-
-const parseList = (text: string | undefined): string[] => {
-  if (!text) return []
-  // Strip zero-width spaces, then normalize inline list separators like "sentence.- Next"
-  const normalized = text
-    .replace(/[\u200b\u200c\u200d\ufeff]/g, '')
-    .replace(/\.\s*-\s+/g, '.\n- ')
-    .replace(/([^\s\n])-\s+([A-Z])/g, '$1\n$2')
-  return normalized
-    .split('\n')
-    .map((line) => line.trim())
-    // Remove leading dashes, asterisks, or numbers followed by dot/paren
-    .map((line) => line.replace(/^[-*•]\s*|^(\d+)[\.)]\s*/, ''))
-    .filter((line) => line.length > 0)
-}
 
 const openReport = () => {
   if (props.audit?.view) {

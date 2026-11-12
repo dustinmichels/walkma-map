@@ -21,8 +21,8 @@ GET /.netlify/functions/gsheet
 
 ## Environment Variables
 
-| Variable              | Description                                                                                                                                                           |
-| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Variable              | Description                                                                                                                                                                                                                                                                     |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `DISABLE_LIVE_UPDATE` | Set to `true` or `1` to skip the live Google Sheet fetch entirely and always serve the embedded saved data. Useful when the sheet is unavailable or has changed unexpectedly. The function also falls back to saved data automatically on fetch errors, even without this flag. |
 
 ## Caching
@@ -48,12 +48,17 @@ cd netlify/functions/gsheet
 go run ./cmd/refresh
 ```
 
-This writes the latest data to `data/audits.json`, which is the file embedded into the Lambda binary at build time. Commit it after running to keep the fallback current.
+This writes:
 
-The output path can be overridden with a flag:
+- `data/audits.json`: embedded into the Lambda binary at build time; served when the live fetch fails.
+- `../../../public/data/last_run.json` (`app/public/data/last_run.json`): `{date, data}` snapshot the frontend loads when the function itself is unreachable.
+
+Commit both after running to keep the fallbacks current. `./refresh_data.sh` at the repo root runs the same command.
+
+The output paths can be overridden with flags (`--snapshot ""` skips the snapshot):
 
 ```bash
-go run ./cmd/refresh --out path/to/audits.json
+go run ./cmd/refresh --out path/to/audits.json --snapshot path/to/last_run.json
 ```
 
 ## Response Fields

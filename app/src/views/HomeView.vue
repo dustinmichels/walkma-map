@@ -1,13 +1,14 @@
 <script setup lang="ts">
+import { Menu } from 'lucide-vue-next'
 import { Pane, Splitpanes } from 'splitpanes'
 import { computed, onMounted, ref } from 'vue'
-import { Menu } from 'lucide-vue-next'
-import { isMenuOpen } from '../state'
 import AuditFilters from '../components/AuditFilters.vue'
 import DataPanel from '../components/DataPanel.vue'
 import Map from '../components/Map.vue'
 import ThemeChart from '../components/ThemeChart.vue'
-import type { Audits, Towns } from '../types'
+import { loadAudits, loadTowns } from '../data'
+import { isMenuOpen } from '../state'
+import type { Audits } from '../types'
 
 const selectedCity = ref('')
 const audits = ref<Audits | null>(null)
@@ -37,33 +38,18 @@ const relevantAudits = computed(() => {
   return base
 })
 
-async function loadAudits() {
-  try {
-    const res = await fetch('/.netlify/functions/gsheet')
-    if (!res.ok) throw new Error(`gsheet returned ${res.status}`)
-    audits.value = await res.json()
-  } catch (err) {
-    console.warn('Live fetch failed, falling back to last_run.json:', err)
-    try {
-      const fallbackRes = await fetch('/data/last_run.json')
-      if (!fallbackRes.ok) throw new Error(`last_run.json returned ${fallbackRes.status}`)
-      const fallback = await fallbackRes.json()
-      audits.value = fallback.data
-      fallbackDate.value = fallback.date
-    } catch (fallbackErr) {
-      console.error('Fallback also failed:', fallbackErr)
-    }
-  }
-}
-
 onMounted(async () => {
   await Promise.all([
-    loadAudits(),
-    fetch('/data/towns.geojson')
-      .then((res) => (res.ok ? res.json() : Promise.reject(res.status)))
-      .then((townsData: Towns) => {
+    loadAudits()
+      .then((result) => {
+        audits.value = result.audits
+        fallbackDate.value = result.fallbackDate
+      })
+      .catch((err) => console.error('Failed to load audits:', err)),
+    loadTowns()
+      .then((townsData) => {
         allTownNames.value = (townsData.features ?? [])
-          .map((f) => f.properties.CITY || (f.properties as any).TOWN)
+          .map((f) => f.properties.CITY)
           .filter(Boolean)
           .sort()
       })
@@ -111,7 +97,10 @@ onMounted(async () => {
               />
             </div>
             <div class="flex-grow flex flex-col min-h-0 relative z-0">
-              <DataPanel :audits="relevantAudits" :selected-tags="selectedTags" />
+              <DataPanel
+                :audits="relevantAudits"
+                :selected-tags="selectedTags"
+              />
             </div>
           </div>
         </Pane>

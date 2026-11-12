@@ -1,4 +1,17 @@
 [tools]
 bun = "latest"
-python = "latest"
-uv = "latest"
+go = "latest"
+"npm:netlify-cli" = "latest"
+
+# Plain Vite has no Netlify Functions runtime, so /.netlify/functions/gsheet
+# fails and the app falls back to the stale app/public/data/last_run.json
+# snapshot. Use `dev:live` to see current Google Sheet data.
+[tasks.dev]
+description = "Run the Vite dev server (snapshot data from last_run.json only)"
+dir = "app"
+run = "bun run dev"
+
+[tasks."dev:live"]
+description = "Run netlify dev: Vite + the gsheet function, serving live Google Sheet data"
+dir = "app"
+run = "netlify dev"

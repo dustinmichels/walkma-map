@@ -3,6 +3,7 @@ import { Home, Loader2, Minus, Plus } from 'lucide-vue-next'
 import maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { computed, onMounted, onUnmounted, ref, shallowRef, watch } from 'vue'
+import { loadTowns } from '../data'
 import type { Audits, Towns } from '../types'
 
 const props = defineProps<{
@@ -133,17 +134,16 @@ onMounted(async () => {
   // Fetch Towns Data first to build lookup map & ensure source data is available
   let townsData: Towns | null = null
   try {
-    const res = await fetch('/data/towns.geojson')
-    townsData = await res.json()
+    townsData = await loadTowns()
 
     if (townsData && townsData.features) {
-      townsData.features.forEach((f: any) => {
+      townsData.features.forEach((f) => {
         const p = f.properties
         if (p.TOWN_ID) {
           // Manually assign ID for setFeatureState to work reliably
           f.id = p.TOWN_ID
 
-          const name = p.CITY || p.TOWN
+          const name = p.CITY
           if (name) {
             const standardName = name.toUpperCase().trim()
             townIdMap.value[standardName] = p.TOWN_ID

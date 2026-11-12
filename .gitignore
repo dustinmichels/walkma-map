@@ -20,3 +20,6 @@ wheels/
 
 # Local Netlify folder
 .netlify
+
+# Locally built Go function binaries
+app/netlify/functions/gsheet/hello

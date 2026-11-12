@@ -17,6 +17,7 @@ Images are selected using a three-tier priority system powered by YOLOv8 object 
 
 import os
 import shutil
+from pathlib import Path
 
 from PIL import Image
 from rich.console import Console
@@ -28,7 +29,7 @@ from ultralytics import YOLO
 console = Console()
 
 # Load YOLOv8 nano model once at module level (downloads on first run)
-_model = YOLO("yolov8n.pt")
+_model = YOLO(Path(__file__).with_name("yolov8n.pt"))
 
 # COCO class IDs
 COCO_PERSON = 0

@@ -2,24 +2,26 @@
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/38ed888f-9b23-4999-aa12-499c030a43e2/deploy-status)](https://app.netlify.com/projects/walkma/deploys)
 
-Interactive data visualization of the WalkMA Walk Audit Database.
+Interactive dashboard for the [WalkMA Walk Audit Database](https://docs.google.com/spreadsheets/d/1-Vxf7AlXk_WJwwYSVy7F28qjxVXQOAmQ-NN0JImx95Y/edit?gid=379989993#gid=379989993).
 
-## Links
+## Layout
 
-[Walk Audit Database](https://docs.google.com/spreadsheets/d/1-Vxf7AlXk_WJwwYSVy7F28qjxVXQOAmQ-NN0JImx95Y/edit?gid=379989993#gid=379989993)
+- `app/`: The dashboard (Vue + Vite + MapLibre) and its Netlify function. See `app/README.md`.
+- `netlify.toml`: Build, functions, and redirect config (builds from `app/`).
+- `refresh_data.sh`: Refreshes the fallback data files (requires Go).
+- `archive/`: Not deployed: notebooks, unused DB pipeline, and the image-ingestion experiment (PDF scrape + YOLO) that produced the existing photos in `app/public/data/images/`. See `archive/README.md`.
 
-## Overview
+## Development
 
-### App
+```sh
+mise run dev:live   # netlify dev: Vite + gsheet function, live sheet data (http://localhost:8888)
+mise run dev        # Vite only: no function, so the app falls back to stale last_run.json
+```
 
-The front-end dashboard lives in `app`.
+## Data
 
-A Netlify function is used to refresh data when the page loads. If this fails, it will fallback on `app/netlify/functions/gsheet/data/last_run.json`. This data can be refreshed by running:
+A Netlify function fetches live data from the sheet when the page loads. If that fails, the app (map and audit pages) falls back on `app/public/data/last_run.json` and shows when it was last refreshed. Refresh it, and the function's embedded copy, with:
 
 ```sh
 ./refresh_data.sh
 ```
-
-### Python Code
-
-The `extract/` directory contains a data pipeline. This was for migrating to more robust relational database system and it is currently not in use.
