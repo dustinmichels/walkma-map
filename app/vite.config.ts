@@ -6,6 +6,8 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
 export default defineConfig({
+  // GitHub Pages serves from /<repo>/; Netlify and dev use /.
+  base: process.env.BASE_PATH ?? '/',
   plugins: [vue(), vueDevTools(), tailwindcss()],
   resolve: {
     alias: {

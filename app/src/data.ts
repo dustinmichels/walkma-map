@@ -21,7 +21,7 @@ async function fetchAudits(): Promise<AuditData> {
   } catch (err) {
     console.warn('Live fetch failed, falling back to last_run.json:', err)
     const snapshot = await fetchJSON<{ date: string; data: Audits }>(
-      '/data/last_run.json'
+      `${import.meta.env.BASE_URL}data/last_run.json`
     )
     return { audits: snapshot.data, fallbackDate: snapshot.date }
   }
@@ -39,7 +39,9 @@ export function loadAudits(): Promise<AuditData> {
 
 let townsPromise: Promise<Towns> | null = null
 export function loadTowns(): Promise<Towns> {
-  townsPromise ??= fetchJSON<Towns>('/data/towns.geojson').catch((err) => {
+  townsPromise ??= fetchJSON<Towns>(
+    `${import.meta.env.BASE_URL}data/towns.geojson`
+  ).catch((err) => {
     townsPromise = null
     throw err
   })

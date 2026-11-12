@@ -4,10 +4,13 @@
 
 Interactive dashboard for the [WalkMA Walk Audit Database](https://docs.google.com/spreadsheets/d/1-Vxf7AlXk_WJwwYSVy7F28qjxVXQOAmQ-NN0JImx95Y/edit?gid=379989993#gid=379989993).
 
+Live site: <https://audits.walkmass.org/> (Netlify), deployed from the [WalkMassachusetts/audit-map](https://github.com/WalkMassachusetts/audit-map) fork, which is kept in sync with this repo.
+
 ## Layout
 
 - `app/`: The dashboard (Vue + Vite + MapLibre) and its Netlify function. See `app/README.md`.
 - `netlify.toml`: Build, functions, and redirect config (builds from `app/`).
+- `.github/workflows/deploy-pages.yml`: Publishes a mirror to GitHub Pages on push to `main`. It has no Netlify function, so it always shows the `last_run.json` snapshot.
 - `refresh_data.sh`: Refreshes the fallback data files (requires Go).
 - `apps-script/`: Google Apps Script that keeps the sheet's SLUG column (permanent audit page URLs) filled. See `apps-script/README.md`.
 - `archive/`: Not deployed: notebooks, unused DB pipeline, and the image-ingestion experiment (PDF scrape + YOLO) that produced the existing photos in `app/public/data/images/`. See `archive/README.md`.

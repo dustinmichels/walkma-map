@@ -79,7 +79,7 @@ function auditImageId(audit: Audit): string | null {
 export function loadAuditImage(audit: Audit): Promise<string | null> {
   const id = auditImageId(audit)
   if (!id) return Promise.resolve(null)
-  const src = `/data/images/${id}.jpeg`
+  const src = `${import.meta.env.BASE_URL}data/images/${id}.jpeg`
   return new Promise((resolve) => {
     const img = new Image()
     img.onload = () => resolve(src)

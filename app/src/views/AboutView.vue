@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import { isMenuOpen } from '../state'
 
 const router = useRouter()
+const baseUrl = import.meta.env.BASE_URL
 </script>
 
 <template>
@@ -86,7 +87,7 @@ const router = useRouter()
 
         <!-- Team Photo -->
         <img
-          src="/data/images/group/team.jpg"
+          :src="`${baseUrl}data/images/group/team.jpg`"
           alt="Walk MA team"
           class="w-full object-cover"
         />

@@ -2,6 +2,7 @@
 
 ## 2026-11-12
 
+- Add GitHub Actions workflow to deploy the app to GitHub Pages; app now respects Vite `base` (`BASE_PATH`)
 - Add a SLUG column (L) to the sheet, filled once per row by `apps-script/Slugs.gs`, so editing audit details no longer breaks shared `/audit/` links
 
 ## 2026-02-09
