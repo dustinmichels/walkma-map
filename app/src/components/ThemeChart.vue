@@ -8,6 +8,7 @@ import {
   LinearScale,
   Title,
   Tooltip,
+  type ActiveElement,
 } from 'chart.js'
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import type { Audits } from '../types'
@@ -130,6 +131,19 @@ const updateChart = async () => {
   }
 }
 
+// Label of the hovered/clicked bar, or null when clicking it would do nothing
+// useful: a 0-count bar would empty the list, unless it is selected (then a
+// click unticks it).
+const clickableLabel = (chart: Chart, elements: ActiveElement[]) => {
+  const element = elements[0]
+  if (!element) return null
+  const label = chart.data.labels?.[element.index]
+  if (typeof label !== 'string') return null
+  const count = chart.data.datasets[0]?.data[element.index]
+  if (count === 0 && !props.selectedTags?.includes(label)) return null
+  return label
+}
+
 onMounted(() => {
   if (chartCanvas.value) {
     const ctx = chartCanvas.value.getContext('2d')
@@ -165,21 +179,14 @@ onMounted(() => {
         },
         options: {
           onClick: (evt, elements, chart) => {
-            if (elements.length > 0 && chart.data.labels) {
-              const element = elements[0]
-              if (element) {
-                const i = element.index
-                const label = chart.data.labels[i]
-                if (typeof label === 'string') {
-                  emit('select', label)
-                }
-              }
-            }
+            const label = clickableLabel(chart, elements)
+            if (label) emit('select', label)
           },
-          onHover: (evt, elements) => {
+          onHover: (evt, elements, chart) => {
             if (chartCanvas.value) {
-              chartCanvas.value.style.cursor =
-                elements.length > 0 ? 'pointer' : 'default'
+              chartCanvas.value.style.cursor = clickableLabel(chart, elements)
+                ? 'pointer'
+                : 'default'
             }
           },
           indexAxis: 'y', // Horizontal bars

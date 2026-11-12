@@ -35,10 +35,8 @@ From the repository root, run (requires Go):
 
 The refresh maintains two fallback files:
 
-| File                                            | Purpose                                                                       |
-| ----------------------------------------------- | ----------------------------------------------------------------------------- |
-| `app/netlify/functions/gsheet/data/audits.json` | Audit array embedded in the Netlify function at build time.                   |
-| `app/public/data/last_run.json`                 | `{date, data}` snapshot used by the website when the function is unreachable. |
+- `app/netlify/functions/gsheet/data/audits.json`: Audit array embedded in the Netlify function at build time.
+- `app/public/data/last_run.json`: `{date, data}` snapshot used by the website when the function is unreachable.
 
 The script:
 

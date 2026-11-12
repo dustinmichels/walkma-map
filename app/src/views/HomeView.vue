@@ -3,6 +3,7 @@ import { Menu } from 'lucide-vue-next'
 import { Pane, Splitpanes } from 'splitpanes'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import AuditFilters from '../components/AuditFilters.vue'
+import AuditSearch from '../components/AuditSearch.vue'
 import DataPanel from '../components/DataPanel.vue'
 import Map from '../components/Map.vue'
 import ThemeChart from '../components/ThemeChart.vue'
@@ -82,9 +83,12 @@ onMounted(async () => {
           Walk MA - Walk Audit Dashboard
         </h1>
       </div>
+      <div class="flex-1 max-w-md ml-4">
+        <AuditSearch :audits="audits" />
+      </div>
       <button
         @click="isMenuOpen = true"
-        class="text-white hover:bg-black/20 p-2 rounded-lg transition-colors ml-4"
+        class="text-white hover:bg-black/20 p-2 rounded-lg transition-colors ml-4 flex-shrink-0"
         aria-label="Open menu"
       >
         <Menu :size="24" />

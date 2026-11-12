@@ -111,7 +111,8 @@ export const parseThemes = (themesStr: string | undefined): string[] => {
   const results: string[] = []
   let current = ''
   let inQuotes = false
-  for (const char of themesStr) {
+  // Drop zero-width space / BOM so an "empty" cell doesn't become a blank tag
+  for (const char of themesStr.replace(/[\u200B\uFEFF]/g, '')) {
     if (char === '"') {
       inQuotes = !inQuotes
     } else if (char === ',' && !inQuotes) {
@@ -133,4 +134,53 @@ export const parseOrgs = (orgsStr: string | undefined): string[] => {
     .split(',')
     .map((s) => s.trim())
     .filter(Boolean)
+}
+
+// Lowercase, strip accents, collapse non-alphanumeric runs to single spaces.
+export const normalizeSearchText = (s: string): string =>
+  s
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim()
+
+// Scores one query token against normalized text; null if it doesn't match.
+// Substrings beat scattered (subsequence) matches; matches at a word start score higher.
+function fuzzyTokenScore(token: string, text: string): number | null {
+  const idx = text.indexOf(token)
+  if (idx >= 0) {
+    const wordStart = idx === 0 || text[idx - 1] === ' '
+    return (wordStart ? 3 : 2) - idx / 1000
+  }
+  // Tightest window containing the token's characters in order
+  let best = Infinity
+  for (
+    let start = text.indexOf(token[0]!);
+    start >= 0;
+    start = text.indexOf(token[0]!, start + 1)
+  ) {
+    let pos = start
+    for (let i = 1; i < token.length && pos >= 0; i++)
+      pos = text.indexOf(token[i]!, pos + 1)
+    if (pos < 0) break
+    best = Math.min(best, pos - start + 1)
+  }
+  // Reject matches spread too thin to be meaningful ("ma" hitting "m...a" across words)
+  if (best > token.length * 2) return null
+  return token.length / best
+}
+
+// Every whitespace-separated query token must match `text` (already normalized);
+// returns the summed score, or null if any token misses.
+export function fuzzyScore(query: string, text: string): number | null {
+  const tokens = normalizeSearchText(query).split(' ').filter(Boolean)
+  if (tokens.length === 0) return null
+  let total = 0
+  for (const token of tokens) {
+    const score = fuzzyTokenScore(token, text)
+    if (score === null) return null
+    total += score
+  }
+  return total
 }

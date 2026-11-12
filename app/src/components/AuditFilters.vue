@@ -81,9 +81,12 @@ const filterByYear = (
   mode: 'through' | 'in'
 ) => {
   if (maxYear === null || yearRange.value.max === 0) return audits
+  // The default "Through {latest year}" state is no filter at all, so it keeps
+  // audits without a year; any narrower year selection drops them.
+  const unfiltered = mode === 'through' && maxYear >= yearRange.value.max
   return audits.filter((a) => {
     const y = parseInt(a.year)
-    if (isNaN(y)) return false
+    if (isNaN(y)) return unfiltered
     if (mode === 'in') return y === maxYear
     return y <= maxYear
   })
@@ -98,11 +101,14 @@ const filterByTags = (audits: Audits, tags: string[]) => {
   })
 }
 
-// Helper to filter by Organizer
+// Helper to filter by Organizer (case-insensitive)
 const filterByOrganizer = (audits: Audits, org: string) => {
   if (!org) return audits
+  const key = org.toLowerCase()
   return audits.filter((a) =>
-    parseOrgs(a.organizer_lead_organization).includes(org)
+    parseOrgs(a.organizer_lead_organization).some(
+      (o) => o.toLowerCase() === key
+    )
   )
 }
 
@@ -113,8 +119,12 @@ const availableTags = computed(() => {
   audits = filterByYear(audits, selectedMaxYear.value, yearFilterMode.value)
   // Filter by Organizer (so tags are relevant to selected org)
   audits = filterByOrganizer(audits, selectedOrganizer.value)
+  // Filter by selected Tags: matching requires every selected tag, so only
+  // tags that co-occur with all of them can narrow the list further
+  audits = filterByTags(audits, selectedTags.value)
 
-  const tags = new Set<string>()
+  // Keep selected tags listed so they can be unticked even when nothing matches
+  const tags = new Set<string>(selectedTags.value)
   audits.forEach((audit) => {
     parseThemes(audit.themes).forEach((tag) => tags.add(tag))
   })
@@ -129,11 +139,20 @@ const availableOrganizers = computed(() => {
   // Filter by Tags (so orgs are relevant to selected tags)
   audits = filterByTags(audits, selectedTags.value)
 
-  const orgs = new Set<string>()
+  const names: string[] = []
   audits.forEach((audit) => {
-    parseOrgs(audit.organizer_lead_organization).forEach((org) => orgs.add(org))
+    names.push(...parseOrgs(audit.organizer_lead_organization))
   })
-  return Array.from(orgs).sort()
+  // Keep the selected organizer listed so it can be unticked even when nothing matches
+  if (selectedOrganizer.value) names.push(selectedOrganizer.value)
+
+  // One entry per case-insensitive name; the first spelling in sort order wins
+  const byKey = new Map<string, string>()
+  names.sort().forEach((name) => {
+    const key = name.toLowerCase()
+    if (!byKey.has(key)) byKey.set(key, name)
+  })
+  return Array.from(byKey.values())
 })
 
 const contentFilteredAudits = computed(() => {
@@ -196,7 +215,8 @@ const filteredCitiesWithoutAudits = computed(() =>
 
 const selectedCityProxy = computed({
   get: () => props.selectedCity,
-  set: (val) => emit('update:selectedCity', val),
+  // The combobox is nullable: clearing it yields null
+  set: (val: string | null) => emit('update:selectedCity', val ?? ''),
 })
 
 const clearFilters = () => {
