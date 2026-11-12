@@ -1,10 +1,26 @@
 # WalkMA Map
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/38ed888f-9b23-4999-aa12-499c030a43e2/deploy-status)](https://app.netlify.com/projects/walkma/deploys)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/055358c1-88cb-4354-8339-b2e4f4b2d023/deploy-status)](https://app.netlify.com/projects/walk-audits/deploys)
 
-Interactive dashboard for the [WalkMA Walk Audit Database](https://docs.google.com/spreadsheets/d/1-Vxf7AlXk_WJwwYSVy7F28qjxVXQOAmQ-NN0JImx95Y/edit?gid=379989993#gid=379989993).
+Interactive dashboard for the WalkMA Walk Audit Database.
 
-Live site: <https://audits.walkmass.org/> (Netlify), deployed from the [WalkMassachusetts/audit-map](https://github.com/WalkMassachusetts/audit-map) fork, which is kept in sync with this repo.
+> Underlying Google Sheet is [here](https://docs.google.com/spreadsheets/d/1-Vxf7AlXk_WJwwYSVy7F28qjxVXQOAmQ-NN0JImx95Y/edit?gid=379989993#gid=379989993).
+
+There are two copies of this project:
+
+**Dustin Michels (original, development)**
+
+- Code: [dustinmichels/walkma-map](https://github.com/dustinmichels/walkma-map)
+- Preview (GitHub Pages): <https://dustinmichels.github.io/walkma-map/>
+- Preview (Netlify): <https://walkma.netlify.app/>
+
+**WalkMA (fork, production)**
+
+- Code: [WalkMassachusetts/audit-map](https://github.com/WalkMassachusetts/audit-map)
+- Netlify: <https://walk-audits.netlify.app/>
+- **Live site: <https://audits.walkmass.org/>**
+
+Changes are made here first, then synced to the WalkMA fork, which serves the live site.
 
 ## Layout
 
